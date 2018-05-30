@@ -6,13 +6,14 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/29 13:34:27 by bpierce          ###   ########.fr        #
+#    Updated: 2018/05/30 16:28:29 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = corewar
 
-FILES = main
+FILES = main \
+		error
 
 C_FLAGS = -Wall -Wextra -Werror
 
@@ -29,7 +30,7 @@ LIB_NAM = libft.a
 LIB_SRC = $(addprefix $(LIB_LOC), $(LIB_NAM))
 
 H_LOCS = -I inc -I ../libft/inc
-HEADERS = inc/corewar.h
+HEADERS = inc/corewar.h inc/op.h
 
 RED = [31m
 GREEN = [32m

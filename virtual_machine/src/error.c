@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/29 13:23:40 by bpierce          ###   ########.fr       */
+/*   Created: 2018/05/30 16:22:40 by bpierce           #+#    #+#             */
+/*   Updated: 2018/05/30 16:28:01 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int		main(int argc, char **argv)
+/*
+** Writes an error message to the stderr and returns the given return_value
+*/
+
+int		corewar_error(char *message, int return_value)
 {
-	t_corewar	core;
-
-	if (argc == 1)
-		return (corewar_error(USAGE, 1));
-	ft_bzero(&core, sizeof(t_corewar));
-
-	return (0);
+	if (message)
+		write(2, message, ft_strlen(message));
+	return (return_value);
 }
