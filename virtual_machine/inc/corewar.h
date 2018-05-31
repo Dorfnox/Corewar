@@ -40,8 +40,15 @@ typedef struct				s_process
 	uint8_t					reg[REG_NUMBER + 1][4];
 }							t_process;
 
+typedef struct				s_flag
+{
+	uint8_t					a:1;		// change!!!
+}							t_flag;
+
 typedef struct				s_corewar
 {
+	t_flag					flag;
+	t_queue					*flag_queue;
 	uint64_t				cycle;
 	t_stack					process_stack[PROCESS_STACK_LEN];
 	uint8_t					board[MEM_SIZE];
@@ -58,5 +65,10 @@ void						corewar_error(char *message, int return_value);
 /*
 **	Flag handling
 */
+
+void						add_flag(t_queue **q, char *flag, void *flag_func);
+unsigned int				flag_handler(t_corewar *c, char ***av);
+void						*search_flag_queue(t_node *n, char *flag);
+void						clean_flag_queue(t_queue **q);
 
 #endif
