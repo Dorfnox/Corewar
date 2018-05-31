@@ -83,6 +83,12 @@ typedef struct			s_corewar
 void					corewar_error(char *message, int return_value);
 
 /*
+**	Initializing Corewar
+*/
+
+void					init_corewar(t_corewar *core);
+
+/*
 **	Flag handling
 */
 
