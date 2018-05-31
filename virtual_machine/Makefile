@@ -13,6 +13,7 @@
 NAME = corewar
 
 FILES = main \
+		init \
 		error flag_handler data \
 
 C_FLAGS = -Wall -Wextra -Werror

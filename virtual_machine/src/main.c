@@ -19,6 +19,7 @@ int		main(int argc, char **argv)
 	if (argc == 1)
 		corewar_error(USAGE, 1);
 	ft_bzero(&core, sizeof(t_corewar));
+	init_corewar(&core);
 	retrieve_data(&core, ++argv);
 //	validation();
 //	ft_memcpy

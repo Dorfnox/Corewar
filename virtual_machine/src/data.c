@@ -29,6 +29,8 @@ unsigned int	flag_dump(t_corewar *core, char ***argv)
 	char *dump;
 
 	args = ++(*argv);
+	if (!*args)
+		corewar_error("Flag '-dump' needs an argument (# of cycles)!!!", 1);
 	dump = *args;
 	if (!ft_isstrdigits(dump))
 		corewar_error("Invalid cycle argument for option '-dump'", 1);
@@ -36,7 +38,10 @@ unsigned int	flag_dump(t_corewar *core, char ***argv)
 	core->env.dump = ft_atoi(dump);
 	core->env.max_cycles = get_max_cycles(CYCLE_TO_DIE);
 	if (core->env.dump > core->env.max_cycles)
-		corewar_error("TOOO MANY CYCLES", 1);
+	{
+		ft_pflite("TOOO MANY CYCLES. Max Cycles: %u\n", core->env.max_cycles);
+		corewar_error(NULL, 1);
+	}
 	(*argv) = args;
 	return (1);
 }
@@ -49,6 +54,8 @@ unsigned int	flag_n(t_corewar *core, char ***argv)
 
 	(void)core;
 	args = ++(*argv);
+	if (!*args)
+		corewar_error("Flag 'n' needs an argument", 1);
 	n = ft_atoi(*(args++));
 	player_corfile = *args;
 	if (n <= 0 && n > 4)

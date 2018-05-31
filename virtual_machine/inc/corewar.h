@@ -16,9 +16,9 @@
 # include "libft.h"
 # include "op.h"
 
-# define PROCESS_STACK_LEN 1000
-
 # define USAGE "usage: ./corewar ><>"
+
+# define PROCESS_STACK_LEN 1000
 
 /*
 **	Flag structs
