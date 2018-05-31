@@ -47,12 +47,14 @@ typedef struct				s_flag
 
 typedef struct				s_corewar
 {
-	t_flag					flag;
 	t_queue					*flag_queue;
+	uint8_t					flag_dump;
+	uint64_t				dump;
 	uint64_t				cycle;
 	t_stack					process_stack[PROCESS_STACK_LEN];
 	uint8_t					board[MEM_SIZE];
 	t_player				player[MAX_PLAYERS + 1];
+	char					*playerfiles[MAX_PLAYERS + 1];
 	void					(*instr[16])(struct s_corewar *);
 }							t_corewar;
 
