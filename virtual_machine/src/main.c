@@ -17,8 +17,10 @@ int		main(int argc, char **argv)
 	t_corewar	core;
 
 	if (argc == 1)
-		return (corewar_error(USAGE, 1));
+		corewar_error(USAGE, 1);
 	ft_bzero(&core, sizeof(t_corewar));
-
+	++argv;
+	flag_handler(&core, &argv);
+	(void)argv;
 	return (0);
 }

@@ -16,9 +16,9 @@
 ** Writes an error message to the stderr and returns the given return_value
 */
 
-int		corewar_error(char *message, int return_value)
+void		corewar_error(char *message, int return_value)
 {
 	if (message)
 		write(2, message, ft_strlen(message));
-	return (return_value);
+	exit(return_value);
 }

@@ -18,7 +18,13 @@
 
 # define PROCESS_STACK_LEN 1000
 
-# define USAGE "usage: ./corewar\n"
+# define USAGE "usage: ./corewar ><>\n"
+
+typedef struct				s_flag_queue
+{
+	char					*flag;
+	void					*flag_func;
+}							t_flag_queue;
 
 typedef struct				s_player
 {
@@ -39,8 +45,18 @@ typedef struct				s_corewar
 	uint64_t				cycle;
 	t_stack					process_stack[PROCESS_STACK_LEN];
 	uint8_t					board[MEM_SIZE];
-	t_player				player[MAX_PLAYERS];
-	void					(*instr)(struct s_corewar *)[16];
+	t_player				player[MAX_PLAYERS + 1];
+	void					(*instr[16])(struct s_corewar *);
 }							t_corewar;
+
+/*
+**	Error functions
+*/
+
+void						corewar_error(char *message, int return_value);
+
+/*
+**	Flag handling
+*/
 
 #endif
