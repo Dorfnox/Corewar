@@ -19,6 +19,9 @@
 void		corewar_error(char *message, int return_value)
 {
 	if (message)
+	{
 		write(2, message, ft_strlen(message));
+		write(1, "\n", 1);
+	}
 	exit(return_value);
 }
