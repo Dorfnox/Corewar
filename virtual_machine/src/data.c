@@ -18,11 +18,29 @@ void	retrieve_data(t_corewar *core, char **argv)
 	add_flag(&core->flag_queue, "-dump", flag_dump);
 	while (!flag_handler(core, &argv))
 	{
-		// add_new_player(core, *argv);
-		++argv;
+		if (ft_strstr(*argv, ".cor"))
+		{
+			if (core->player[0].player_num == 0)
+				add_new_player(core, *argv, 1);
+			else if (core->player[1].player_num == 0)
+				add_new_player(core, *argv, 2);
+			else if (core->player[2].player_num == 0)
+				add_new_player(core, *argv, 3);
+			else if (core->player[4].player_num == 0)
+				add_new_player(core, *argv, 4);
+			add_new_player(core, *argv, 5);
+			argv++;
+		}
+		else
+			corewar_error(ft_str256(2, "Bad flag: ", *argv), 1);
 		add_flag(&core->flag_queue, "-n", flag_n);
 		add_flag(&core->flag_queue, "-dump", flag_dump);
 	}
+}
+
+void	writeinstructions_to_map(uint8_t location, uint8_t *instructions, uint8_t *board, uint16_t instr_size)
+{
+	ft_memcpy(&board[location], instructions, instr_size);
 }
 
 unsigned int	flag_dump(t_corewar *core, char ***argv)

@@ -18,10 +18,13 @@
 
 void		corewar_error(char *message, int return_value)
 {
+	ft_putstr(CSEM);
 	if (message)
 	{
 		write(2, message, ft_strlen(message));
-		write(1, "\n", 1);
+		write(2, "\n", 1);
 	}
+	else
+		ft_putstr("Error\n");
 	exit(return_value);
 }

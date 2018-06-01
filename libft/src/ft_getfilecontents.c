@@ -40,9 +40,9 @@ size_t			getfilecontents(char *filename, char **contents)
 		if (ret == -1)
 			return (free_contents(fd, contents));
 		buff[ret] = 0;
-		if (!(contents = ft_rememalloc(contents, total, total + ret)))
+		if (!(*contents = ft_rememalloc(*contents, total, total + ret)))
 			return (free_contents(fd, contents));
-		ft_memcpy(&contents[total], buff, ret);
+		ft_memcpy(&(*contents)[total], buff, ret);
 		total += ret;
 	}
 	close(fd);
