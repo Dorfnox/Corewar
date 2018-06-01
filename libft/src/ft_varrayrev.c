@@ -1,30 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   ft_varrayrev.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/30 16:22:40 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/30 16:28:01 by bpierce          ###   ########.fr       */
+/*   Created: 2017/09/16 19:08:09 by bpierce           #+#    #+#             */
+/*   Updated: 2018/05/31 13:37:07 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar.h"
+#include "libft.h"
 
 /*
-** Writes an error message to the stderr and returns the given return_value
+** Reverses the given array of pointers
 */
 
-void		corewar_error(char *message, int return_value)
+void	ft_varrayrev(void **array, int size_of_array)
 {
-	ft_putstr(CSEM);
-	if (message)
+	int		beg;
+	void	*tmp;
+
+	if (!array || !(*array) || size_of_array < 2)
+		return ;
+	beg = 0;
+	--size_of_array;
+	while (1)
 	{
-		write(2, message, ft_strlen(message));
-		write(2, "\n", 1);
+		tmp = array[beg];
+		array[beg] = array[size_of_array];
+		array[size_of_array] = tmp;
+		++beg;
+		--size_of_array;
+		if (beg >= size_of_array)
+			return ;
 	}
-	else
-		ft_putstr("Error\n");
-	exit(return_value);
 }

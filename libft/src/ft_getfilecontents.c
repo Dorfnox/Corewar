@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/15 20:15:18 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/21 19:21:38 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/05/31 22:46:11 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,9 @@ size_t			getfilecontents(char *filename, char **contents)
 		if (ret == -1)
 			return (free_contents(fd, contents));
 		buff[ret] = 0;
-		if (!(*contents = ft_strfjoin(contents, buff)))
+		if (!(*contents = ft_rememalloc(*contents, total, total + ret)))
 			return (free_contents(fd, contents));
+		ft_memcpy(&(*contents)[total], buff, ret);
 		total += ret;
 	}
 	close(fd);

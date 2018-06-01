@@ -13,11 +13,6 @@
 #ifndef	OP_H
 # define OP_H
 
-/*
-** Toutes les tailles sont en octets.
-** On part du principe qu'un int fait 32 bits. Est-ce vrai chez vous ?
-*/
-
 # define IND_SIZE				2
 # define REG_SIZE				4
 # define DIR_SIZE				REG_SIZE
@@ -66,6 +61,7 @@ typedef char	t_arg_type;
 
 # define PROG_NAME_LENGTH		(128)
 # define COMMENT_LENGTH			(2048)
+# define INSTR					(PROG_NAME_LENGTH + COMMENT_LENGTH)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
 typedef struct					header_s
