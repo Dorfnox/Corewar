@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/28 13:24:29 by bpierce          ###   ########.fr        #
+#    Updated: 2018/05/31 13:35:57 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ FILES = bzero memalloc memccpy memchr memcmp memcpy memdel memmove memset \
 		strmap strmapi strncat strncmp strncpy strnequ strnew strnstr strrchr \
 		strrev strsplit strsplits strstr strsub strtrim strofchars \
 		arraynew arraynew4d arraylen arraydel arraydup arrayprint arrayappend \
-		varraynew varraydel \
+		varraynew varraydel varrayrev \
 		lstadd lstdel lstdelone lstiter lstmap lstnew \
 		isalnum isalpha isascii isdigit islower isprint isupper iswhitespace \
 		isstrdigits isstrprints \
