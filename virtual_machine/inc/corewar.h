@@ -26,6 +26,8 @@
 **	Flag structs
 */
 
+struct					s_corewar;
+
 typedef struct			s_flag_queue
 {
 	char				*flag;
@@ -66,6 +68,7 @@ typedef struct			s_process
 {
 	t_player			*player;
 	uint8_t				reg[REG_NUMBER + 1][4];
+	void				(*instr)(struct s_corewar *);
 }						t_process;
 
 typedef struct			s_corewar
@@ -113,7 +116,8 @@ void					add_new_player(t_corewar *core, char *f, uint8_t p_num);
 size_t					import_player_file(char *filename, uint8_t **contents);
 void					parse_player_name(t_player *p, uint8_t *contents);
 void					parse_player_comment(t_player *p, uint8_t *contents);
-void					init_player_processes(t_corewar *c);
+void					init_player_processes(t_corewar *core);
+void					writeinstructions_to_map(uint8_t location, uint8_t *instructions, uint8_t *board, uint16_t instr_size);
 
 /*
 **	Processes
