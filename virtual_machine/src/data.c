@@ -18,8 +18,10 @@ void	retrieve_data(t_corewar *core, char **argv)
 	add_flag(&core->flag_queue, "-dump", flag_dump);
 	while (!flag_handler(core, &argv))
 	{
-		if (!add_player_file(core, *argv))
-			corewar_error(ft_str256(3, "Bad Flag / File: '", *argv, "'"), 1);
+		// add_new_player(core, *argv);
+		++argv;
+		add_flag(&core->flag_queue, "-n", flag_n);
+		add_flag(&core->flag_queue, "-dump", flag_dump);
 	}
 }
 
@@ -57,20 +59,16 @@ unsigned int	flag_n(t_corewar *core, char ***argv)
 	if (!*args)
 		corewar_error("Flag 'n' needs an argument", 1);
 	n = ft_atoi(*(args++));
-	player_corfile = *args;
 	if (n <= 0 && n > 4)
 		corewar_error("Invalid player number", 1);
+	player_corfile = *args;
+	if (!player_corfile)
+		corewar_error("Flag 'n' requires champion (.cor file)", 1);
 	if (!ft_strstr(player_corfile, ".cor"))
 		corewar_error("Flag 'n' requires champion (.cor file)", 1);
+	add_new_player(core, *args, n);
 	(*argv) = args;
-	return 1; 
-}
-
-unsigned int	add_player_file(t_corewar *core, char *filename)
-{
-	(void)core;
-	(void)filename;
-	return (1);
+	return 1;
 }
 
 uint64_t		get_max_cycles(uint64_t init)

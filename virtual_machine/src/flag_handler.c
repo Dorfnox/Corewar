@@ -25,7 +25,7 @@ void			add_flag(t_queue **q, char *flag, void *flag_func)
 	*q = !*q ? initq() : *q;
 	q_item = malloc(sizeof(t_flag_queue));
 	if (!q_item)
-		corewar_error("Failed to malloc in add_flag\n", 0);
+		corewar_error("Failed to malloc in add_flag\n", 1);
 	q_item->flag = flag;
 	q_item->flag_func = flag_func;
 	enqueue(*q, q_item);

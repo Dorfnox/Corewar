@@ -19,8 +19,13 @@ int		main(int argc, char **argv)
 	if (argc == 1)
 		corewar_error(USAGE, 1);
 	ft_bzero(&core, sizeof(t_corewar));
-	init_corewar(&core);
 	retrieve_data(&core, ++argv);
+	int i = 0;
+	while (i < 4)
+	{
+		ft_pflite("player: %u, name: %s\n", i + 1, core.player[i].header.prog_name);
+		i++;
+	}
 //	validation();
 //	ft_memcpy
 	return (0);
