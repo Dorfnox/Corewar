@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 13:00:55 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/31 13:01:07 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/02 13:46:13 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	retrieve_data(t_corewar *core, char **argv)
 	{
 		if (ft_strstr(*argv, ".cor"))
 		{
-//			core->env.num_players++; need to know the total amount of players before adding players
 			if (core->player[0].player_num == 0)
 				add_new_player(core, *argv, 1);
 			else if (core->player[1].player_num == 0)
