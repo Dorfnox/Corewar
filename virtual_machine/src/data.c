@@ -40,17 +40,6 @@ void	retrieve_data(t_corewar *core, char **argv)
 	}
 }
 
-void	writeinstructions_to_map(uint16_t location, uint8_t *instructions, uint8_t *board, uint16_t instr_size)
-{
-	ft_putnbr(location);
-	ft_putchar('\n');
-	int i = -1;
-	while (++i < CHAMP_MAX_SIZE)
-		printf("%x", instructions[i]);
-	printf("\n");
-	ft_memcpy(&board[location], instructions, instr_size);
-}
-
 unsigned int	flag_dump(t_corewar *core, char ***argv)
 {
 	char **args;

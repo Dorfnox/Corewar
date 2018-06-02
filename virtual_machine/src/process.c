@@ -17,7 +17,7 @@
 **	'Start location' on the board.
 */
 
-t_process	*new_process(t_player *player, uint32_t start_location)
+t_process	*new_process(t_player *player, t_board_node *start_pos)
 {
 	t_process	*new;
 
@@ -26,6 +26,11 @@ t_process	*new_process(t_player *player, uint32_t start_location)
 	if (!(new = ft_memalloc(sizeof(t_process))))
 		corewar_error("Unable to malloc a process: Reached max heapness!!", 1);
 	new->player = player;
-	ft_memcpy(&new->reg[0], &start_location, 4); // FIX!! Need a way of setting the PC.
+	new->curr_pc = start_pos;
+	new->reg[1][0] = 0xFF;
+	new->reg[1][1] = 0xFF;
+	new->reg[1][2] = 0xFF;
+	new->reg[1][3] = (~(player->player_num) + 1);
+	DB("NEW PROCESS CREATED");
 	return (new);
 }

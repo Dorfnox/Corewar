@@ -15,7 +15,9 @@ NAME = corewar
 FILES = main \
 		error \
 		flag_handler \
-		data player process \
+		data player process board instruction \
+		loop \
+		live
 
 C_FLAGS = -Wall -Wextra -Werror
 

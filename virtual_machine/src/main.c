@@ -12,28 +12,6 @@
 
 #include "corewar.h"
 
-void	init_board(t_corewar *core)
-{
-	uint8_t tp;
-	uint8_t p;
-	char *instructions;
-	unsigned int content_size;
-
-	tp = core->env.num_players;
-	ft_putnbr(tp);
-	ft_putchar('\n');
-	p = 0;
-	while (++p < 5)
-	{
-		if (core->player[p - 1].player_num)
-		{
-			content_size = core->player[p - 1].header.prog_size;
-			instructions = core->player[p - 1].header.instructions;
-			writeinstructions_to_map(((p - 1) * (4096 / tp)), (uint8_t *)instructions, core->board, content_size - INSTR);
-		}
-	}
-}
-
 int		main(int argc, char **argv)
 {
 	t_corewar	core;
@@ -42,8 +20,10 @@ int		main(int argc, char **argv)
 		corewar_error(USAGE, 1);
 	ft_bzero(&core, sizeof(t_corewar));
 	retrieve_data(&core, ++argv);
+	DB("here");
 	init_board(&core);
-//	init_player_processes(&core);
+	init_instruction_array_and_wait_times(&core);
+	loop(&core);
 	int i = 0;
 	while (i < 4)
 	{
@@ -54,16 +34,12 @@ int		main(int argc, char **argv)
 	i = 0;
 	while (i < MEM_SIZE)
 	{
-		if (i == 1365 || i == 2730)
-			printf("XX");
-		else
-			printf("%0.2x", core.board[i]);
+		printf("%0.2x", core.board->value);
 		printf(" ");
 		if (!(i % 63) && i >= 63)
 			printf("\n");
+		core.board = core.board->next;
 		i++;
 	}
-//	validation();
-//	ft_memcpy
 	return (0);
 }

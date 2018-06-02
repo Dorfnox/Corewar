@@ -64,11 +64,20 @@ typedef struct			s_player
 	uint64_t			num_live;	// num of times live was called
 }						t_player;
 
+typedef struct			s_board_node
+{
+	uint8_t				value;
+	uint16_t			index;
+	struct s_board_node	*next;
+	struct s_board_node	*prev;
+}						t_board_node;
+
 typedef struct			s_process
 {
 	t_player			*player;
+	t_board_node		*curr_pc;
 	uint8_t				reg[REG_NUMBER + 1][4];
-	void				(*instr)(struct s_corewar *);
+	void				(*instr)(struct s_corewar *, struct s_process *);
 }						t_process;
 
 typedef struct			s_corewar
@@ -77,10 +86,12 @@ typedef struct			s_corewar
 	t_flag				flag;
 	t_env				env;
 	t_stack				process_stack[PROCESS_STACK_LEN];
-	uint8_t				board[MEM_SIZE];
-	t_player			player[MAX_PLAYERS + 1];
+	t_board_node		*node_addresses[MEM_SIZE];
+	t_board_node		*board;
+	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
-	void				(*instr[16])(struct s_corewar *);
+	void				(*instr[16])(struct s_corewar *, struct s_process *);
+	uint16_t			wait_time[16];
 }						t_corewar;
 
 /*
@@ -107,6 +118,8 @@ unsigned int			flag_dump(t_corewar *core, char ***argv);
 unsigned int			flag_n(t_corewar *core, char ***argv);
 unsigned int			add_player_file(t_corewar *core, char *filename);
 uint64_t				get_max_cycles(uint64_t init);
+void					init_board(t_corewar *core);
+void       				init_instruction_array_and_wait_times(t_corewar *core);
 
 /*
 **	Players
@@ -117,24 +130,30 @@ size_t					import_player_file(char *filename, uint8_t **contents);
 void					parse_player_name(t_player *p, uint8_t *contents);
 void					parse_player_comment(t_player *p, uint8_t *contents);
 void					init_player_processes(t_corewar *core);
-void					writeinstructions_to_map(uint16_t location, uint8_t *instructions, uint8_t *board, uint16_t instr_size);
 
 /*
 **	Processes
 */
 
-t_process				*new_process(t_player *player, uint32_t start);
+t_process				*new_process(t_player *player, t_board_node *);
 
 
 /*
 ** Instructions
 */
 
-uint8_t     live(t_corewar *core, t_process *process);
+void 	    			live(t_corewar *core, t_process *process);
+
+/*
+**	Loop
+*/
+
+void    				loop(t_corewar *core);
 
 /*
 ** Commands
 */
 
-void    exec_live(uint32_t args, t_process *process, t_env *env);
+void   					exec_live(uint32_t args, t_process *process, t_env *env);
+
 #endif
