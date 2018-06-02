@@ -125,4 +125,16 @@ void					writeinstructions_to_map(uint16_t location, uint8_t *instructions, uint
 
 t_process				*new_process(t_player *player, uint32_t start);
 
+
+/*
+** Instructions
+*/
+
+uint8_t     live(t_corewar *core, t_process *process);
+
+/*
+** Commands
+*/
+
+void    exec_live(uint32_t args, t_process *process, t_env *env);
 #endif
