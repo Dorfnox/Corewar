@@ -17,8 +17,7 @@ void			add_new_player(t_corewar *core, char *filename, uint8_t p_num)
 	uint8_t		*contents;
 	size_t		content_size;
 
-	DB(filename);
-	if (++core->env.num_players == 5)
+	if (++core->env.num_players == 5 || p_num == 5)
 		corewar_error("Too many players", 1);
 	if (core->player[p_num - 1].player_num)
 	{
@@ -38,7 +37,8 @@ void			add_new_player(t_corewar *core, char *filename, uint8_t p_num)
 		printf("%.2x", contents[i++]);
 	printf("\n");*/
 	ft_memcpy(core->player[p_num - 1].header.comment, &contents[128 + 12], COMMENT_LENGTH);
-	writeinstructions_to_map(((p_num - 1) * (4096 / 4)), &contents[INSTR + 16], core->board, content_size - INSTR);
+	ft_memcpy(core->player[p_num - 1].header.instructions, &contents[INSTR + 16], content_size - INSTR);
+	core->player[p_num - 1].header.prog_size = content_size;
 	core->player[p_num - 1].player_num = p_num;
 	core->player[p_num - 1].filename = filename;
 }

@@ -26,6 +26,6 @@ t_process	*new_process(t_player *player, uint32_t start_location)
 	if (!(new = ft_memalloc(sizeof(t_process))))
 		corewar_error("Unable to malloc a process: Reached max heapness!!", 1);
 	new->player = player;
-	new->reg[0][0] = start_location; // FIX!! Need a way of setting the PC.
+	ft_memcpy(&new->reg[0], &start_location, 4); // FIX!! Need a way of setting the PC.
 	return (new);
 }

@@ -20,15 +20,17 @@ void	retrieve_data(t_corewar *core, char **argv)
 	{
 		if (ft_strstr(*argv, ".cor"))
 		{
+//			core->env.num_players++; need to know the total amount of players before adding players
 			if (core->player[0].player_num == 0)
 				add_new_player(core, *argv, 1);
 			else if (core->player[1].player_num == 0)
 				add_new_player(core, *argv, 2);
 			else if (core->player[2].player_num == 0)
 				add_new_player(core, *argv, 3);
-			else if (core->player[4].player_num == 0)
+			else if (core->player[3].player_num == 0)
 				add_new_player(core, *argv, 4);
-			add_new_player(core, *argv, 5);
+			else
+				add_new_player(core, *argv, 5);
 			argv++;
 		}
 		else
@@ -38,8 +40,14 @@ void	retrieve_data(t_corewar *core, char **argv)
 	}
 }
 
-void	writeinstructions_to_map(uint8_t location, uint8_t *instructions, uint8_t *board, uint16_t instr_size)
+void	writeinstructions_to_map(uint16_t location, uint8_t *instructions, uint8_t *board, uint16_t instr_size)
 {
+	ft_putnbr(location);
+	ft_putchar('\n');
+	int i = -1;
+	while (++i < CHAMP_MAX_SIZE)
+		printf("%x", instructions[i]);
+	printf("\n");
 	ft_memcpy(&board[location], instructions, instr_size);
 }
 

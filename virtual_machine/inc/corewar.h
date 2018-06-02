@@ -117,7 +117,7 @@ size_t					import_player_file(char *filename, uint8_t **contents);
 void					parse_player_name(t_player *p, uint8_t *contents);
 void					parse_player_comment(t_player *p, uint8_t *contents);
 void					init_player_processes(t_corewar *core);
-void					writeinstructions_to_map(uint8_t location, uint8_t *instructions, uint8_t *board, uint16_t instr_size);
+void					writeinstructions_to_map(uint16_t location, uint8_t *instructions, uint8_t *board, uint16_t instr_size);
 
 /*
 **	Processes

@@ -70,6 +70,7 @@ typedef struct					header_s
 	char						prog_name[PROG_NAME_LENGTH + 1];
 	unsigned int				prog_size;
 	char						comment[COMMENT_LENGTH + 1];
+	char						instructions[CHAMP_MAX_SIZE + 1];
 }								header_t;
 
 #endif
