@@ -24,6 +24,7 @@ void		live_(t_corewar *core, t_process *process)
 	uint32_t	player_num;
 	int			i;
 
+	i = -1;
 	player_num = 0;
 	process->curr_pc = process->curr_pc->next; // Added this (moves to byte AFTER 0x01)
 	// player_num |= (uint32_t)process->curr_pc->value << 24;
@@ -32,7 +33,6 @@ void		live_(t_corewar *core, t_process *process)
 	// player_num |= (uint32_t)process->curr_pc->next->next->next->value;
 	//	Then add as the last line:
 	// process->curr_pc = process->curr_pc->next->next->next->next; // AMAZING LINE
-	i = -1;
 	while (++i < 4)
 	{
 		player_num <<= 8;
@@ -40,8 +40,9 @@ void		live_(t_corewar *core, t_process *process)
 		process->curr_pc = process->curr_pc->next;
 	}
 	if (player_num < 0xFFFFFFFC)
-		return ; // Failed
+		return ;
+	// Do we need to minus one if we just don't do +1 in the first place?
 	player_num = ~player_num + 1;
-	core->player[player_num].num_live++;
-	core->player[player_num].last_live = core->env.cycle;
+	core->player[player_num - 1].num_live++;
+	core->player[player_num - 1].last_live = core->env.cycle;
 }
