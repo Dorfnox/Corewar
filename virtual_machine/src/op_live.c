@@ -39,10 +39,12 @@ void		live_(t_corewar *core, t_process *process)
 		player_num |= process->curr_pc->value;
 		process->curr_pc = process->curr_pc->next;
 	}
+	ft_printf("player_num: bef: %#.8x, after: %#.8x\n", player_num, ~player_num + 1);
 	if (player_num < 0xFFFFFFFC)
 		return ;
 	// Do we need to minus one if we just don't do +1 in the first place?
 	player_num = ~player_num + 1;
 	core->player[player_num - 1].num_live++;
 	core->player[player_num - 1].last_live = core->env.cycle;
+	ft_pflite("live called on player %u: %s\n", player_num, core->player[player_num - 1].header.prog_name);
 }

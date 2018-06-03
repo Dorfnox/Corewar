@@ -18,7 +18,6 @@ int		main(int argc, char **argv)
 
 	if (argc == 1)
 		corewar_error(USAGE, 1);
-	DBI(sizeof(t_corewar));
 	ft_bzero(&core, sizeof(t_corewar));
 	retrieve_data(&core, ++argv);
 	init_board(&core);

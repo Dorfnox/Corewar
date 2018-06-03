@@ -17,6 +17,7 @@ FILES = main \
 		flag_handler \
 		data player process board instruction \
 		loop \
+		op_utility \
 		op_live \
 		op_ld \
 		op_st \
@@ -32,7 +33,7 @@ FILES = main \
 		op_lld \
 		op_lldi \
 		op_lfork \
-		op_aff
+		op_aff \
 
 C_FLAGS = -Wall -Wextra -Werror
 

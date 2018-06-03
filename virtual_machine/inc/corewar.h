@@ -19,9 +19,11 @@
 
 # define USAGE "usage: ./corewar ><>"
 
+# define CSEM "Corewar Conflict:\n"
+
 # define PROCESS_STACK_LEN 1000
 
-# define CSEM "Corewar Conflict:\n"
+# define ZERO_AT_BAD_INSTR(a) ((a) < 17 ? (a) : 0)
 
 struct s_corewar;
 
@@ -80,7 +82,7 @@ typedef struct			s_process
 {
 	t_player			*player;
 	t_board_node		*curr_pc;
-	uint8_t				reg[REG_NUMBER + 1][4];
+	uint8_t				reg[REG_NUMBER + 1][REG_SIZE];
 	void				(*instr)(struct s_corewar *, struct s_process *);
 }						t_process;
 
@@ -100,7 +102,7 @@ typedef struct			s_corewar
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
-	t_operation			op[16];
+	t_operation			op[17];
 }						t_corewar;
 
 /*
@@ -147,11 +149,14 @@ void					init_player_processes(t_corewar *core);
 **	Processes
 */
 
-t_process				*new_process(t_player *player, t_board_node *b);
+t_process				*new_process(t_player *player, t_board_node *b,
+							t_process *to_copy);
 
 /*
 ** Instructions
 */
+void					first_(t_corewar *core, t_process *process);
+void					bad_(t_corewar *core, t_process *process);
 
 void					live_(t_corewar *core, t_process *process);
 void					exec_live(uint32_t args, t_process *p, t_env *env);
@@ -191,5 +196,7 @@ void					aff_(t_corewar *core, t_process *process);
 */
 
 void					loop(t_corewar *core);
+void    				game_speed(uint8_t speed);
+
 
 #endif

@@ -18,7 +18,7 @@
 
 void       init_operations(t_corewar *core)
 {
-    core->op[0].instr = live_;
+    core->op[0].instr = bad_;
     core->op[1].instr = live_;
     core->op[2].instr = live_;
     core->op[3].instr = live_;
@@ -34,6 +34,7 @@ void       init_operations(t_corewar *core)
     core->op[13].instr = live_;
     core->op[14].instr = live_;
     core->op[15].instr = live_;
+    core->op[16].instr = live_;
     init_wait_times(core);
 }
 
@@ -54,5 +55,5 @@ void		init_wait_times(t_corewar *core)
     core->op[12].wait_time = 10;
     core->op[13].wait_time = 10;
     core->op[14].wait_time = 10;
-    core->op[15].wait_time = 10;
+    core->op[16].wait_time = 10;
 }
