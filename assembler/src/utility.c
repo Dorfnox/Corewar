@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/02 00:07:15 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/04 11:45:41 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	verify_input(int ac, char **av)
 	if (ac != 2)
 		asm_error(1, USAGE);
 	len = ft_strlen(av[1]);
-	if (len < 3  || av[1][len - 2] != '.' || av[1][len - 1] == 's')
+	if (len < 3  || av[1][len - 2] != '.' || av[1][len - 1] != 's')
 		asm_error(1, USAGE);
 }
 

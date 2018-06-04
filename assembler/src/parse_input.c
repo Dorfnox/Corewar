@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/02 00:31:39 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/04 14:42:00 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,47 +30,81 @@
 // 	return (0);
 // }
 
-int parse_header(t_asm *assembler, char *file_name)
-{
-	int		name_set;
-	int		comment_set;
-	char	*line;
+// int 	parse_header(t_asm *assembler, char *file_name)
+// {
+// 	int		name_set;
+// 	int		comment_set;
+// 	char	*line;
 
 	
-	name_set = 0;
-	comment_set = 0;
-	if ((assembler->fd == open(file_name, O_RDONLY)) == -1)
-		asm_error(1, "Couldn't open file");
-	while (ft_gnl(assembler->fd, &line) && !(name_set && comment_set))
-	{
-		if (!name_set && get_name(line, assembler->header->prog_name) == 1)
-			name_set = 1;
-		else if (!comment_set && get_name(line, assembler->header->prog_name) == 1)
-			comment_set = 1;
-		ft_strdel(&line);
-	}
-	if (!name_set || !comment_set)
-		asm_error(1, "Couldn't find program's name and/or comment");
-}
+// 	name_set = 0;
+// 	comment_set = 0;
+// 	if ((assembler->fd = open(file_name, O_RDONLY)) == -1)
+// 		asm_error(1, "Couldn't open file");
+// 	while (ft_gnl(assembler->fd, &line) && !(name_set && comment_set))
+// 	{
+// 		if (!name_set && get_name(line, assembler->header->prog_name) == 1)
+// 			name_set = 1;
+// 		else if (!comment_set && get_name(line, assembler->header->prog_name) == 1)
+// 			comment_set = 1;
+// 		ft_strdel(&line);
+// 	}
+// 	if (!name_set || !comment_set)
+// 		asm_error(1, "Couldn't find program's name and/or comment");
+// }
 
 void	parse_operations(t_asm *assembler)
 {
 	char		*s;
 	t_input		*line;
+	t_token		current_token;
+	t_token		label_carry;
 
 	line = (t_input *)ft_memalloc(sizeof(t_input));
-	while (ft_gnl(assembler->fd, &s))
+	while (ft_gnl(assembler->fd, &s) > 0)
 	{
+		ft_bzero(&current_token, sizeof(current_token));
+		ft_putstr("Test 1\n");
 		line->s = s;
+		// ft_putstr(line->s);
 		line->len = ft_strlen(s);
+		// ft_putnbr(line->len);
 
+		if (current_token.type == LABEL)
+		{
+			label_carry = current_token;
+			current_token = get_next_token(line);	
+		}
+		if (current_token.type == OPERATION)
+		{
+			//Create jump table to run function
+			// Depending on subtype to parse params
+			
+		}
+		else
+		{
+			asm_error(1, "Invalid syntax");
+		}
+		// current_token = get_next_token(line);
+		// printf("Value: %s, type: %hhd, subtype: %hhd\n", current_token.value, current_token.type, current_token.subtype);
 		
+		// current_token = get_next_token(line);
+		// printf("Value: %s, type: %hhd, subtype: %hhd\n", current_token.value, current_token.type, current_token.subtype);
+
+		// current_token = get_next_token(line);
+		// printf("Value: %s, type: %hhd, subtype: %hhd\n", current_token.value, current_token.type, current_token.subtype);
+
+		// current_token = get_next_token(line);
+		// printf("Value: %s, type: %hhd, subtype: %hhd\n", current_token.value, current_token.type, current_token.subtype);
+	
+		
+		// free(line);
 		ft_bzero((void *)line, sizeof(t_input));
-		ft_strdel(&line);
+		ft_putstr("Test 2\n");
 	}
 }
 
-int	parse_input(t_asm *assembler, char *file)
+void		parse_input(t_asm *assembler, char *file)
 {
 	if ((assembler->fd = open(file, O_RDONLY)) == -1)
 		asm_error(1, "Couldn't open file");

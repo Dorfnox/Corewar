@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 00:02:13 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/02 00:07:57 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/04 13:28:42 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,13 @@ uint8_t	verify_if_indirect(char *s)
 	size_t	i;
 	size_t	len;
 
-	i = 1;
+	i = 0;
 	len = ft_strlen(s);
 	if (len > 0)
 	{
 		if (len > 1 && (s[i] == '+' || s[i] == '-'))
 			i++;
-		if (ft_isstrdigits(&s[i]))
+		if (ft_isstrdigits(&s[i]) || s[i] == '0')
 			return (1);
 	}
 	return (0);

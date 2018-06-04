@@ -3,16 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/29 13:34:06 by bpierce          ###   ########.fr        #
+#    Updated: 2018/06/04 11:39:42 by rzarate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = asm
 
-FILES = main
+FILES = main \
+		parse_input \
+		tokenizer \
+		token_verifiers \
+		utility \
 
 C_FLAGS = -Wall -Wextra -Werror
 

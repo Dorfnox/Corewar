@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 00:22:31 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/04 14:41:13 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef char	t_arg_type;
 # define OPERATION				2
 # define PARAMETER				3
 # define EOL					-1
+# define EMPTY					-2
 
 /*
 **	Operation codes
@@ -110,6 +111,7 @@ typedef	struct			s_input
 	char				*s;
 	size_t				len;
 	size_t				index;
+	size_t				line_n;
 	char				current_char;
 }						t_input;
 
@@ -124,8 +126,8 @@ typedef struct			s_header
 typedef	struct			s_token
 {
 	uint8_t				type;
-	char				*value;
 	uint8_t				subtype;
+	char				*value;
 }						t_token;
 
 typedef struct			s_ast
@@ -137,9 +139,22 @@ typedef struct			s_ast
 	struct s_ast		*next;
 }						t_ast;
 
+typedef struct			s_ast
+{
+	t_token				op;
+	t_token				label;
+	t_token				params[3];
+	uint8_t				bytes;
+	uint16_t			op_num;
+	struct s_ast		*prev;
+	struct s_ast		*next;
+}						t_ast;
+
 typedef struct			s_ops
 {
+	t_ast				*asts;
 	//				pointer_to_start_of_ops
+	// t_stack				*
 	uint32_t			total_bytes;
 	uint16_t			number_of_ops;
 }						t_ops;
@@ -150,15 +165,36 @@ typedef struct			s_asm
     char				*input_file_name;
     char				*input_content;
 	char				*output_file_name;
-	t_header			*header;		
+	t_header			*header;	
+	t_ast				*t_ops;
+	
 }						t_asm;
 
 /*
 **  FUNCTIONS
 */
 
+t_asm	*init_asm(void);
+
+void	parse_input(t_asm *assembler, char *file);
+void	parse_operations(t_asm *assembler);
+int 	parse_header(t_asm *assembler, char *file_name);
+void	verify_input(int ac, char **av);
+
+
+t_token	get_next_token(t_input *line);
+void	get_token_type(t_token *token);
+char	*parse_value(t_input *line);
+void	advance(t_input *line);
+void	handle_whitespace(t_input *line);
+uint8_t	compare_to_ops(char *s);
+uint8_t	compare_to_params(char *s);
+uint8_t	verify_if_register(char *s);
+uint8_t	verify_if_direct(char *s);
+uint8_t	verify_if_indirect(char *s);
 
 
 void	asm_error(int error_code, char *error_message);
+int		is_space(char c);
 
 #endif
