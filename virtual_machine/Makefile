@@ -14,7 +14,7 @@ NAME = corewar
 
 FILES = main \
 		error \
-		flag_handler \
+		flag_handler stack \
 		data player process board instruction \
 		loop \
 		op_utility \
