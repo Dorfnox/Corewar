@@ -6,11 +6,22 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/01 06:46:59 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/02 00:07:15 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "assembler.h"
+
+int		is_space(char c)
+{
+	return ((c == ' ' || c == '\t') ? (1) : (0));
+}
+
+void	handle_whitespace(t_input *line)
+{
+	while (line->current_char && is_space(line->current_char))
+		advance(line);
+}
 
 void	verify_input(int ac, char **av)
 {

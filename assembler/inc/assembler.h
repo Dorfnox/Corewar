@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/01 06:36:10 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/02 00:22:31 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,16 @@
 #define REG_SIZE				4
 #define DIR_SIZE				REG_SIZE
 
-
+# define IND_CODE				3
 # define REG_CODE				1
 # define DIR_CODE				2
-# define IND_CODE				3
 
-
-#define MAX_ARGS_NUMBER			4
-#define MAX_PLAYERS				4
-#define MEM_SIZE				(4*1024)
 #define IDX_MOD					(MEM_SIZE / 8)
 #define CHAMP_MAX_SIZE			(MEM_SIZE / 6)
 
 #define COMMENT_CHAR			'#'
 #define LABEL_CHAR				':'
+#define REGISTER_CHAR			'r'
 #define DIRECT_CHAR				'%'
 #define SEPARATOR_CHAR			','
 
@@ -74,26 +70,88 @@ typedef char	t_arg_type;
 # define COMMENT_LENGTH			(2048)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
-typedef struct		s_header
-{
-  unsigned int		magic;
-  char				prog_name[PROG_NAME_LENGTH + 1];
-  unsigned int		prog_size;
-  char				comment[COMMENT_LENGTH + 1];
-}					t_header;
+/*
+**	Token macros
+*/
+
+# define NONE					0
+# define LABEL					1
+# define OPERATION				2
+# define PARAMETER				3
+# define EOL					-1
+
+/*
+**	Operation codes
+*/
+
+# define LIVE						1
+# define LD							2
+# define ST							3
+# define ADD						4
+# define SUB						5
+# define AND						6
+# define OR							7
+# define XOR						8
+# define ZJUMP						9
+# define LDI						10
+# define STI						11
+# define FORK						12
+# define LLD						13
+# define LLDI						14
+# define LFORK						15
+# define AFF						16
 
 /*
 **  STRUCTURES
 */
 
-typedef struct   s_asm
+typedef	struct			s_input
 {
-    int			fd;
-    char		*input_file_name;
-    char		*input_content;
-	char		*output_file_name;
-	t_header	*header;		
-}               t_asm;
+	char				*s;
+	size_t				len;
+	size_t				index;
+	char				current_char;
+}						t_input;
+
+typedef struct			s_header
+{
+	uint32_t			magic;
+	uint8_t				prog_name[PROG_NAME_LENGTH + 1];
+	uint32_t			prog_size;
+	uint8_t				comment[COMMENT_LENGTH + 1];
+}						t_header;
+
+typedef	struct			s_token
+{
+	uint8_t				type;
+	char				*value;
+	uint8_t				subtype;
+}						t_token;
+
+typedef struct			s_ast
+{
+	t_token				token;
+	char				*label;				
+	uint8_t				ecb;
+	t_token				params[3];
+	struct s_ast		*next;
+}						t_ast;
+
+typedef struct			s_ops
+{
+	//				pointer_to_start_of_ops
+	uint32_t			total_bytes;
+	uint16_t			number_of_ops;
+}						t_ops;
+
+typedef struct			s_asm
+{
+    int					fd;
+    char				*input_file_name;
+    char				*input_content;
+	char				*output_file_name;
+	t_header			*header;		
+}						t_asm;
 
 /*
 **  FUNCTIONS
