@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   op_add.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/30 16:22:40 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 13:44:47 by bpierce          ###   ########.fr       */
+/*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
+/*   Updated: 2018/06/02 14:56:15 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
 /*
-** Writes an error message to the stderr and returns the given return_value
+**	0x04 - ADD
+**	- - - - - - - - - -
+**	Takes 3 registers. Adds content of first two, and stores it in reg 3
 */
 
-void		corewar_error(char *message, int return_value)
+void		add_(t_corewar *core, t_process *process)
 {
-	ft_putstr(CSEM);
-	if (message)
-	{
-		write(2, message, ft_strlen(message));
-		write(2, "\n", 1);
-	}
-	else
-		ft_putstr("Error\n");
-	exit(return_value);
+	(void)core;
+	(void)process;
 }

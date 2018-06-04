@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   op_zjmp.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/30 16:22:40 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 13:44:47 by bpierce          ###   ########.fr       */
+/*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
+/*   Updated: 2018/06/02 14:57:59 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
 /*
-** Writes an error message to the stderr and returns the given return_value
+**	0x09 - Z JUMP
+**	- - - - - - - - - -
+**	Takes an Index as a parameter and jumps to the current PC + index value
+**
+**	CANNOT be followed by a parameter encoding byte
+**
+**	WILL wait zjmp's wait time if parameter is valid or invalid
+**
+**	NOTE: MODIFIED BY THE CARRY
+**	If carry == 1, make the jump.
+**	If carry == null (0), ONLY wait
 */
 
-void		corewar_error(char *message, int return_value)
+void		zjmp_(t_corewar *core, t_process *process)
 {
-	ft_putstr(CSEM);
-	if (message)
-	{
-		write(2, message, ft_strlen(message));
-		write(2, "\n", 1);
-	}
-	else
-		ft_putstr("Error\n");
-	exit(return_value);
+	(void)core;
+	(void)process;
 }

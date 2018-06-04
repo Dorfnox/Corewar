@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   op_utility.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/30 16:22:40 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 13:44:47 by bpierce          ###   ########.fr       */
+/*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
+/*   Updated: 2018/06/02 22:36:47 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
 /*
-** Writes an error message to the stderr and returns the given return_value
+**	Utility functions for helping control the start of the game
 */
 
-void		corewar_error(char *message, int return_value)
+void		first_(t_corewar *core, t_process *process)
 {
-	ft_putstr(CSEM);
-	if (message)
-	{
-		write(2, message, ft_strlen(message));
-		write(2, "\n", 1);
-	}
-	else
-		ft_putstr("Error\n");
-	exit(return_value);
+	(void)core;
+	(void)process;
+}
+
+void		bad_(t_corewar *core, t_process *process)
+{
+	(void)core;
+	process->curr_pc = process->curr_pc->next;
 }

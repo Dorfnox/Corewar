@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   import_player.c                                    :+:      :+:    :+:   */
+/*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 15:43:23 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/31 15:43:36 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/02 13:46:23 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,30 +69,4 @@ size_t			import_player_file(char *filename, uint8_t **contents)
 		corewar_error(ft_str256(0), 1);
 	}
 	return content_size;
-}
-
-/*
-**	Creates processes and adds them to stack[board's first byte 'wait' value]
-**	Must be called after the board has been set.
-*/
-
-
-void			init_player_processes(t_corewar *core)
-{
-	t_process	*process;
-	uint32_t	pc_location;
-	uint8_t		i;
-
-	i = 0;
-	pc_location = 0;
-	while (i < MAX_PLAYERS)
-	{
-		if (core->player[i].player_num)
-		{
-			process = new_process(&core->player[i], pc_location);
-			push(&core->process_stack[0], process);
-		}
-		++i;
-		pc_location += (MEM_SIZE / 4);
-	}
 }
