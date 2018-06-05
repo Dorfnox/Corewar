@@ -20,6 +20,14 @@
 
 void		add_(t_corewar *core, t_process *process)
 {
+	uint16_t	index;
+
+	index = process->curr_pc->index;
+	parse_encoding_byte(process);
+	if (EB0 != 1 || EB1 != 1 || EB2 != 1)
+		return ;
+	if (!parse_arguments(process))
+		return ;
 	(void)core;
 	(void)process;
 }
