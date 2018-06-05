@@ -22,6 +22,8 @@ void    loop(t_corewar *core)
 	while (1) // live hasn't been called within the last cycle by at least 1 champion and other stuff
 	{
         DBI(i);
+        if (i > 100)
+        	break ;
 		while (!isemptys(&core->process_stack[i % 1000]))
 		{
 			p = pop(&core->process_stack[i % 1000]);

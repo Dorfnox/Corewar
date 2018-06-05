@@ -20,14 +20,22 @@
 
 void		add_(t_corewar *core, t_process *process)
 {
-	uint16_t	index;
+	uint32_t	additive_result;
 
-	index = process->curr_pc->index;
-	parse_encoding_byte(process);
-	if (EB0 != 1 || EB1 != 1 || EB2 != 1)
+	(void)core;
+	additive_result = 0;
+	DB("adding");
+	if (!parse_encoding_byte(process))
+		return ; // Do we just treat the next argument as an operation?
+	if (EB0 != REGISTER || EB1 != REGISTER || EB2 != REGISTER)
 		return ;
 	if (!parse_arguments(process))
 		return ;
-	(void)core;
-	(void)process;
+	additive_result = get_reg(process->reg[process->args[0][0]]);
+	additive_result += get_reg(process->reg[process->args[1][0]]);
+	ft_printf("additive result: %.8x\n", additive_result);
+	process->reg[process->args[2][0]][0] = (uint8_t)(additive_result >> 24);
+	process->reg[process->args[2][0]][1] = (uint8_t)(additive_result >> 16);
+	process->reg[process->args[2][0]][2] = (uint8_t)(additive_result >> 8);
+	process->reg[process->args[2][0]][3] = (uint8_t)(additive_result >> 0);
 }

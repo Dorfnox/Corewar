@@ -38,6 +38,6 @@ void		st_(t_corewar *core, t_process *process)
 	{
 		index = get_index(index, process->args[1][0], process->args[1][1]);
 		write_number_to_board(core->node_addresses[index], process->reg[process->args[0][0]]);
-		print_board(core); //debugging
+		// print_board(core); //debugging
 	}
 }

@@ -40,5 +40,9 @@ void		ld_(t_corewar *core, t_process *process)
 	}
 	else
 		process->carry = 0;
-	printf("register 2 is now: %d\n", process->reg[2][0]); //debug
+	ft_printf("register %u is now: %x%x%x%x\n", process->args[1][0],
+		process->reg[process->args[1][0]][0], //debug
+		process->reg[process->args[1][0]][1], //debug
+		process->reg[process->args[1][0]][2],
+		process->reg[process->args[1][0]][3]);
 }

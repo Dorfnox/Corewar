@@ -22,8 +22,8 @@ void       init_operations(t_corewar *core)
     core->op[1].instr = live_;
     core->op[2].instr = ld_;
     core->op[3].instr = st_;
-    core->op[4].instr = live_;
-    core->op[5].instr = live_;
+    core->op[4].instr = add_;
+    core->op[5].instr = sub_;
     core->op[6].instr = live_;
     core->op[7].instr = live_;
     core->op[8].instr = live_;

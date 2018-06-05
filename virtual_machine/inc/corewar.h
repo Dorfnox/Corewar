@@ -33,7 +33,7 @@ struct s_corewar;
 
 enum
 {
-	REGISTRY = 1,
+	REGISTER = 1,
 	DIRECT,
 	INDIRECT
 };
@@ -225,8 +225,9 @@ void					insert_process(t_stack *s, t_process *p);
 ** Utilities
 */
 
-void					parse_encoding_byte(t_process *process);
-int						parse_arguments(t_process *process);
+uint8_t					parse_encoding_byte(t_process *process);
+uint8_t					parse_arguments(t_process *process);
+uint32_t				get_reg(uint8_t *reg);
 
 /*
 ** Write Bytes
