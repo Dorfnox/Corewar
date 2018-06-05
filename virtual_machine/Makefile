@@ -17,6 +17,7 @@ FILES = main \
 		flag_handler stack \
 		data player process board instruction \
 		loop \
+		parse_byte \
 		write_byte \
 		op_utility \
 		op_live \

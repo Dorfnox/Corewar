@@ -38,7 +38,7 @@ int		main(int argc, char **argv)
 	ft_bzero(&core, sizeof(t_corewar));
 	retrieve_data(&core, ++argv);
 	init_board(&core);
-	init_operations(&core);
+	init_operations(core.op);
 	loop(&core);
 	int i = 0;
 	while (i < 4)

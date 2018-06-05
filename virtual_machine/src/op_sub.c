@@ -31,8 +31,8 @@ void		sub_(t_corewar *core, t_process *process)
 		return ;
 	if (!parse_arguments(process))
 		return ;
-	subtractive_result = get_reg(process->reg[process->args[0][0]]);
-	subtractive_result -= get_reg(process->reg[process->args[1][0]]);
+	subtractive_result = smash_bytes(process->reg[process->args[0][0]]);
+	subtractive_result -= smash_bytes(process->reg[process->args[1][0]]);
 	ft_printf("subtractive result: %.8x\n", subtractive_result);
 	process->reg[process->args[2][0]][0] = (uint8_t)(subtractive_result >> 24);
 	process->reg[process->args[2][0]][1] = (uint8_t)(subtractive_result >> 16);

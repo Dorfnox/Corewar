@@ -45,3 +45,15 @@ void		write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg)
 {
 	ft_memcpy(dst_reg, src_reg, 4);
 }
+
+uint32_t	read_from_board(t_board_node *board)
+{
+	uint32_t	result;
+
+	result = 0;
+	result |= (uint32_t)board->value << 24;
+	result |= (uint32_t)board->next->value << 16;
+	result |= (uint32_t)board->next->next->value << 8;
+	result |= (uint32_t)board->next->next->next->value << 0;
+	return (result);
+}

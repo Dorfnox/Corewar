@@ -153,8 +153,8 @@ uint64_t				get_max_cycles(uint64_t init);
 
 void					init_board(t_corewar *core);
 
-void					init_operations(t_corewar *core);
-void					init_wait_times(t_corewar *core);
+void					init_operations(t_operation *core);
+void					init_wait_times(t_operation *core);
 
 /*
 **	Players
@@ -191,10 +191,16 @@ void					add_(t_corewar *core, t_process *process);
 void					sub_(t_corewar *core, t_process *process);
 
 void					and_(t_corewar *core, t_process *process);
+uint32_t				get_and_args(t_corewar *c, t_process *process,
+							uint16_t index, uint8_t arg_num);
 
 void					or_(t_corewar *core, t_process *process);
+uint32_t				get_or_args(t_corewar *c, t_process *process,
+							uint16_t index, uint8_t arg_num);
 
 void					xor_(t_corewar *core, t_process *process);
+uint32_t				get_xor_args(t_corewar *c, t_process *process,
+							uint16_t index, uint8_t arg_num);
 
 void					zjmp_(t_corewar *core, t_process *process);
 
@@ -227,7 +233,7 @@ void					insert_process(t_stack *s, t_process *p);
 
 uint8_t					parse_encoding_byte(t_process *process);
 uint8_t					parse_arguments(t_process *process);
-uint32_t				get_reg(uint8_t *reg);
+uint32_t				smash_bytes(uint8_t *reg);
 
 /*
 ** Write Bytes
@@ -237,5 +243,6 @@ uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2);
 void					write_number_to_board(t_board_node *board, uint8_t *number);
 void					write_board_to_register(uint8_t *reg, t_board_node *board);
 void					write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg);
+uint32_t				read_from_board(t_board_node *board);
 
 #endif
