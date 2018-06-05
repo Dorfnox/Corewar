@@ -18,12 +18,12 @@
 **	If given a previous process, will copy the register over as well.
 */
 
-t_process	*new_process(
-	t_player *player, t_board_node *start_pos, t_process *to_copy)
+t_process	*new_process(t_player *player, t_board_node *start_pos, t_process *to_copy)
 {
-	t_process	*new;
-	int64_t		reg_ctr;
-	int64_t		byte;
+	t_process		*new;
+	int64_t			reg_ctr;
+	int64_t			byte;
+	static uint64_t	process_num;
 
 	if (!player)
 		corewar_error("Failed to attach a player to the new process", 1);
@@ -32,6 +32,7 @@ t_process	*new_process(
 	new->player = player;
 	new->curr_pc = start_pos;
 	new->instr = first_;
+	new->process_num = process_num++;
 	reg_ctr = -1;
 	while (++reg_ctr < REG_NUMBER + 1)
 	{

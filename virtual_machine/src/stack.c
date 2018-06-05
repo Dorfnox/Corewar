@@ -20,14 +20,14 @@ void		insert_process(t_stack *s, t_process *p)
 
 	if (!s->top)
 		push(s, p);
-	else if ((tmp = peek(s)) && p->process_num > tmp->process_num)
+	else if ((tmp = peeks(s)) && p->process_num > tmp->process_num)
 		push(s, p);
 	else
 	{
 		head = s->top;
 		n = s->top;
 		s->top = s->top->next;
-		while ((tmp = peek(s)))
+		while ((tmp = peeks(s)))
 		{
 			if (p->process_num > tmp->process_num)
 				break ;

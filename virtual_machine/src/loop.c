@@ -30,7 +30,8 @@ void    loop(t_corewar *core)
             // --------------------
 			board_value = ZERO_AT_BAD_INSTR(p->curr_pc->value);
 			p->instr = core->op[board_value].instr;
-			push(&core->process_stack[(i + core->op[board_value].wait_time) % 1000], p);
+			insert_process(&core->process_stack[(i + core->op[board_value].wait_time) % 1000], p);
+			// push(&core->process_stack[(i + core->op[board_value].wait_time) % 1000], p);
 		}
         game_speed(15); // 1 is fast, 50 is slow
         ++i;

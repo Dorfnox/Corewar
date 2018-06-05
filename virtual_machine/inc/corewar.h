@@ -25,7 +25,18 @@
 
 # define ZERO_AT_BAD_INSTR(a) ((a) < 17 ? (a) : 0)
 
+# define EB0 process->encoding_byte[0]
+# define EB1 process->encoding_byte[1]
+# define EB2 process->encoding_byte[2]
+
 struct s_corewar;
+
+enum
+{
+	REGISTRY = 1,
+	DIRECT,
+	INDIRECT
+};
 
 /*
 **	Flag structs
@@ -82,6 +93,10 @@ typedef struct			s_process
 {
 	t_player			*player;
 	t_board_node		*curr_pc;
+	uint64_t			process_num;
+	uint8_t				encoding_byte[3];
+	uint8_t				args[3][4];
+	uint8_t				carry;
 	uint8_t				reg[REG_NUMBER + 1][REG_SIZE];
 	void				(*instr)(struct s_corewar *, struct s_process *);
 }						t_process;
@@ -104,6 +119,12 @@ typedef struct			s_corewar
 	char				*playerfiles[MAX_PLAYERS + 1];
 	t_operation			op[17];
 }						t_corewar;
+
+/*
+** For Debugging
+*/
+
+void	print_board(t_corewar *core);
 
 /*
 **	Error functions
@@ -192,11 +213,28 @@ void					lfork_(t_corewar *core, t_process *process);
 void					aff_(t_corewar *core, t_process *process);
 
 /*
-**	Loop
+**	Loop and Stack
 */
 
 void					loop(t_corewar *core);
 void    				game_speed(uint8_t speed);
 
+void					insert_process(t_stack *s, t_process *p);
+
+/*
+** Utilities
+*/
+
+void					parse_encoding_byte(t_process *process);
+int						parse_arguments(t_process *process);
+
+/*
+** Write Bytes
+*/
+
+uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2);
+void					write_number_to_board(t_board_node *board, uint8_t *number);
+void					write_board_to_register(uint8_t *reg, t_board_node *board);
+void					write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg);
 
 #endif
