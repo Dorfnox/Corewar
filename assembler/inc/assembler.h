@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/04 14:41:13 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/05 17:29:22 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ typedef char	t_arg_type;
 # define LABEL					1
 # define OPERATION				2
 # define PARAMETER				3
+# define COMMENT				4
+# define MATH					5
 # define EOL					-1
 # define EMPTY					-2
 
@@ -102,6 +104,10 @@ typedef char	t_arg_type;
 # define LFORK						15
 # define AFF						16
 
+
+
+#define CAPACITY					30
+
 /*
 **  STRUCTURES
 */
@@ -125,36 +131,38 @@ typedef struct			s_header
 
 typedef	struct			s_token
 {
-	uint8_t				type;
+	int8_t				type;
 	uint8_t				subtype;
 	char				*value;
 }						t_token;
 
 typedef struct			s_ast
 {
-	t_token				token;
-	char				*label;				
+	uint8_t				op;
+	// char				*label;				
 	uint8_t				ecb;
-	t_token				params[3];
+	t_token				*params;
 	struct s_ast		*next;
 }						t_ast;
 
-typedef struct			s_ast
+typedef struct			s_label_item
 {
-	t_token				op;
-	t_token				label;
-	t_token				params[3];
-	uint8_t				bytes;
-	uint16_t			op_num;
-	struct s_ast		*prev;
-	struct s_ast		*next;
-}						t_ast;
+	char				*key;
+	uint32_t			byte_start;
+	struct s_label_item	*next;
+}						t_label_item;
+
+typedef struct			s_labels
+{
+	t_label_item		**items;
+	size_t				capacity;
+}						t_labels;
 
 typedef struct			s_ops
 {
-	t_ast				*asts;
-	//				pointer_to_start_of_ops
-	// t_stack				*
+	t_ast				*first;
+	t_ast				*last;
+	t_labels			*labels;
 	uint32_t			total_bytes;
 	uint16_t			number_of_ops;
 }						t_ops;
@@ -166,8 +174,8 @@ typedef struct			s_asm
     char				*input_content;
 	char				*output_file_name;
 	t_header			*header;	
-	t_ast				*t_ops;
-	
+	t_ops				*ops;
+	void				(*op_handler[17])(t_input *line);
 }						t_asm;
 
 /*
@@ -196,5 +204,19 @@ uint8_t	verify_if_indirect(char *s);
 
 void	asm_error(int error_code, char *error_message);
 int		is_space(char c);
+
+
+t_ast		*dequeue_op(t_ops *queue);
+void		enqueue_op(t_ops *queue, uint8_t op, uint8_t ecb, t_token *params);
+t_ops		*init_op_queue(void);
+
+size_t		hash(char *label);
+t_labels	*labelsInit(size_t capacity);
+int8_t		labelsInsert(t_labels *dict, char *key, uint32_t byte_start);
+uint32_t	labelsSearch(t_labels *dict, char *key);
+
+
+void	init_op_handler(t_asm *assembler);
+void	handle_live(t_input *line);
 
 #endif

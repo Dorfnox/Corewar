@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/04 11:45:41 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/05 17:27:15 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,28 @@ t_asm	*init_asm(void)
 
 	new_asm = (t_asm *)ft_memalloc(sizeof(t_asm));
 	new_asm->header = (t_header *)ft_memalloc(sizeof(t_header));
-
+	new_asm->ops = init_op_queue();
+	init_op_handler(new_asm);
 	return (new_asm);
+}
+
+void	init_op_handler(t_asm *assembler)
+{
+	assembler->op_handler[0] = &handle_live;
+	assembler->op_handler[1] = &handle_live;
+	assembler->op_handler[2] = &handle_live;
+	assembler->op_handler[3] = &handle_live;
+	assembler->op_handler[4] = &handle_live;
+	assembler->op_handler[5] = &handle_live;
+	assembler->op_handler[6] = &handle_live;
+	assembler->op_handler[7] = &handle_live;
+	assembler->op_handler[8] = &handle_live;
+	assembler->op_handler[9] = &handle_live;
+	assembler->op_handler[10] = &handle_live;
+	assembler->op_handler[11] = &handle_live;
+	assembler->op_handler[12] = &handle_live;
+	assembler->op_handler[13] = &handle_live;
+	assembler->op_handler[14] = &handle_live;
+	assembler->op_handler[15] = &handle_live;
+	assembler->op_handler[16] = &handle_live;
 }

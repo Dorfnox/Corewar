@@ -6,7 +6,7 @@
 #    By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/06/04 11:39:42 by rzarate          ###   ########.fr        #
+#    Updated: 2018/06/05 17:29:48 by rzarate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,11 @@ FILES = main \
 		tokenizer \
 		token_verifiers \
 		utility \
+		op_queue \
+		label_hashtable \
+		op_handler_1 \
+		op_handler_2 \
+		op_handler_3 \
 
 C_FLAGS = -Wall -Wextra -Werror
 

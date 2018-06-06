@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/04 14:42:00 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/05 17:28:40 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	parse_operations(t_asm *assembler)
 	t_input		*line;
 	t_token		current_token;
 	t_token		label_carry;
+	// t_ast		*new_op;
 
 	line = (t_input *)ft_memalloc(sizeof(t_input));
 	while (ft_gnl(assembler->fd, &s) > 0)
@@ -70,21 +71,19 @@ void	parse_operations(t_asm *assembler)
 		line->len = ft_strlen(s);
 		// ft_putnbr(line->len);
 
+		current_token = get_next_token(line);
 		if (current_token.type == LABEL)
 		{
 			label_carry = current_token;
-			current_token = get_next_token(line);	
+			current_token = get_next_token(line);
 		}
 		if (current_token.type == OPERATION)
-		{
-			//Create jump table to run function
-			// Depending on subtype to parse params
-			
-		}
-		else
+			assembler->op_handler[current_token.subtype](line);
+		else if (current_token.type != EMPTY || current_token.type != COMMENT)
 		{
 			asm_error(1, "Invalid syntax");
 		}
+
 		// current_token = get_next_token(line);
 		// printf("Value: %s, type: %hhd, subtype: %hhd\n", current_token.value, current_token.type, current_token.subtype);
 		
