@@ -14,9 +14,11 @@ NAME = corewar
 
 FILES = main \
 		error \
-		flag_handler \
+		flag_handler stack \
 		data player process board instruction \
 		loop \
+		parse_byte \
+		write_byte \
 		op_utility \
 		op_live \
 		op_ld \
@@ -33,7 +35,7 @@ FILES = main \
 		op_lld \
 		op_lldi \
 		op_lfork \
-		op_aff \
+		op_aff
 
 C_FLAGS = -Wall -Wextra -Werror
 

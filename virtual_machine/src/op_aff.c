@@ -23,5 +23,13 @@
 void		aff_(t_corewar *core, t_process *process)
 {
 	(void)core;
-	(void)process;
+	
+	if (!(parse_encoding_byte(process)))
+		return ;
+	if (EB0 != REGISTER || EB1 || EB2)
+		return ;
+	if (!parse_arguments(process))
+		return ;
+	ft_putchar((int)smash_bytes(process->args[0]) % 256);	
+	
 }

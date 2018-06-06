@@ -28,6 +28,15 @@
 
 void		zjmp_(t_corewar *core, t_process *process)
 {
-	(void)core;
-	(void)process;
+	uint8_t jump_index_a;
+	uint8_t jump_index_b;
+	uint16_t index;
+
+	if (process->carry)
+	{
+		jump_index_a = (uint8_t)read_from_board(process->curr_pc->next, 1);
+		jump_index_b = (uint8_t)read_from_board(process->curr_pc->next->next, 1);
+		index = get_index(process->curr_pc->index, jump_index_a, jump_index_b);
+		process->curr_pc = core->node_addresses[index];
+	}
 }

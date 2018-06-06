@@ -12,10 +12,6 @@
 
 #include "corewar.h"
 
-/*
-**	Utility functions for helping control the start of the game
-*/
-
 void		first_(t_corewar *core, t_process *process)
 {
 	(void)core;
