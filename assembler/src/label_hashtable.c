@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:51 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/05 17:01:19 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/05 20:23:40 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ uint32_t 	labelsSearch(t_labels *dict, char *key)
 	t_label_item	*tmp_item;
 
 	tmp_item = dict->items[hash(key)];
-	if (!tmp_item)
-		return (-1);
 	while (tmp_item && ft_strcmp(tmp_item->key, key) != 0)
 		tmp_item = tmp_item->next;
+	if (!tmp_item)
+		return (-1);
 	return (tmp_item->byte_start);
 }
 

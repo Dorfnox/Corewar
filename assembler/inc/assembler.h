@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/05 17:29:22 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/06 00:09:15 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,12 @@
 
 #define	USAGE					"usage: <>"
 
+#define OP_SIZE					1
+#define ECB_SIZE				1
 #define IND_SIZE				2
 #define REG_SIZE				4
-#define DIR_SIZE				REG_SIZE
+#define DIR_SIZE_0				4
+#define DIR_SIZE_1				2
 
 # define IND_CODE				3
 # define REG_CODE				1
@@ -87,26 +90,26 @@ typedef char	t_arg_type;
 **	Operation codes
 */
 
-# define LIVE						1
-# define LD							2
-# define ST							3
-# define ADD						4
-# define SUB						5
-# define AND						6
-# define OR							7
-# define XOR						8
-# define ZJUMP						9
-# define LDI						10
-# define STI						11
-# define FORK						12
-# define LLD						13
-# define LLDI						14
-# define LFORK						15
-# define AFF						16
+# define LIVE					1
+# define LD						2
+# define ST						3
+# define ADD					4
+# define SUB					5
+# define AND					6
+# define OR						7
+# define XOR					8
+# define ZJUMP					9
+# define LDI					10
+# define STI					11
+# define FORK					12
+# define LLD					13
+# define LLDI					14
+# define LFORK					15
+# define AFF					16
 
 
 
-#define CAPACITY					30
+#define CAPACITY				30
 
 /*
 **  STRUCTURES
@@ -139,9 +142,9 @@ typedef	struct			s_token
 typedef struct			s_ast
 {
 	uint8_t				op;
-	// char				*label;				
 	uint8_t				ecb;
 	t_token				*params;
+	uint8_t				bytes;
 	struct s_ast		*next;
 }						t_ast;
 
@@ -175,48 +178,48 @@ typedef struct			s_asm
 	char				*output_file_name;
 	t_header			*header;	
 	t_ops				*ops;
-	void				(*op_handler[17])(t_input *line);
+	void				(*op_handler[17])(t_input *line, t_ops *ops);
 }						t_asm;
 
 /*
 **  FUNCTIONS
 */
 
-t_asm	*init_asm(void);
+t_asm					*init_asm(void);
 
-void	parse_input(t_asm *assembler, char *file);
-void	parse_operations(t_asm *assembler);
-int 	parse_header(t_asm *assembler, char *file_name);
-void	verify_input(int ac, char **av);
-
-
-t_token	get_next_token(t_input *line);
-void	get_token_type(t_token *token);
-char	*parse_value(t_input *line);
-void	advance(t_input *line);
-void	handle_whitespace(t_input *line);
-uint8_t	compare_to_ops(char *s);
-uint8_t	compare_to_params(char *s);
-uint8_t	verify_if_register(char *s);
-uint8_t	verify_if_direct(char *s);
-uint8_t	verify_if_indirect(char *s);
+void					parse_input(t_asm *assembler, char *file);
+void					parse_operations(t_asm *assembler);
+int 					parse_header(t_asm *assembler, char *file_name);
+void					verify_input(int ac, char **av);
 
 
-void	asm_error(int error_code, char *error_message);
-int		is_space(char c);
+t_token					get_next_token(t_input *line);
+void					get_token_type(t_token *token);
+char					*parse_value(t_input *line);
+void					advance(t_input *line);
+void					handle_whitespace(t_input *line);
+uint8_t					compare_to_ops(char *s);
+uint8_t					compare_to_params(char *s);
+uint8_t					verify_if_register(char *s);
+uint8_t					verify_if_direct(char *s);
+uint8_t					verify_if_indirect(char *s);
 
 
-t_ast		*dequeue_op(t_ops *queue);
-void		enqueue_op(t_ops *queue, uint8_t op, uint8_t ecb, t_token *params);
-t_ops		*init_op_queue(void);
-
-size_t		hash(char *label);
-t_labels	*labelsInit(size_t capacity);
-int8_t		labelsInsert(t_labels *dict, char *key, uint32_t byte_start);
-uint32_t	labelsSearch(t_labels *dict, char *key);
+void					asm_error(int error_code, char *error_message);
+int						is_space(char c);
 
 
-void	init_op_handler(t_asm *assembler);
-void	handle_live(t_input *line);
+t_ast					*dequeue_op(t_ops *queue);
+void					enqueue_op(t_ops *queue, uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params, uint8_t len_tokens);
+t_ops					*init_op_queue(void);
+
+size_t					hash(char *label);
+t_labels				*labelsInit(size_t capacity);
+int8_t					labelsInsert(t_labels *dict, char *key, uint32_t byte_start);
+uint32_t				labelsSearch(t_labels *dict, char *key);
+
+
+void					init_op_handler(t_asm *assembler);
+void					handle_live(t_input *line, t_ops *ops);
 
 #endif

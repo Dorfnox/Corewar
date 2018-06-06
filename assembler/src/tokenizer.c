@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 20:27:31 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/04 14:19:28 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/05 20:49:56 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	*parse_value(t_input *line)
 			advance(line);
 		return (ft_strsub(line->s, start, line->index - start));
 	}
-	
 }
 
 void	get_token_type(t_token *token)
