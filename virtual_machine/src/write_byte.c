@@ -41,19 +41,28 @@ void		write_board_to_register(uint8_t *reg, t_board_node *board)
 	}
 }
 
+void		write_number_to_register(uint8_t *reg, uint32_t nbr)
+{
+	reg[0] = (nbr >> 24);
+	reg[1] = (uint8_t)(nbr >> 16);
+	reg[2] = (uint8_t)(nbr >> 8);
+	reg[3] = (uint8_t)(nbr >> 0);
+}
+
 void		write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg)
 {
 	ft_memcpy(dst_reg, src_reg, 4);
 }
 
-uint32_t	read_from_board(t_board_node *board)
+uint32_t	read_from_board(t_board_node *board, uint8_t bytes)
 {
 	uint32_t	result;
 
 	result = 0;
-	result |= (uint32_t)board->value << 24;
-	result |= (uint32_t)board->next->value << 16;
-	result |= (uint32_t)board->next->next->value << 8;
-	result |= (uint32_t)board->next->next->next->value << 0;
+	while (bytes-- > 0)
+	{
+		result |= (uint32_t)board->value << (bytes * 8);
+		board = board->next;
+	}
 	return (result);
 }

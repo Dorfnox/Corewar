@@ -27,6 +27,12 @@
 
 void		lfork_(t_corewar *core, t_process *process)
 {
-	(void)core;
-	(void)process;
+	uint16_t		arg;
+	t_board_node	*index;
+	t_process		*new_p; 
+
+	arg = (uint16_t)read_from_board(process->curr_pc->next, 2);
+	index = core->node_addresses[(process->curr_pc->index + arg) % MEM_SIZE];
+	new_p = new_process(process->player, index, process);
+	insert_process(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN], new_p);
 }

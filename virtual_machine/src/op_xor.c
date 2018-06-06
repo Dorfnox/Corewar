@@ -58,6 +58,7 @@ uint32_t	get_xor_args(
 		return (smash_bytes(process->args[arg_num]));
 	else if (process->encoding_byte[arg_num] == INDIRECT)
 		return (read_from_board(core->node_addresses[
-			get_index(index, process->args[arg_num][0], process->args[arg_num][1])]));
+			get_index(index, process->args[arg_num][0], process->args[arg_num][1])
+			], 4));
 	return (0);
 }

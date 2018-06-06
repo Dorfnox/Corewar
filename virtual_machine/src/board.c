@@ -56,9 +56,11 @@ void	init_board(t_corewar *core)
 		if (core->player[p].player_num)
 		{
 			j = (++k - 1) * (MEM_SIZE / core->env.num_players);
+			DB("ahfdsf");
 			push(&core->process_stack[0],
 				new_process(&core->player[p],
 					core->node_addresses[j], NULL));
+			DB("ahfdsf");
 			i = 0;
 			while (i < CHAMP_MAX_SIZE)
 			{

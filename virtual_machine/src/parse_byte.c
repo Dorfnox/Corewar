@@ -44,6 +44,8 @@ uint8_t		parse_arguments(t_process *process)
 		{
 			process->args[i][0] = process->curr_pc->value;
 			process->args[i][1] = process->curr_pc->next->value;
+			process->args[i][2] = 0;
+			process->args[i][3] = 0;
 			process->curr_pc = process->curr_pc->next->next;
 		}
 	}
@@ -62,11 +64,11 @@ uint8_t		parse_encoding_byte(t_process *process)
 	encoding_byte = process->curr_pc->next->value;
 	process->curr_pc = process->curr_pc->next->next;
 	if (encoding_byte > 0xF8 || (encoding_byte & 0b11) > 0)
-		return ((process->carry = 0));
+		return 0;
 	process->encoding_byte[0] = (encoding_byte >> 6) & 0b11;
 	process->encoding_byte[1] = (encoding_byte >> 4) & 0b11;
 	process->encoding_byte[2] = (encoding_byte >> 2) & 0b11;
-	return (1);
+	return 1;
 }
 
 /*

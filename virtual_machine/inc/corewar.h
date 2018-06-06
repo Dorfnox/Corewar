@@ -21,7 +21,7 @@
 
 # define CSEM "Corewar Conflict:\n"
 
-# define PROCESS_STACK_LEN 1000
+# define PROCESS_STACK_LEN 1024
 
 # define ZERO_AT_BAD_INSTR(a) ((a) < 17 ? (a) : 0)
 
@@ -124,7 +124,7 @@ typedef struct			s_corewar
 ** For Debugging
 */
 
-void	print_board(t_corewar *core);
+void					print_board(t_corewar *core, t_process *p);
 
 /*
 **	Error functions
@@ -242,7 +242,8 @@ uint32_t				smash_bytes(uint8_t *reg);
 uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2);
 void					write_number_to_board(t_board_node *board, uint8_t *number);
 void					write_board_to_register(uint8_t *reg, t_board_node *board);
+void					write_number_to_register(uint8_t *reg, uint32_t nbr);
 void					write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg);
-uint32_t				read_from_board(t_board_node *board);
+uint32_t				read_from_board(t_board_node *board, uint8_t bytes);
 
 #endif
