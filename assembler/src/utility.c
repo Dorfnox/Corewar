@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/05 21:03:59 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/08 00:21:24 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,20 @@ t_asm	*init_asm(void)
 
 void	init_op_handler(t_asm *assembler)
 {
-	assembler->op_handler[0] = &handle_live;
-	assembler->op_handler[1] = &handle_live;
-	assembler->op_handler[2] = &handle_live;
-	assembler->op_handler[3] = &handle_live;
-	assembler->op_handler[4] = &handle_live;
-	assembler->op_handler[5] = &handle_live;
-	assembler->op_handler[6] = &handle_live;
-	assembler->op_handler[7] = &handle_live;
-	assembler->op_handler[8] = &handle_live;
-	assembler->op_handler[9] = &handle_live;
-	assembler->op_handler[10] = &handle_live;
-	assembler->op_handler[11] = &handle_live;
-	assembler->op_handler[12] = &handle_live;
-	assembler->op_handler[13] = &handle_live;
-	assembler->op_handler[14] = &handle_live;
-	assembler->op_handler[15] = &handle_live;
-	assembler->op_handler[16] = &handle_live;
+	assembler->op_handler[1] = &live_;
+	assembler->op_handler[2] = &ld_lld_;
+	assembler->op_handler[3] = &st_;
+	assembler->op_handler[4] = &add_sub_;
+	assembler->op_handler[5] = &add_sub_;
+	assembler->op_handler[6] = &and_or_xor_;
+	assembler->op_handler[7] = &and_or_xor_;
+	assembler->op_handler[8] = &and_or_xor_;
+	assembler->op_handler[9] = &zjump_fork_lfork_;
+	assembler->op_handler[10] = &ldi_lldi_;
+	assembler->op_handler[11] = &sti_;
+	assembler->op_handler[12] = &zjump_fork_lfork_;
+	assembler->op_handler[13] = &ld_lld_;
+	assembler->op_handler[14] = &ldi_lldi_;
+	assembler->op_handler[15] = &zjump_fork_lfork_;
+	assembler->op_handler[16] = &aff_;
 }

@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/06 00:09:15 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/08 00:16:20 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,8 @@ int						is_space(char c);
 
 
 t_ast					*dequeue_op(t_ops *queue);
-void					enqueue_op(t_ops *queue, uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params, uint8_t len_tokens);
+void					enqueue_op(t_ops *queue, t_ast *node);
+t_ast					*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params);
 t_ops					*init_op_queue(void);
 
 size_t					hash(char *label);
@@ -220,6 +221,14 @@ uint32_t				labelsSearch(t_labels *dict, char *key);
 
 
 void					init_op_handler(t_asm *assembler);
-void					handle_live(t_input *line, t_ops *ops);
+void					live_(t_input *line, t_ops *ops);
+void					ld_lld_(t_input *line, t_ops *ops);
+void					st_(t_input *line, t_ops *ops);
+void					add_sub_(t_input *line, t_ops *ops);
+void					and_or_xor_(t_input *line, t_ops *ops);
+void					zjump_fork_lfork_(t_input *line, t_ops *ops);
+void					ldi_(t_input *line, t_ops *ops);
+void					sti_(t_input *line, t_ops *ops);
+void					aff_(t_input *line, t_ops *ops);
 
 #endif

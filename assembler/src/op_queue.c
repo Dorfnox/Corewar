@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:11:57 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/05 22:40:07 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/07 17:32:37 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,8 @@ t_ops		*init_op_queue(void)
 	return (new_queue);
 }
 
-void		enqueue_op(t_ops *queue, uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params)
+void		enqueue_op(t_ops *queue, t_ast *node)
 {
-	t_ast	 *node;
-
-	if (!(node = (t_ast *)ft_memalloc(sizeof(t_ast))))
-		asm_error(1, "Malloc error");
-	node->op = op;
-	node->ecb = ecb;
-	node->bytes = bytes;
-	node->params = params;
-	node->next = NULL;
 	if (!queue->first)
 	{
 		queue->first = node;
@@ -45,7 +36,7 @@ void		enqueue_op(t_ops *queue, uint8_t op, uint8_t ecb, uint8_t bytes, t_token *
 		queue->last->next = node;
 		queue->last = node;
 	}
-	queue->total_bytes += bytes;
+	queue->total_bytes += node->bytes;
 	queue->number_of_ops++;
 }
 
@@ -65,6 +56,20 @@ t_ast		*dequeue_op(t_ops *queue)
 		queue->total_bytes -= tmp_node->bytes;
 		return (tmp_node);
 	}
+}
+
+t_ast		*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params)
+{
+	t_ast	 *node;
+
+	if (!(node = (t_ast *)ft_memalloc(sizeof(t_ast))))
+		asm_error(1, "Malloc error");
+	node->op = op;
+	node->ecb = ecb;
+	node->bytes = bytes;
+	node->params = params;
+	node->next = NULL;
+	return (node);
 }
 
 // char			*peek_queue(t_ops *queue)

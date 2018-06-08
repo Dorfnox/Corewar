@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/05 22:07:44 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/07 22:10:45 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	parse_operations(t_asm *assembler)
 			if (label_carry != NULL)
 			{
 				labelsInsert(assembler->ops->labels, label_carry, assembler->ops->total_bytes + 1);
-				ft_strdel(&label_carry);
+				// ft_strdel(&label_carry);
 			}
 			assembler->op_handler[current_token.subtype](line, assembler->ops);
 		}
