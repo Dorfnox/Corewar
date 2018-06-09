@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/08 00:21:24 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/08 03:58:33 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int		is_space(char c)
 	return ((c == ' ' || c == '\t') ? (1) : (0));
 }
 
-void	handle_whitespace(t_input *line)
+void	skip_whitespaces(t_input *line)
 {
-	while (line->current_char && is_space(line->current_char))
+	while (char_is_separator(line->current_char))
 		advance(line);
 }
 
@@ -55,6 +55,7 @@ t_asm	*init_asm(void)
 
 void	init_op_handler(t_asm *assembler)
 {
+	assembler->op_handler[0] = &unknown_;
 	assembler->op_handler[1] = &live_;
 	assembler->op_handler[2] = &ld_lld_;
 	assembler->op_handler[3] = &st_;
@@ -72,3 +73,45 @@ void	init_op_handler(t_asm *assembler)
 	assembler->op_handler[15] = &zjump_fork_lfork_;
 	assembler->op_handler[16] = &aff_;
 }
+
+int8_t	char_is_separator(char c)
+{
+	if (!c || c == SEPARATOR_CHAR ||
+			c == COMMENT_CHAR || ft_iswhitespace(c))
+		return (1);
+	return (0);
+}
+
+int8_t	token_is_label(char *s, size_t len)
+{
+	size_t	i;
+
+	i = -1;
+	if (len > 1 && s[len - 1] == LABEL_CHAR)
+	{
+		while (++i < len - 1)
+		{
+			if (!(s[i] >='a' && s[i] <= 'z') && 
+				!(s[i] >= '0' && s[i] <= '9') &&
+				s[i] != '_')
+				return (0);
+		}
+		return (1);
+	}
+	return (0);
+}
+
+// int8_t	token_is_parameter(char *s, size_t len)
+// {
+	
+// }
+
+void	remove_label_char(char **s, size_t len)
+{
+	char *new_s;
+
+	new_s = ft_strsub(*s, 0, len - 1);
+	ft_strdel(s);
+	*s = new_s;
+}
+

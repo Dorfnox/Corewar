@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/07 22:10:45 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/08 04:35:19 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,14 @@
 // 	return (0);
 // }
 
-// int 	parse_header(t_asm *assembler, char *file_name)
+// int 	parse_header(t_asm *assembler, t_input *line)
 // {
-// 	int		name_set;
-// 	int		comment_set;
-// 	char	*line;
+// 	uint8_t	name_set;
+// 	uint8_t	comment_set;
+// 	t_token	current_token;
 
-	
 // 	name_set = 0;
 // 	comment_set = 0;
-// 	if ((assembler->fd = open(file_name, O_RDONLY)) == -1)
-// 		asm_error(1, "Couldn't open file");
 // 	while (ft_gnl(assembler->fd, &line) && !(name_set && comment_set))
 // 	{
 // 		if (!name_set && get_name(line, assembler->header->prog_name) == 1)
@@ -53,25 +50,16 @@
 // 		asm_error(1, "Couldn't find program's name and/or comment");
 // }
 
-void	parse_operations(t_asm *assembler)
+void	parse_operations(t_asm *assembler, t_input *line)
 {
-	// char		*s;
-	t_input		*line;
 	t_token		current_token;
 	char		*label_carry;
-	// t_ast		*new_op;
 
-	line = (t_input *)ft_memalloc(sizeof(t_input));
 	label_carry = NULL;
 	while (ft_gnl(assembler->fd, &line->s) > 0)
 	{
 		ft_bzero(&current_token, sizeof(current_token));
-		ft_putstr("Test 1\n");
-		// line->s = s;
-		// ft_putstr(line->s);
 		line->len = ft_strlen(line->s);
-		// ft_putnbr(line->len);
-
 		current_token = get_next_token(line);
 		if (current_token.type == LABEL)
 		{
@@ -83,29 +71,22 @@ void	parse_operations(t_asm *assembler)
 		if (current_token.type == OPERATION)
 		{
 			if (label_carry != NULL)
-			{
 				labelsInsert(assembler->ops->labels, label_carry, assembler->ops->total_bytes + 1);
-				// ft_strdel(&label_carry);
-			}
 			assembler->op_handler[current_token.subtype](line, assembler->ops);
 		}
-		else if (current_token.type != EMPTY || current_token.type != COMMENT)
-		{
+		else if (current_token.type != EOL || current_token.type != COMMENT)
 			asm_error(1, "Invalid syntax");
-		}
-	
-		t_ast *n = dequeue_op(assembler->ops);
-		// printf("op type: %i, param: %s ");
 		line->line_n++;
 		ft_bzero((void *)line, sizeof(t_input));
-		ft_putstr("Test 2\n");
 	}
 }
 
 void		parse_input(t_asm *assembler, char *file)
 {
+	t_input		*line;
+
+	line = (t_input *)ft_memalloc(sizeof(t_input));
 	if ((assembler->fd = open(file, O_RDONLY)) == -1)
 		asm_error(1, "Couldn't open file");
-	// parse_header(assembler, file);
-	parse_operations(assembler);
+	parse_operations(assembler, line);
 }

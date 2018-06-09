@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:51 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/05 20:23:40 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/08 00:41:52 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int8_t		labelsInsert(t_labels *dict, char *key, uint32_t byte_start)
 	new_item->byte_start = byte_start;
 	new_item->next = dict->items[tmp_hash];
 	dict->items[tmp_hash] = new_item;
+	ft_strdel(&key);
 	return (1);
 }
 

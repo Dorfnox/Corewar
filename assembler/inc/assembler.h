@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/08 00:16:20 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/08 03:58:31 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #define OP_SIZE					1
 #define ECB_SIZE				1
 #define IND_SIZE				2
-#define REG_SIZE				4
+#define REG_SIZE				1
 #define DIR_SIZE_0				4
 #define DIR_SIZE_1				2
 
@@ -81,8 +81,9 @@ typedef char	t_arg_type;
 # define LABEL					1
 # define OPERATION				2
 # define PARAMETER				3
-# define COMMENT				4
-# define MATH					5
+# define PARAM_SEPARATOR		4
+# define COMMENT				5
+# define MATH					6
 # define EOL					-1
 # define EMPTY					-2
 
@@ -188,8 +189,8 @@ typedef struct			s_asm
 t_asm					*init_asm(void);
 
 void					parse_input(t_asm *assembler, char *file);
-void					parse_operations(t_asm *assembler);
-int 					parse_header(t_asm *assembler, char *file_name);
+void					parse_operations(t_asm *assembler, t_input *line);
+int 					parse_header(t_asm *assembler, t_input *line);
 void					verify_input(int ac, char **av);
 
 
@@ -197,13 +198,16 @@ t_token					get_next_token(t_input *line);
 void					get_token_type(t_token *token);
 char					*parse_value(t_input *line);
 void					advance(t_input *line);
-void					handle_whitespace(t_input *line);
+void					skip_whitespaces(t_input *line);
+int8_t					char_is_separator(char c);
 uint8_t					compare_to_ops(char *s);
 uint8_t					compare_to_params(char *s);
 uint8_t					verify_if_register(char *s);
 uint8_t					verify_if_direct(char *s);
 uint8_t					verify_if_indirect(char *s);
 
+int8_t					token_is_label(char *s, size_t len);
+void					remove_label_char(char **s, size_t len);
 
 void					asm_error(int error_code, char *error_message);
 int						is_space(char c);
@@ -220,15 +224,19 @@ int8_t					labelsInsert(t_labels *dict, char *key, uint32_t byte_start);
 uint32_t				labelsSearch(t_labels *dict, char *key);
 
 
-void					init_op_handler(t_asm *assembler);
 void					live_(t_input *line, t_ops *ops);
 void					ld_lld_(t_input *line, t_ops *ops);
 void					st_(t_input *line, t_ops *ops);
 void					add_sub_(t_input *line, t_ops *ops);
 void					and_or_xor_(t_input *line, t_ops *ops);
 void					zjump_fork_lfork_(t_input *line, t_ops *ops);
-void					ldi_(t_input *line, t_ops *ops);
+void					ldi_lldi_(t_input *line, t_ops *ops);
 void					sti_(t_input *line, t_ops *ops);
 void					aff_(t_input *line, t_ops *ops);
+void					unknown_(t_input *line, t_ops *ops);
+
+void					init_op_handler(t_asm *assembler);
+t_token					*get_params(t_input *line, uint8_t len_tokens);
+uint8_t					create_ecb(t_token *tokens, uint8_t len_tokens);
 
 #endif

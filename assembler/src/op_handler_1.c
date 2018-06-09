@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op_handler_1-5.c                                   :+:      :+:    :+:   */
+/*   op_handler_1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 17:19:56 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/08 00:10:36 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/08 00:32:43 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	and_or_xor_(t_input *line, t_ops *ops)
 	uint8_t		ecb;
 	uint8_t		bytes;
 	uint8_t		len_tokens;
-	uint8_t		i;
 	
 	len_tokens = 3;
 	tokens = get_params(line, len_tokens);

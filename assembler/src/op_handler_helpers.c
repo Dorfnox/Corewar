@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 17:26:46 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/07 17:26:59 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/08 00:44:25 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 t_token		*get_params(t_input *line, uint8_t len_tokens)
 {
 	t_token *tokens;
-	uint8_t	i;
+	int8_t	i;
 
+	i = -1;
 	tokens = (t_token *)ft_memalloc(sizeof(t_token) * len_tokens);
-	while (i < len_tokens)
+	while (++i < len_tokens)
 	{
 		tokens[i] = get_next_token(line);
 		if (tokens[i].type != PARAMETER)
@@ -30,11 +31,11 @@ t_token		*get_params(t_input *line, uint8_t len_tokens)
 uint8_t	create_ecb(t_token *tokens, uint8_t len_tokens)
 {
 	uint8_t ecb;
-	uint8_t i;
+	int8_t i;
 
-	i = 0;
+	i = -1;
 	ecb = 0;
-	while (i < 3)
+	while (++i < 3)
 	{
 		ecb += (i < len_tokens) ? tokens[i].subtype : 0;
 		ecb <<= 2;

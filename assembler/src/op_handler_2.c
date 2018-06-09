@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 17:20:09 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/08 00:20:07 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/08 03:58:15 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	ldi_lldi_(t_input *line, t_ops *ops)
 	uint8_t		ecb;
 	uint8_t		bytes;
 	uint8_t		len_tokens;
-	uint8_t		i;
 	
 	len_tokens = 3;
 	tokens = get_params(line, len_tokens);
@@ -53,7 +52,6 @@ void	sti_(t_input *line, t_ops *ops)
 	uint8_t		ecb;
 	uint8_t		bytes;
 	uint8_t		len_tokens;
-	uint8_t		i;
 	
 	len_tokens = 3;
 	tokens = get_params(line, len_tokens);
@@ -72,7 +70,6 @@ void	aff_(t_input *line, t_ops *ops)
 	uint8_t		ecb;
 	uint8_t		bytes;
 	uint8_t		len_tokens;
-	uint8_t		i;
 	
 	len_tokens = 1;
 	tokens = get_params(line, len_tokens);
@@ -81,4 +78,11 @@ void	aff_(t_input *line, t_ops *ops)
 	ecb = create_ecb(tokens, len_tokens);
 	bytes = OP_SIZE + ECB_SIZE + REG_SIZE;
 	enqueue_op(ops, create_ast(LIVE, ecb, bytes, tokens));
+}
+
+void	unknown_(t_input *line, t_ops *ops)
+{
+	(void)line;
+	(void)ops;
+	asm_error(1, "????????");
 }
