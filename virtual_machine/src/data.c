@@ -14,9 +14,7 @@
 
 void	retrieve_data(t_corewar *core, char **argv)
 {
-	add_flag(&core->flag_queue, "-n", flag_n);
-	add_flag(&core->flag_queue, "-dump", flag_dump);
-	add_flag(&core->flag_queue, "-viz", flag_viz);
+	init_flag_queue(&core->flag_queue);
 	while (!flag_handler(core, &argv))
 	{
 		if (ft_strstr(*argv, ".cor"))
@@ -35,9 +33,8 @@ void	retrieve_data(t_corewar *core, char **argv)
 		}
 		else
 			corewar_error(ft_str256(2, "Bad flag: ", *argv), 1);
-		add_flag(&core->flag_queue, "-n", flag_n);
-		add_flag(&core->flag_queue, "-dump", flag_dump);
 	}
+	clean_flag_queue(&core->flag_queue);
 }
 
 unsigned int	flag_dump(t_corewar *core, char ***argv)
