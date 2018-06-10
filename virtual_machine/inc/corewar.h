@@ -191,6 +191,8 @@ void    				init_bored_colors(void);
 void					terminate_ncurses(t_corewar *core);
 void    				draw_process(t_ncurses *n, t_process *process);
 
+void					print_process_info(t_process *p);
+
 /*
 **	Players
 */
