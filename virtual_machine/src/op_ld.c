@@ -38,10 +38,13 @@ void		ld_(t_corewar *core, t_process *process)
 		index = get_index(index, process->args[0][0], process->args[0][1]);
 		write_board_to_register(process->reg[process->args[1][0]], core->node_addresses[index]);
 	}
-	process->carry = !!smash_bytes(process->reg[process->args[1][0]]);
-	ft_printf("register %u is now: %x%x%x%x\n", process->args[1][0],
-		process->reg[process->args[1][0]][0], //debug
-		process->reg[process->args[1][0]][1], //debug
-		process->reg[process->args[1][0]][2],
-		process->reg[process->args[1][0]][3]);
+//	mvprintw(0, 0, "Reg value: %x\n", process->reg[process->args[1][0]]);
+	process->carry = !smash_bytes(process->reg[process->args[1][0]]);
+//	mvprintw(1, 0, "Reg value: %x\n", !smash_bytes(process->reg[process->args[1][0]]));
+//	refresh();
+	//ft_printf("register %u is now: %x%x%x%x\n", process->args[1][0],
+	//	process->reg[process->args[1][0]][0], //debug
+	//	process->reg[process->args[1][0]][1], //debug
+	//	process->reg[process->args[1][0]][2],
+	//	process->reg[process->args[1][0]][3]);
 }

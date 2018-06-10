@@ -28,7 +28,7 @@ void		and_(t_corewar *core, t_process *process)
 	uint32_t	b;
 	uint32_t	and_result;
 
-	DB("and-ing");
+//	DB("and-ing");
 	index = process->curr_pc->index;
 	if (!parse_encoding_byte(process))
 		return ;
@@ -39,7 +39,7 @@ void		and_(t_corewar *core, t_process *process)
 	a = get_and_args(core, process, index, 0);
 	b = get_and_args(core, process, index, 1);
 	and_result = a & b;
-	ft_printf("and result: %.8x\n", and_result);
+//	ft_printf("and result: %.8x\n", and_result);
 	process->reg[process->args[2][0]][0] = (uint8_t)(and_result >> 24);
 	process->reg[process->args[2][0]][1] = (uint8_t)(and_result >> 16);
 	process->reg[process->args[2][0]][2] = (uint8_t)(and_result >> 8);

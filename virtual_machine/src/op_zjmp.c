@@ -37,6 +37,10 @@ void		zjmp_(t_corewar *core, t_process *process)
 		jump_index_a = (uint8_t)read_from_board(process->curr_pc->next, 1);
 		jump_index_b = (uint8_t)read_from_board(process->curr_pc->next->next, 1);
 		index = get_index(process->curr_pc->index, jump_index_a, jump_index_b);
+		mvprintw(0, 0, "curr_pc index: %u\nidx_a: %u, idx_b: %u, index: %u\n\n",
+			process->curr_pc->index, jump_index_a, jump_index_b, index);
 		process->curr_pc = core->node_addresses[index];
 	}
+	else
+		process->curr_pc = process->curr_pc->next->next->next;
 }

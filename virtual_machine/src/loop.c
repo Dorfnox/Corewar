@@ -26,6 +26,8 @@ void    loop(t_corewar *core)
 			p = pop(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN]);
 			// ft_cclearscreen(2);
 			// print_board(core, p);
+			if (core->flag.viz)
+				draw_process(&core->ncur, p);
 			p->instruct(core, p);
 //			ft_pflite("Process: %u, curr_pc: %u\n", p->process_num, p->curr_pc->index);
 			// --------------------
@@ -35,7 +37,7 @@ void    loop(t_corewar *core)
 			insert_process(&core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], p);
 			// push(&core->process_stack[(i + core->op[board_value].wait_time) % 1000], p);
 		}
-        game_speed(1); // 1 is fast, 50 is slow
+        game_speed(5); // 1 is fast, 50 is slow
         ++core->env.cycle;
 	}
 }

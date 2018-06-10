@@ -44,7 +44,7 @@ int		main(int argc, char **argv)
 	init_board(&core);
 	init_operations(core.op);
 	init_c_array(&core);
-	init_ncursesboard(&core);
+	init_ncursesbored(&core);
 	loop(&core);
 	int i = 0;
 	while (i < 4)

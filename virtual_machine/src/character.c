@@ -21,7 +21,7 @@ void	init_c_array(t_corewar *c)
 	i = -1;
 	while (++i < 256)
 	{
-		c->c_array[i][0] = t[i / 16];
-		c->c_array[i][1] = t[i % 16];
+		c->ncur.c_array[i][0] = t[i / 16];
+		c->ncur.c_array[i][1] = t[i % 16];
 	}
 }

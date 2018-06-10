@@ -34,6 +34,15 @@ struct s_corewar;
 
 enum
 {
+	P1 = 1,
+	P2,
+	P3,
+	P4,
+	DF
+};
+
+enum
+{
 	REGISTER = 1,
 	DIRECT,
 	INDIRECT
@@ -75,7 +84,8 @@ typedef struct			s_env
 
 typedef struct			s_ncurses
 {
-	WINDOW				*win;
+	WINDOW				*bored;
+	char				c_array[256][3];
 }						t_ncurses;
 
 /*
@@ -129,7 +139,6 @@ typedef struct			s_corewar
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
 	t_operation			op[17];
-	char				c_array[256][3];
 	t_ncurses			ncur;
 }						t_corewar;
 
@@ -177,9 +186,10 @@ void					init_c_array(t_corewar *core);
 **	NCurses Functionality
 */
 
-void					init_ncursesboard(t_corewar *core);
+void					init_ncursesbored(t_corewar *core);
+void    				init_bored_colors(void);
 void					terminate_ncurses(t_corewar *core);
-void    				write_to_n_window(t_corewar *core, int node);
+void    				draw_process(t_ncurses *n, t_process *process);
 
 /*
 **	Players
