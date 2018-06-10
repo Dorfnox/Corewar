@@ -67,7 +67,16 @@ typedef struct			s_env
 	uint64_t			max_cycles;
 	uint64_t			dump;
 	uint8_t				num_players;
-}						t_env;
+}
+						t_env;
+/*
+**	Ncurses handling
+*/
+
+typedef struct			s_ncurses
+{
+	WINDOW				*win;
+}						t_ncurses;
 
 /*
 **	Core War structs
@@ -114,14 +123,14 @@ typedef struct			s_corewar
 	t_env				env;
 	t_flag				flag;
 	t_queue				flag_queue;
-	WINDOW				*win;
 	t_board_node		*board;
 	t_board_node		*node_addresses[MEM_SIZE];
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
-	char				c_array[256][3];
 	t_operation			op[17];
+	char				c_array[256][3];
+	t_ncurses			ncur;
 }						t_corewar;
 
 /*
@@ -161,6 +170,16 @@ void					init_board(t_corewar *core);
 
 void					init_operations(t_operation *core);
 void					init_wait_times(t_operation *core);
+
+void					init_c_array(t_corewar *core);
+
+/*
+**	NCurses Functionality
+*/
+
+void					init_ncursesboard(t_corewar *core);
+void					terminate_ncurses(t_corewar *core);
+void    				write_to_n_window(t_corewar *core, int node);
 
 /*
 **	Players

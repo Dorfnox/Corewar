@@ -85,8 +85,9 @@ unsigned int	flag_n(t_corewar *core, char ***argv)
 
 unsigned int	flag_viz(t_corewar *core, char ***argv)
 {
+	(void)argv;
 	if (core->flag.viz)
-		corewar_error("You can't have two visualizers, silly!");
+		corewar_error("You can't have two visualizers, silly!", 1);
 	return ((core->flag.viz = 1));
 }
 

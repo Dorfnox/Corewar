@@ -15,7 +15,6 @@
 void	init_c_array(t_corewar *c)
 {
 	uint16_t		i;
-	uint16_t		j;
 	char			*t;
 
 	t = "0123456789ABCDEF";

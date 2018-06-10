@@ -15,7 +15,7 @@ NAME = corewar
 FILES = main \
 		error \
 		flag_handler \
-		data player process board instruction character \
+		data player process board instruction character ncurses_board \
 		loop \
 		parse_byte \
 		write_byte \
