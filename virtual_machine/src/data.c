@@ -16,6 +16,7 @@ void	retrieve_data(t_corewar *core, char **argv)
 {
 	add_flag(&core->flag_queue, "-n", flag_n);
 	add_flag(&core->flag_queue, "-dump", flag_dump);
+	add_flag(&core->flag_queue, "-viz", flag_viz);
 	while (!flag_handler(core, &argv))
 	{
 		if (ft_strstr(*argv, ".cor"))
@@ -82,12 +83,19 @@ unsigned int	flag_n(t_corewar *core, char ***argv)
 		corewar_error("Flag 'n' requires champion (.cor file)", 1);
 	add_new_player(core, *args, n);
 	(*argv) = args;
-	return 1;
+	return (1);
+}
+
+unsigned int	flag_viz(t_corewar *core, char ***argv)
+{
+	if (core->f.viz)
+		corewar_error("You can't have two visualizers, silly!");
+	return ((core->f.viz = 1));
 }
 
 uint64_t		get_max_cycles(uint64_t init)
 {
 	if (init <= CYCLE_DELTA)
-		return 0;
+		return (0);
 	return (init + get_max_cycles(init - CYCLE_DELTA));
 }

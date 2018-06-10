@@ -53,6 +53,7 @@ typedef struct			s_flag_queue
 typedef struct			s_flag
 {
 	uint8_t				dump:1;
+	uint8_t				viz:1;
 }						t_flag;
 
 /*
@@ -149,6 +150,7 @@ void					clean_flag_queue(t_queue **q);
 void					retrieve_data(t_corewar *core, char **argv);
 unsigned int			flag_dump(t_corewar *core, char ***argv);
 unsigned int			flag_n(t_corewar *core, char ***argv);
+unsigned int			flag_viz(t_corewar *core, char ***argv);
 unsigned int			add_player_file(t_corewar *core, char *filename);
 uint64_t				get_max_cycles(uint64_t init);
 
