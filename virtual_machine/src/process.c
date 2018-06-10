@@ -49,3 +49,31 @@ t_process	*new_process(t_player *player, t_board_node *start_pos, t_process *to_
 //	ft_pflite("-----\nPlayer: %s\nCurrent PC: %u\nProcess ID: %u\n-----\n", player->header.prog_name, new->curr_pc->index, new->process_num);
 	return (new);
 }
+
+void		insert_process(t_stack *s, t_process *p)
+{
+	t_node		*head;
+	t_node		*n;
+	t_process	*tmp;
+
+	if (!s->top)
+		push(s, p);
+	else if ((tmp = peeks(s)) && p->process_num > tmp->process_num)
+		push(s, p);
+	else
+	{
+		head = s->top;
+		n = s->top;
+		s->top = s->top->next;
+		while ((tmp = peeks(s)))
+		{
+			if (p->process_num > tmp->process_num)
+				break ;
+			n = s->top;
+			s->top = s->top->next;
+		}
+		push(s, p);
+		n->next = s->top;
+		s->top = head;
+	}
+}
