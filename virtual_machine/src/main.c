@@ -48,8 +48,8 @@ int		main(int argc, char **argv)
 	int i = 0;
 	while (i < 4)
 	{
-		ft_pflite("player: %u, name: %s\n", i + 1, core.player[i].header.prog_name);
-		ft_pflite("player: %u, comm: %s\n", i + 1, core.player[i].header.comment);
+//		ft_pflite("player: %u, name: %s\n", i + 1, core.player[i].header.prog_name);
+//		ft_pflite("player: %u, comm: %s\n", i + 1, core.player[i].header.comment);
 		i++;
 	}
 	i = 0;

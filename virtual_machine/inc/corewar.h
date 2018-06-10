@@ -114,6 +114,7 @@ typedef struct			s_corewar
 	t_env				env;
 	t_flag				flag;
 	t_queue				flag_queue;
+	WINDOW				*win;
 	t_board_node		*board;
 	t_board_node		*node_addresses[MEM_SIZE];
 	t_stack				process_stack[PROCESS_STACK_LEN];
