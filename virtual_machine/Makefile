@@ -38,6 +38,7 @@ FILES = main \
 		op_aff
 
 C_FLAGS = -Wall -Wextra -Werror
+NCURSES = -L/usr/lib -lncurses
 
 C_LOC = src/
 C_NAM = $(addsuffix .c, $(FILES))
@@ -71,7 +72,7 @@ all: $(NAME)
 
 $(NAME): $(LIB_SRC) $(O_SRC)
 	@echo "$(YELLOW_BOLD)Compiling executable... $@$(END_COLOUR)"
-	@gcc $(C_FLAGS) $^ -o $@
+	@gcc $(C_FLAGS) $(NCURSES) $^ -o $@
 	@echo
 
 $(O_LOC)%.o: $(C_LOC)%.c $(HEADERS)

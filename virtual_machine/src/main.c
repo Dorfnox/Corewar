@@ -43,6 +43,7 @@ int		main(int argc, char **argv)
 	retrieve_data(&core, ++argv);
 	init_board(&core);
 	init_operations(core.op);
+	init_ncursesboard(&core);
 	loop(&core);
 	int i = 0;
 	while (i < 4)
@@ -52,6 +53,7 @@ int		main(int argc, char **argv)
 		i++;
 	}
 	i = 0;
+	terminate_ncurses();
 	// print_board(&core);
 	return (0);
 }

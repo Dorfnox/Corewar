@@ -18,23 +18,23 @@
 
 void       init_operations(t_operation *op)
 {
-    op[0].instr = bad_;
-    op[1].instr = live_;
-    op[2].instr = ld_;
-    op[3].instr = st_;
-    op[4].instr = add_;
-    op[5].instr = sub_;
-    op[6].instr = and_;
-    op[7].instr = or_;
-    op[8].instr = xor_;
-    op[9].instr = zjmp_;
-    op[10].instr = ldi_;
-    op[11].instr = sti_;
-    op[12].instr = fork_;
-    op[13].instr = lld_;
-    op[14].instr = lldi_;
-    op[15].instr = lfork_;
-    op[16].instr = aff_;
+    op[0].instruct = bad_;
+    op[1].instruct = live_;
+    op[2].instruct = ld_;
+    op[3].instruct = st_;
+    op[4].instruct = add_;
+    op[5].instruct = sub_;
+    op[6].instruct = and_;
+    op[7].instruct = or_;
+    op[8].instruct = xor_;
+    op[9].instruct = zjmp_;
+    op[10].instruct = ldi_;
+    op[11].instruct = sti_;
+    op[12].instruct = fork_;
+    op[13].instruct = lld_;
+    op[14].instruct = lldi_;
+    op[15].instruct = lfork_;
+    op[16].instruct = aff_;
     init_wait_times(op);
 }
 

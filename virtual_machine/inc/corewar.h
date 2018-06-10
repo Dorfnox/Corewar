@@ -14,6 +14,7 @@
 # define COREWAR_H
 
 # include <sys/stat.h>
+# include <ncurses.h>
 # include "libft.h"
 # include "op.h"
 
@@ -98,12 +99,12 @@ typedef struct			s_process
 	uint8_t				args[3][4];
 	uint8_t				carry;
 	uint8_t				reg[REG_NUMBER + 1][REG_SIZE];
-	void				(*instr)(struct s_corewar *, struct s_process *);
+	void				(*instruct)(struct s_corewar *, struct s_process *);
 }						t_process;
 
 typedef struct			s_operation
 {
-	void				(*instr)(struct s_corewar *, struct s_process *);
+	void				(*instruct)(struct s_corewar *, struct s_process *);
 	uint16_t			wait_time;
 }						t_operation;
 

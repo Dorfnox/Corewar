@@ -26,12 +26,12 @@ void    loop(t_corewar *core)
 			p = pop(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN]);
 			// ft_cclearscreen(2);
 			// print_board(core, p);
-			p->instr(core, p);
-			ft_pflite("Process: %u, curr_pc: %u\n", p->process_num, p->curr_pc->index);
+			p->instruct(core, p);
+//			ft_pflite("Process: %u, curr_pc: %u\n", p->process_num, p->curr_pc->index);
 			// --------------------
             // --------------------
 			board_value = ZERO_AT_BAD_INSTR(p->curr_pc->value);
-			p->instr = core->op[board_value].instr;
+			p->instruct = core->op[board_value].instruct;
 			insert_process(&core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], p);
 			// push(&core->process_stack[(i + core->op[board_value].wait_time) % 1000], p);
 		}
