@@ -35,4 +35,5 @@ void		lfork_(t_corewar *core, t_process *process)
 	index = core->node_addresses[(process->curr_pc->index + arg) % MEM_SIZE];
 	new_p = new_process(process->player, index, process);
 	insert_process(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN], new_p);
+	process->curr_pc = process->curr_pc->next->next->next;
 }
