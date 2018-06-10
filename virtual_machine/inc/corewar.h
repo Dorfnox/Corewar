@@ -120,6 +120,7 @@ typedef struct			s_corewar
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
+	char				c_array[256][3];
 	t_operation			op[17];
 }						t_corewar;
 
@@ -177,6 +178,7 @@ void					init_player_processes(t_corewar *core);
 
 t_process				*new_process(t_player *player, t_board_node *b,
 							t_process *to_copy);
+void					insert_process(t_stack *s, t_process *p);
 
 /*
 ** Instructions
@@ -229,8 +231,6 @@ void					aff_(t_corewar *core, t_process *process);
 
 void					loop(t_corewar *core);
 void    				game_speed(uint8_t speed);
-
-void					insert_process(t_stack *s, t_process *p);
 
 /*
 ** Utilities
