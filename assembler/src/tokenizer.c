@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 20:27:31 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/08 04:11:49 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/10 06:19:56 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	get_token_type(t_token *token)
 	uint8_t	op;
 	uint8_t	param;
 	
-	ft_putstr(token->value);
+	// ft_putstr(token->value);
 	if (!token->value)
 	{
 		token->type = EMPTY;
@@ -90,7 +90,7 @@ t_token	get_next_token(t_input *line)
 	new_token.value = parse_value(line);
 	// ft_putstr(new_token.value);
 	get_token_type(&new_token);
-	ft_putnbr(new_token.type);
+	// ft_putnbr(new_token.type);
 	return (new_token);
 }
 

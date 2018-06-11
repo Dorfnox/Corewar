@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:51 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/08 00:41:52 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/10 05:26:40 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ uint32_t 	labelsSearch(t_labels *dict, char *key)
 	tmp_item = dict->items[hash(key)];
 	while (tmp_item && ft_strcmp(tmp_item->key, key) != 0)
 		tmp_item = tmp_item->next;
-	if (!tmp_item)
-		return (-1);
+	if (!tmp_item || ft_strcmp(key, tmp_item->key) != 0)
+		asm_error(1, "Invalid label dir param was dereferenced");
 	return (tmp_item->byte_start);
 }
 

@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/08 04:35:19 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/10 05:57:12 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	parse_operations(t_asm *assembler, t_input *line)
 		{
 			if (label_carry != NULL)
 				labelsInsert(assembler->ops->labels, label_carry, assembler->ops->total_bytes + 1);
-			assembler->op_handler[current_token.subtype](line, assembler->ops);
+			assembler->op_handler[current_token.subtype](line, assembler->ops, current_token.subtype);
 		}
 		else if (current_token.type != EOL || current_token.type != COMMENT)
 			asm_error(1, "Invalid syntax");

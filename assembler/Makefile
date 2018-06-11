@@ -6,7 +6,7 @@
 #    By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/06/08 00:22:20 by rzarate          ###   ########.fr        #
+#    Updated: 2018/06/10 05:30:13 by rzarate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ FILES = main \
 		op_handler_1 \
 		op_handler_2 \
 		op_handler_helpers \
+		bytecode \
 		label_hashtable \
 		utility \
 

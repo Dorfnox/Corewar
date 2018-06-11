@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:11:57 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/07 17:32:37 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/10 05:52:26 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,10 @@ t_ops		*init_op_queue(void)
 void		enqueue_op(t_ops *queue, t_ast *node)
 {
 	if (!queue->first)
-	{
 		queue->first = node;
-		queue->last = node;
-	}
 	else
-	{
 		queue->last->next = node;
-		queue->last = node;
-	}
+	queue->last = node;
 	queue->total_bytes += node->bytes;
 	queue->number_of_ops++;
 }
@@ -58,7 +53,7 @@ t_ast		*dequeue_op(t_ops *queue)
 	}
 }
 
-t_ast		*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params)
+t_ast		*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params, uint8_t len_params)
 {
 	t_ast	 *node;
 
@@ -68,13 +63,14 @@ t_ast		*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params)
 	node->ecb = ecb;
 	node->bytes = bytes;
 	node->params = params;
+	node->len_params = len_params;
 	node->next = NULL;
 	return (node);
 }
 
-// char			*peek_queue(t_ops *queue)
-// {
-// 	if (!queue || !queue->first)
-// 		exit_error();
-// 	return (queue->first->s);
-// }
+uint8_t		op_queue_is_empty(t_ops *queue)
+{
+	if (!queue || !queue->first)
+		return (1);
+	return (0);
+}

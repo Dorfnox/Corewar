@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/08 03:58:31 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/10 05:58:11 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,20 @@
 
 typedef char	t_arg_type;
 
+typedef struct	s_op
+{
+	char		*name;
+	int			arg_count;
+	t_arg_type	arg[3];
+	uint8_t		opcode;
+	size_t		cycles;
+	char		*description;
+	int			needs_acb;
+	int			short_direct;
+}				t_op;
+
+extern	t_op					g_ops[17];
+
 #define T_REG					1
 #define T_DIR					2
 #define T_IND					4
@@ -108,9 +122,10 @@ typedef char	t_arg_type;
 # define LFORK					15
 # define AFF					16
 
-
+#define BYTE_TO_FILE(x)			ft_putchar_fd(x,assembler->fd)
 
 #define CAPACITY				30
+
 
 /*
 **  STRUCTURES
@@ -144,6 +159,7 @@ typedef struct			s_ast
 {
 	uint8_t				op;
 	uint8_t				ecb;
+	uint8_t				len_params;
 	t_token				*params;
 	uint8_t				bytes;
 	struct s_ast		*next;
@@ -179,7 +195,7 @@ typedef struct			s_asm
 	char				*output_file_name;
 	t_header			*header;	
 	t_ops				*ops;
-	void				(*op_handler[17])(t_input *line, t_ops *ops);
+	void				(*op_handler[17])(t_input *line, t_ops *ops, uint8_t opcode);
 }						t_asm;
 
 /*
@@ -187,6 +203,8 @@ typedef struct			s_asm
 */
 
 t_asm					*init_asm(void);
+
+void					create_bytecode(t_asm *assembler);
 
 void					parse_input(t_asm *assembler, char *file);
 void					parse_operations(t_asm *assembler, t_input *line);
@@ -215,8 +233,9 @@ int						is_space(char c);
 
 t_ast					*dequeue_op(t_ops *queue);
 void					enqueue_op(t_ops *queue, t_ast *node);
-t_ast					*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params);
+t_ast					*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params, uint8_t len_params);
 t_ops					*init_op_queue(void);
+uint8_t					op_queue_is_empty(t_ops *queue);
 
 size_t					hash(char *label);
 t_labels				*labelsInit(size_t capacity);
@@ -224,16 +243,16 @@ int8_t					labelsInsert(t_labels *dict, char *key, uint32_t byte_start);
 uint32_t				labelsSearch(t_labels *dict, char *key);
 
 
-void					live_(t_input *line, t_ops *ops);
-void					ld_lld_(t_input *line, t_ops *ops);
-void					st_(t_input *line, t_ops *ops);
-void					add_sub_(t_input *line, t_ops *ops);
-void					and_or_xor_(t_input *line, t_ops *ops);
-void					zjump_fork_lfork_(t_input *line, t_ops *ops);
-void					ldi_lldi_(t_input *line, t_ops *ops);
-void					sti_(t_input *line, t_ops *ops);
-void					aff_(t_input *line, t_ops *ops);
-void					unknown_(t_input *line, t_ops *ops);
+void					live_(t_input *line, t_ops *ops, uint8_t op_code);
+void					ld_lld_(t_input *line, t_ops *ops, uint8_t op_code);
+void					st_(t_input *line, t_ops *ops, uint8_t op_code);
+void					add_sub_(t_input *line, t_ops *ops, uint8_t op_code);
+void					and_or_xor_(t_input *line, t_ops *ops, uint8_t op_code);
+void					zjump_fork_lfork_(t_input *line, t_ops *ops, uint8_t op_code);
+void					ldi_lldi_(t_input *line, t_ops *ops, uint8_t op_code);
+void					sti_(t_input *line, t_ops *ops, uint8_t op_code);
+void					aff_(t_input *line, t_ops *ops, uint8_t op_code);
+void					unknown_(t_input *line, t_ops *ops, uint8_t op_code);
 
 void					init_op_handler(t_asm *assembler);
 t_token					*get_params(t_input *line, uint8_t len_tokens);
