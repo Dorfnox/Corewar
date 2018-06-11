@@ -30,6 +30,30 @@
 # define EB1 process->encoding_byte[1]
 # define EB2 process->encoding_byte[2]
 
+# define REG process->reg
+
+# define ARG0 process->args[0]
+# define ARG00 process->args[0][0]
+# define ARG01 process->args[0][1]
+# define ARG02 process->args[0][2]
+# define ARG03 process->args[0][3]
+
+# define ARG1 process->args[1]
+# define ARG10 process->args[1][0]
+# define ARG11 process->args[1][1]
+# define ARG12 process->args[1][2]
+# define ARG13 process->args[1][3]
+
+# define ARG2 process->args[2]
+# define ARG20 process->args[2][0]
+# define ARG21 process->args[2][1]
+# define ARG22 process->args[2][2]
+# define ARG23 process->args[2][3]
+
+# define VIZ(a) core->flag.viz ? (a) : 0
+# define NCURSES_XLIMIT 189
+# define NCURSES_YLIMIT	64
+
 struct s_corewar;
 
 enum
@@ -82,10 +106,19 @@ typedef struct			s_env
 **	Ncurses handling
 */
 
+typedef struct			s_ncurses_draw_data
+{
+	uint8_t				*value;
+	uint8_t				value_size;
+	uint8_t				start_x;
+	uint8_t				start_y;
+}						t_ndd;
+
 typedef struct			s_ncurses
 {
 	WINDOW				*bored;
 	char				c_array[256][3];
+	t_ndd				ncur_data;
 }						t_ncurses;
 
 /*
@@ -98,6 +131,7 @@ typedef struct			s_player
 	char				*filename;
 	uint8_t				player_num;
 	header_t			header;
+	uint16_t			instruction_size;
 	uint64_t			last_live;
 	uint64_t			num_live;
 }						t_player;
@@ -186,10 +220,14 @@ void					init_c_array(t_corewar *core);
 **	NCurses Functionality
 */
 
-void					init_ncursesbored(t_corewar *core);
+void					init_ncurses(t_corewar *core);
 void    				init_bored_colors(void);
+void    				init_ncurses_bored(t_corewar *core);
 void					terminate_ncurses(t_corewar *core);
 void    				draw_process(t_ncurses *n, t_process *process);
+void    				capture_ncur_data(t_ncurses *n, uint16_t index,
+							uint8_t *value, uint8_t value_size);
+void    				draw_to_bored(t_ncurses *n, uint8_t player_num);
 
 void					print_process_info(t_process *p);
 

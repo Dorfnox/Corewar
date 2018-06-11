@@ -41,10 +41,9 @@ int		main(int argc, char **argv)
 		corewar_error(USAGE, 1);
 	ft_bzero(&core, sizeof(t_corewar));
 	retrieve_data(&core, ++argv);
+	init_ncurses(&core);
 	init_board(&core);
 	init_operations(core.op);
-	init_c_array(&core);
-	init_ncursesbored(&core);
 	loop(&core);
 	int i = 0;
 	while (i < 4)

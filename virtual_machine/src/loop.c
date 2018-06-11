@@ -18,26 +18,16 @@ void    loop(t_corewar *core)
 	t_process   *p;
 	while (1) // live hasn't been called within the last cycle by at least 1 champion and other stuff
 	{
-        // DBI(core->env.cycle);
-        // if (core->env.cycle > 870)
-        // 	break ;
 		while (!isemptys(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN]))
 		{
 			p = pop(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN]);
-			// ft_cclearscreen(2);
-			// print_board(core, p);
-			if (core->flag.viz)
-				draw_process(&core->ncur, p);
+			VIZ(draw_process(&core->ncur, p));
 			p->instruct(core, p);
-//			ft_pflite("Process: %u, curr_pc: %u\n", p->process_num, p->curr_pc->index);
-			// --------------------
-            // --------------------
 			board_value = ZERO_AT_BAD_INSTR(p->curr_pc->value);
 			p->instruct = core->op[board_value].instruct;
 			insert_process(&core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], p);
-			// push(&core->process_stack[(i + core->op[board_value].wait_time) % 1000], p);
 		}
-        game_speed(5); // 1 is fast, 50 is slow
+        game_speed(8); // 1 is fast, 50 is slow
         ++core->env.cycle;
 	}
 }

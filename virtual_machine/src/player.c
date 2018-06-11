@@ -28,17 +28,10 @@ void			add_new_player(t_corewar *core, char *filename, uint8_t p_num)
 	}
 	content_size = import_player_file(filename, &contents);
 	ft_memcpy(core->player[p_num - 1].header.prog_name, &contents[4], PROG_NAME_LENGTH);
-/*	int i = 0;
-	printf("\n");
-	while (i < 128)
-		printf("%.2x", contents[i++]);
-	printf("\n");
-	while (i < INSTR)
-		printf("%.2x", contents[i++]);
-	printf("\n");*/
 	ft_memcpy(core->player[p_num - 1].header.comment, &contents[128 + 12], COMMENT_LENGTH);
 	ft_memcpy(core->player[p_num - 1].header.instructions, &contents[INSTR + 16], content_size - INSTR);
 	core->player[p_num - 1].header.prog_size = content_size;
+	core->player[p_num - 1].instruction_size = content_size - (INSTR + 16);
 	core->player[p_num - 1].player_num = p_num;
 	core->player[p_num - 1].filename = filename;
 }
