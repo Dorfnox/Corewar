@@ -14,12 +14,12 @@
 
 void		print_process_info(t_ncurses *n, t_process *p)
 {
-    wattron(n->playa[p->player->player_num],
+    wattron(n->playa[p->player->player_num - 1],
     	COLOR_PAIR(p->player->player_num));
-	mvwprintw(n->playa[p->player->player_num], 0, 0,
-		"Player: %u\n----------\ncurr_pc: %4u, board-value: %.8x",
+	mvwprintw(n->playa[p->player->player_num - 1], 0, 0,
+		"Player: %u\n----------\ncurr_pc: %4u\nboard-value: %.2x",
 		p->player->player_num,
 		p->curr_pc->index,
 		p->curr_pc->value);
-	wrefresh(n->playa[p->player->player_num]);
+	wrefresh(n->playa[p->player->player_num - 1]);
 }

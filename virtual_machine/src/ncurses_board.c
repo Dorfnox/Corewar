@@ -18,18 +18,18 @@ void    init_ncurses(t_corewar *core)
 
 void    init_bored_colors(void)
 {
-    init_pair(P1, COLOR_GREEN, COLOR_WHITE);
-    init_pair(P2, COLOR_BLUE, COLOR_WHITE);
-    init_pair(P3, COLOR_RED, COLOR_WHITE);
-    init_pair(P4, COLOR_MAGENTA, COLOR_WHITE);
-    init_pair(DF, COLOR_BLACK, COLOR_WHITE);
+    init_pair(P1, COLOR_GREEN, COLOR_BLACK);
+    init_pair(P2, COLOR_BLUE, COLOR_BLACK);
+    init_pair(P3, COLOR_RED, COLOR_BLACK);
+    init_pair(P4, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(DF, COLOR_WHITE, COLOR_BLACK);
 }
 
 void    init_ncurses_bored(t_corewar *core)
 {
     uint16_t    i;
 
-    core->ncur.bored = newwin(64, (64 * 2) + 63, 10, 10);
+    core->ncur.bored = newwin(64, (64 * 2) + 63, 2, 5);
     wattron(core->ncur.bored, COLOR_PAIR(DF));
     i = -1;
     while (++i < MEM_SIZE)
@@ -46,26 +46,39 @@ void    init_ncurses_playa(t_corewar *core)
 {
     uint8_t     i;
 
-    i = 0;
-    while (i < MAX_PLAYERS)
+    i = -1;
+    while (++i < MAX_PLAYERS)
     {
         if (core->player[i].player_num)
-            core->ncur.playa[i] = newwin(20, 20, 200, 30 * i);
-        ++i;
+        {
+            core->ncur.playa[i] = newwin(5, 25, 5 * i, 200);
+            wrefresh(core->ncur.playa[i]);
+        }
     }
 }
-
-void    draw_process(t_ncurses *n, t_process *process)
+/*
+void    clear_process(t_ncurses *n, uint16_t index)
 {
     uint8_t    y;
     uint8_t    x;
 
     y = process->curr_pc->index / 64;
     x = (process->curr_pc->index % 64) * 3;
+    wattroff(n->bored, A_STANDOUT);
+}
+*/
+void    draw_process(t_ncurses *n, t_process *process)
+{
+    uint8_t    y;
+    uint8_t    x;
+
+    
+    y = process->curr_pc->index / 64;
+    x = (process->curr_pc->index % 64) * 3;
     wattron(n->bored, COLOR_PAIR(process->player->player_num));
-    // wattron(n->bored, A_BLINK);
+//    wattroff(n->bored, A_BOLD);
     wmove(n->bored, y, x);
-    // mvwprintw(n->bored, y, x, n->c_array[process->curr_pc->value]);
+//    mvwprintw(n->bored, y, x, n->c_array[process->curr_pc->value]);
     wrefresh(n->bored);
     //wattroff(n->bored, A_BLINK);
 }
@@ -82,9 +95,9 @@ void    draw_to_bored(t_ncurses *n, uint8_t player_num)
 {
     uint8_t     i;
 
-    i = 0;
+    i = -1;
     wattron(n->bored, COLOR_PAIR(player_num));
-    while (i < n->ncur_data.value_size)
+    while (++i < n->ncur_data.value_size)
     {
         mvwprintw(n->bored, n->ncur_data.start_y, n->ncur_data.start_x, 
             n->c_array[n->ncur_data.value[i]]);
@@ -98,7 +111,6 @@ void    draw_to_bored(t_ncurses *n, uint8_t player_num)
         }
         else
             n->ncur_data.start_x += 3;
-        i++;
     }
     wrefresh(n->bored);
 }

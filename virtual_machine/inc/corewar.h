@@ -62,7 +62,11 @@ enum
 	P2,
 	P3,
 	P4,
-	DF
+	DF,
+	P1B = 10,
+	P2B,
+	P3B,
+	P4B
 };
 
 enum
@@ -310,6 +314,7 @@ void    				game_speed(uint8_t speed);
 uint8_t					parse_encoding_byte(t_process *process);
 uint8_t					parse_arguments(t_process *process);
 uint32_t				smash_bytes(uint8_t *reg);
+uint8_t					*unsmash_bytes(uint32_t nbr);
 
 /*
 ** Write Bytes

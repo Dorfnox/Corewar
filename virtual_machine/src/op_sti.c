@@ -44,7 +44,7 @@ void		sti_(t_corewar *core, t_process *process)
 		a = smash_bytes(process->args[1]) >> 16;
 	else if (EB1 == INDIRECT)
 	{
-		index = get_index(process->curr_pc->index, process->args[1][0], process->args[1][1]);
+		index = get_index(tmp->index, process->args[1][0], process->args[1][1]);
 		a = read_from_board(core->node_addresses[index], 4);
 	}
 	if (EB2 == REGISTER)
@@ -54,4 +54,6 @@ void		sti_(t_corewar *core, t_process *process)
 	a += b;
 	tmp = core->node_addresses[(tmp->index + (a % IDX_MOD)) % MEM_SIZE];
 	write_number_to_board(tmp, process->args[0]);
+	VIZ(capture_ncur_data(&core->ncur, tmp->index, unsmash_bytes(a), 4));
+	VIZ(draw_to_bored(&core->ncur, process->player->player_num));
 }

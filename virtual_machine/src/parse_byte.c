@@ -64,11 +64,11 @@ uint8_t		parse_encoding_byte(t_process *process)
 	encoding_byte = process->curr_pc->next->value;
 	process->curr_pc = process->curr_pc->next->next;
 	if (encoding_byte > 0xF8 || (encoding_byte & 0b11) > 0)
-		return 0;
+		return (0);
 	process->encoding_byte[0] = (encoding_byte >> 6) & 0b11;
 	process->encoding_byte[1] = (encoding_byte >> 4) & 0b11;
 	process->encoding_byte[2] = (encoding_byte >> 2) & 0b11;
-	return 1;
+	return (1);
 }
 
 /*
@@ -85,4 +85,15 @@ uint32_t	smash_bytes(uint8_t *reg)
 	result |= (uint32_t)reg[2] << 8;
 	result |= (uint32_t)reg[3] << 0;
 	return (result);
+}
+
+uint8_t		*unsmash_bytes(uint32_t nbr)
+{
+	static uint8_t	unsmashme[4];
+
+	unsmashme[0] = (nbr >> 24);
+	unsmashme[1] = (nbr >> 16) & 0xFF;
+	unsmashme[2] = (nbr >> 8) & 0xFF;
+	unsmashme[3] = (nbr >> 0) & 0xFF;
+	return (unsmashme);
 }
