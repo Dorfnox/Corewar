@@ -6,40 +6,15 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/30 16:28:29 by bpierce          ###   ########.fr        #
+#    Updated: 2018/06/06 13:00:58 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = corewar
+NAME = dsm
 
 FILES = main \
-		error \
-		flag_handler \
-		data player process board instruction character \
-		ncurses_board ncurses_info \
-		loop \
-		parse_byte \
-		write_byte \
-		op_utility \
-		op_live \
-		op_ld \
-		op_st \
-		op_add \
-		op_sub \
-		op_and \
-		op_or \
-		op_xor \
-		op_zjmp \
-		op_ldi \
-		op_sti \
-		op_fork \
-		op_lld \
-		op_lldi \
-		op_lfork \
-		op_aff
 
 C_FLAGS = -Wall -Wextra -Werror
-NCURSES = -L/usr/lib -lncurses
 
 C_LOC = src/
 C_NAM = $(addsuffix .c, $(FILES))
@@ -54,7 +29,7 @@ LIB_NAM = libft.a
 LIB_SRC = $(addprefix $(LIB_LOC), $(LIB_NAM))
 
 H_LOCS = -I inc -I ../libft/inc
-HEADERS = inc/corewar.h inc/op.h
+HEADERS = inc/disassembler.h
 
 RED = [31m
 GREEN = [32m
@@ -73,7 +48,7 @@ all: $(NAME)
 
 $(NAME): $(LIB_SRC) $(O_SRC)
 	@echo "$(YELLOW_BOLD)Compiling executable... $@$(END_COLOUR)"
-	@gcc $(C_FLAGS) $(NCURSES) $^ -o $@
+	@gcc $(C_FLAGS) $^ -o $@
 	@echo
 
 $(O_LOC)%.o: $(C_LOC)%.c $(HEADERS)
@@ -94,12 +69,12 @@ clean:
 	@mkdir -p $(O_LOC)
 	@/bin/rm -rf $(O_SRC)
 	@make clean -C $(LIB_LOC)
-	@echo "$(GREEN)clean complete!$(END_COLOUR)"
+	@echo "$(GREEN)$(NAME) clean complete!$(END_COLOUR)"
 
 fclean: clean
 	@/bin/rm -f $(NAME)
 	@make fclean -C $(LIB_LOC)
-	@echo "$(GREEN)fclean complete!$(END_COLOUR)"
+	@echo "$(GREEN)$(NAME) fclean complete!$(END_COLOUR)"
 
 re: fclean all
 

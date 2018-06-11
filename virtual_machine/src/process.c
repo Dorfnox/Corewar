@@ -29,10 +29,10 @@ t_process	*new_process(t_player *player, t_board_node *start_pos, t_process *to_
 		corewar_error("Failed to attach a player to the new process", 1);
 	if (!(new = ft_memalloc(sizeof(t_process))))
 		corewar_error("Unable to malloc a process: Reached max heapness!!", 1);
-	DB("ahfdsf");		
+//	DB("ahfdsf");		
 	new->player = player;
 	new->curr_pc = start_pos;
-	new->instr = first_;
+	new->instruct = first_;
 	new->carry = to_copy ? to_copy->carry : 0;
 	new->process_num = process_num++;
 	reg_ctr = -1;
@@ -46,6 +46,34 @@ t_process	*new_process(t_player *player, t_board_node *start_pos, t_process *to_
 	new->reg[1][1] = to_copy ? to_copy->reg[1][1] : 0xFF;
 	new->reg[1][2] = to_copy ? to_copy->reg[1][2] : 0xFF;
 	new->reg[1][3] = to_copy ? to_copy->reg[1][3] : (~(player->player_num) + 1);
-	ft_pflite("-----\nPlayer: %s\nCurrent PC: %u\nProcess ID: %u\n-----\n", player->header.prog_name, new->curr_pc->index, new->process_num);
+//	ft_pflite("-----\nPlayer: %s\nCurrent PC: %u\nProcess ID: %u\n-----\n", player->header.prog_name, new->curr_pc->index, new->process_num);
 	return (new);
+}
+
+void		insert_process(t_stack *s, t_process *p)
+{
+	t_node		*head;
+	t_node		*n;
+	t_process	*tmp;
+
+	if (!s->top)
+		push(s, p);
+	else if ((tmp = peeks(s)) && p->process_num > tmp->process_num)
+		push(s, p);
+	else
+	{
+		head = s->top;
+		n = s->top;
+		s->top = s->top->next;
+		while ((tmp = peeks(s)))
+		{
+			if (p->process_num > tmp->process_num)
+				break ;
+			n = s->top;
+			s->top = s->top->next;
+		}
+		push(s, p);
+		n->next = s->top;
+		s->top = head;
+	}
 }

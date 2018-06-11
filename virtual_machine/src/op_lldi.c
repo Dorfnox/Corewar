@@ -55,5 +55,5 @@ void		lldi_(t_corewar *core, t_process *process)
 		b = smash_bytes(process->args[1]) >> 16;
 	a += b;
 	write_number_to_register(process->reg[process->args[2][0]], a);
-	process->carry = !!smash_bytes(process->reg[process->args[2][0]]);
+	process->carry = !smash_bytes(process->reg[process->args[2][0]]);
 }

@@ -24,7 +24,7 @@ void		add_(t_corewar *core, t_process *process)
 
 	(void)core;
 	additive_result = 0;
-	DB("adding");
+//	DB("adding");
 	if (!parse_encoding_byte(process))
 		return ; // Do we just treat the next argument as an operation?
 	if (EB0 != REGISTER || EB1 != REGISTER || EB2 != REGISTER)

@@ -14,6 +14,7 @@
 # define COREWAR_H
 
 # include <sys/stat.h>
+# include <ncurses.h>
 # include "libft.h"
 # include "op.h"
 
@@ -29,7 +30,44 @@
 # define EB1 process->encoding_byte[1]
 # define EB2 process->encoding_byte[2]
 
+# define REG process->reg
+
+# define ARG0 process->args[0]
+# define ARG00 process->args[0][0]
+# define ARG01 process->args[0][1]
+# define ARG02 process->args[0][2]
+# define ARG03 process->args[0][3]
+
+# define ARG1 process->args[1]
+# define ARG10 process->args[1][0]
+# define ARG11 process->args[1][1]
+# define ARG12 process->args[1][2]
+# define ARG13 process->args[1][3]
+
+# define ARG2 process->args[2]
+# define ARG20 process->args[2][0]
+# define ARG21 process->args[2][1]
+# define ARG22 process->args[2][2]
+# define ARG23 process->args[2][3]
+
+# define VIZ(a) core->flag.viz ? (a) : 0
+# define NCURSES_XLIMIT 189
+# define NCURSES_YLIMIT	64
+
 struct s_corewar;
+
+enum
+{
+	P1 = 1,
+	P2,
+	P3,
+	P4,
+	DF,
+	P1B = 10,
+	P2B,
+	P3B,
+	P4B
+};
 
 enum
 {
@@ -52,6 +90,7 @@ typedef struct			s_flag_queue
 typedef struct			s_flag
 {
 	uint8_t				dump:1;
+	uint8_t				viz:1;
 }						t_flag;
 
 /*
@@ -65,7 +104,27 @@ typedef struct			s_env
 	uint64_t			max_cycles;
 	uint64_t			dump;
 	uint8_t				num_players;
-}						t_env;
+}
+						t_env;
+/*
+**	Ncurses handling
+*/
+
+typedef struct			s_ncurses_draw_data
+{
+	uint8_t				*value;
+	uint8_t				value_size;
+	uint8_t				start_x;
+	uint8_t				start_y;
+}						t_ndd;
+
+typedef struct			s_ncurses
+{
+	WINDOW				*bored;
+	WINDOW				*playa[4];
+	char				c_array[256][3];
+	t_ndd				ncur_data;
+}						t_ncurses;
 
 /*
 **	Core War structs
@@ -77,6 +136,7 @@ typedef struct			s_player
 	char				*filename;
 	uint8_t				player_num;
 	header_t			header;
+	uint16_t			instruction_size;
 	uint64_t			last_live;
 	uint64_t			num_live;
 }						t_player;
@@ -98,12 +158,12 @@ typedef struct			s_process
 	uint8_t				args[3][4];
 	uint8_t				carry;
 	uint8_t				reg[REG_NUMBER + 1][REG_SIZE];
-	void				(*instr)(struct s_corewar *, struct s_process *);
+	void				(*instruct)(struct s_corewar *, struct s_process *);
 }						t_process;
 
 typedef struct			s_operation
 {
-	void				(*instr)(struct s_corewar *, struct s_process *);
+	void				(*instruct)(struct s_corewar *, struct s_process *);
 	uint16_t			wait_time;
 }						t_operation;
 
@@ -111,13 +171,14 @@ typedef struct			s_corewar
 {
 	t_env				env;
 	t_flag				flag;
-	t_queue				*flag_queue;
+	t_queue				flag_queue;
 	t_board_node		*board;
 	t_board_node		*node_addresses[MEM_SIZE];
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
 	t_operation			op[17];
+	t_ncurses			ncur;
 }						t_corewar;
 
 /*
@@ -136,10 +197,11 @@ void					corewar_error(char *message, int return_value);
 **	Flag handling
 */
 
-void					add_flag(t_queue **q, char *flag, void *flag_func);
+void					init_flag_queue(t_queue *q);
+void					add_flag(t_queue *q, char *flag, void *flag_func);
 unsigned int			flag_handler(t_corewar *c, char ***av);
 void					*search_flag_queue(t_node *n, char *flag);
-void					clean_flag_queue(t_queue **q);
+void					clean_flag_queue(t_queue *q);
 
 /*
 **	Initializing data
@@ -148,6 +210,7 @@ void					clean_flag_queue(t_queue **q);
 void					retrieve_data(t_corewar *core, char **argv);
 unsigned int			flag_dump(t_corewar *core, char ***argv);
 unsigned int			flag_n(t_corewar *core, char ***argv);
+unsigned int			flag_viz(t_corewar *core, char ***argv);
 unsigned int			add_player_file(t_corewar *core, char *filename);
 uint64_t				get_max_cycles(uint64_t init);
 
@@ -155,6 +218,24 @@ void					init_board(t_corewar *core);
 
 void					init_operations(t_operation *core);
 void					init_wait_times(t_operation *core);
+
+void					init_c_array(t_corewar *core);
+
+/*
+**	NCurses Functionality
+*/
+
+void					init_ncurses(t_corewar *core);
+void    				init_bored_colors(void);
+void    				init_ncurses_bored(t_corewar *core);
+void    				init_ncurses_playa(t_corewar *core);
+void					terminate_ncurses(t_corewar *core);
+void    				draw_process(t_ncurses *n, t_process *process);
+void    				capture_ncur_data(t_ncurses *n, uint16_t index,
+							uint8_t *value, uint8_t value_size);
+void    				draw_to_bored(t_ncurses *n, uint8_t player_num);
+
+void					print_process_info(t_ncurses *n, t_process *p);
 
 /*
 **	Players
@@ -172,6 +253,7 @@ void					init_player_processes(t_corewar *core);
 
 t_process				*new_process(t_player *player, t_board_node *b,
 							t_process *to_copy);
+void					insert_process(t_stack *s, t_process *p);
 
 /*
 ** Instructions
@@ -225,8 +307,6 @@ void					aff_(t_corewar *core, t_process *process);
 void					loop(t_corewar *core);
 void    				game_speed(uint8_t speed);
 
-void					insert_process(t_stack *s, t_process *p);
-
 /*
 ** Utilities
 */
@@ -234,6 +314,7 @@ void					insert_process(t_stack *s, t_process *p);
 uint8_t					parse_encoding_byte(t_process *process);
 uint8_t					parse_arguments(t_process *process);
 uint32_t				smash_bytes(uint8_t *reg);
+uint8_t					*unsmash_bytes(uint32_t nbr);
 
 /*
 ** Write Bytes

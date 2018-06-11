@@ -39,10 +39,10 @@ void		lld_(t_corewar *core, t_process *process)
 		index = core->node_addresses[(index->index + ((smash_bytes(process->args[0]) >> 16))) % MEM_SIZE];
 		write_board_to_register(process->reg[process->args[1][0]], index);
 	}
-	process->carry = !!smash_bytes(process->reg[process->args[1][0]]);
-	ft_printf("register %u is now: %x%x%x%x\n", process->args[1][0],
-		process->reg[process->args[1][0]][0], //debug
-		process->reg[process->args[1][0]][1], //debug
-		process->reg[process->args[1][0]][2],
-		process->reg[process->args[1][0]][3]);
+	process->carry = !smash_bytes(process->reg[process->args[1][0]]);
+	//ft_printf("register %u is now: %x%x%x%x\n", process->args[1][0],
+	//	process->reg[process->args[1][0]][0], //debug
+	//	process->reg[process->args[1][0]][1], //debug
+	//	process->reg[process->args[1][0]][2],
+	//	process->reg[process->args[1][0]][3]);
 }
