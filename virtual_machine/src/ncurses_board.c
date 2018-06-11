@@ -13,6 +13,7 @@ void    init_ncurses(t_corewar *core)
     init_c_array(core);
     init_bored_colors();   
     init_ncurses_bored(core);
+    init_ncurses_playa(core);
 }
 
 void    init_bored_colors(void)
@@ -39,6 +40,19 @@ void    init_ncurses_bored(t_corewar *core)
 	}
     wmove(core->ncur.bored, 0, 0);
     wrefresh(core->ncur.bored);
+}
+
+void    init_ncurses_playa(t_corewar *core)
+{
+    uint8_t     i;
+
+    i = 0;
+    while (i < MAX_PLAYERS)
+    {
+        if (core->player[i].player_num)
+            core->ncur.playa[i] = newwin(20, 20, 200, 30 * i);
+        ++i;
+    }
 }
 
 void    draw_process(t_ncurses *n, t_process *process)

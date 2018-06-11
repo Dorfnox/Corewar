@@ -22,6 +22,7 @@ void    loop(t_corewar *core)
 		{
 			p = pop(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN]);
 			VIZ(draw_process(&core->ncur, p));
+			VIZ(print_process_info(&core->ncur, p));
 			p->instruct(core, p);
 			board_value = ZERO_AT_BAD_INSTR(p->curr_pc->value);
 			p->instruct = core->op[board_value].instruct;

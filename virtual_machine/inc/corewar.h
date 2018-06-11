@@ -117,6 +117,7 @@ typedef struct			s_ncurses_draw_data
 typedef struct			s_ncurses
 {
 	WINDOW				*bored;
+	WINDOW				*playa[4];
 	char				c_array[256][3];
 	t_ndd				ncur_data;
 }						t_ncurses;
@@ -223,13 +224,14 @@ void					init_c_array(t_corewar *core);
 void					init_ncurses(t_corewar *core);
 void    				init_bored_colors(void);
 void    				init_ncurses_bored(t_corewar *core);
+void    				init_ncurses_playa(t_corewar *core);
 void					terminate_ncurses(t_corewar *core);
 void    				draw_process(t_ncurses *n, t_process *process);
 void    				capture_ncur_data(t_ncurses *n, uint16_t index,
 							uint8_t *value, uint8_t value_size);
 void    				draw_to_bored(t_ncurses *n, uint8_t player_num);
 
-void					print_process_info(t_process *p);
+void					print_process_info(t_ncurses *n, t_process *p);
 
 /*
 **	Players

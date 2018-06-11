@@ -12,16 +12,14 @@
 
 #include "corewar.h"
 
-void		print_process_info(t_process *p)
+void		print_process_info(t_ncurses *n, t_process *p)
 {
-	uint8_t		x;
-	uint8_t		y;
-
-	x = 200;
-	y = 30 * p->player->player_num;
-	mvprintw(y, x, "Player: %u\n----------\ncurr_pc: %4u, board-value: %.8x",
+    wattron(n->playa[p->player->player_num],
+    	COLOR_PAIR(p->player->player_num));
+	mvwprintw(n->playa[p->player->player_num], 0, 0,
+		"Player: %u\n----------\ncurr_pc: %4u, board-value: %.8x",
 		p->player->player_num,
 		p->curr_pc->index,
 		p->curr_pc->value);
-	refresh();
+	wrefresh(n->playa[p->player->player_num]);
 }
