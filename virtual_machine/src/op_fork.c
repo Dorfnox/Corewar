@@ -30,10 +30,13 @@ void		fork_(t_corewar *core, t_process *process)
 	t_board_node	*index;
 	t_process		*new_p; 
 
-	arg = (uint16_t)read_from_board(process->curr_pc->next, 2);
+	arg = (uint16_t)process->curr_pc->next->value << 8; // added this
+	// arg = (uint16_t)read_from_board(process->curr_pc->next, 2);
+	arg |= (uint16_t)process->curr_pc->next->next->value; // added this
 	index = core->node_addresses[(process->curr_pc->index + (arg % IDX_MOD)) % MEM_SIZE];
 	new_p = new_process(process->player, index, process);
 	insert_process(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN], new_p);
+	process->player->num_of_processes++;
 	process->curr_pc = process->curr_pc->next->next->next;
 //	DB("FORKINGGG!!!");
 }

@@ -22,7 +22,14 @@
 
 # define CSEM "Corewar Conflict:\n"
 
+# define GAME_SPEED 3
+
+# define MALL_ERR_MSG(a) ft_str256(2, "Failure to malloc: ", (a))
+# define MALL_ERR(a, b) !(a) ? corewar_error(MALL_ERR_MSG(b), 1) : 0
+
 # define PROCESS_STACK_LEN 1024
+# define PROCESS_STACK core->process_stack
+# define CURRENT_CYCLE core->env.cycle % PROCESS_STACK_LEN
 
 # define ZERO_AT_BAD_INSTR(a) ((a) < 17 ? (a) : 0)
 
@@ -66,7 +73,8 @@ enum
 	P1B = 10,
 	P2B,
 	P3B,
-	P4B
+	P4B,
+	INFOZ
 };
 
 enum
@@ -122,6 +130,7 @@ typedef struct			s_ncurses
 {
 	WINDOW				*bored;
 	WINDOW				*playa[4];
+	WINDOW				*infoz;
 	char				c_array[256][3];
 	t_ndd				ncur_data;
 }						t_ncurses;
@@ -135,10 +144,11 @@ typedef struct			s_player
 {
 	char				*filename;
 	uint8_t				player_num;
-	header_t			header;
-	uint16_t			instruction_size;
+	uint16_t			num_of_processes;
 	uint64_t			last_live;
 	uint64_t			num_live;
+	uint16_t			instruction_size;
+	header_t			header;
 }						t_player;
 
 typedef struct			s_board_node
@@ -226,9 +236,10 @@ void					init_c_array(t_corewar *core);
 */
 
 void					init_ncurses(t_corewar *core);
-void    				init_bored_colors(void);
+void    				init_ncurses_colors(void);
 void    				init_ncurses_bored(t_corewar *core);
 void    				init_ncurses_playa(t_corewar *core);
+void					init_ncurses_infoz(t_corewar *core);
 void					terminate_ncurses(t_corewar *core);
 void    				draw_process(t_ncurses *n, t_process *process);
 void    				capture_ncur_data(t_ncurses *n, uint16_t index,
@@ -236,6 +247,7 @@ void    				capture_ncur_data(t_ncurses *n, uint16_t index,
 void    				draw_to_bored(t_ncurses *n, uint8_t player_num);
 
 void					print_process_info(t_ncurses *n, t_process *p);
+void					print_game_info(t_corewar *core);
 
 /*
 **	Players
@@ -305,6 +317,8 @@ void					aff_(t_corewar *core, t_process *process);
 */
 
 void					loop(t_corewar *core);
+void					loop_viz(t_corewar *core);
+uint8_t					cycle_handle(t_corewar *core);
 void    				game_speed(uint8_t speed);
 
 /*

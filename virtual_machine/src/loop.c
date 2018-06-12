@@ -14,23 +14,57 @@
 
 void    loop(t_corewar *core)
 {
-	uint8_t     board_value;
-	t_process   *p;
+	uint8_t		board_value;
+	t_process	*process;
+
+	while (1)
+	{
+		while (!isemptys(&PROCESS_STACK[CURRENT_CYCLE]))
+		{
+			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
+			process->instruct(core, process);
+			board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
+			process->instruct = core->op[board_value].instruct;
+			insert_process(&core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
+		}
+        ++core->env.cycle;
+        if (!cycle_handle(core))
+        	break ;
+        game_speed(GAME_SPEED); // 1 is fast, 50 is slow
+	}
+}
+
+void    loop_viz(t_corewar *core)
+{
+	uint8_t		board_value;
+	t_process	*process;
+
 	while (1) // live hasn't been called within the last cycle by at least 1 champion and other stuff
 	{
-		while (!isemptys(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN]))
+		while (!isemptys(&PROCESS_STACK[CURRENT_CYCLE]))
 		{
-			p = pop(&core->process_stack[core->env.cycle % PROCESS_STACK_LEN]);
-			VIZ(draw_process(&core->ncur, p));
-			VIZ(print_process_info(&core->ncur, p));
-			p->instruct(core, p);
-			board_value = ZERO_AT_BAD_INSTR(p->curr_pc->value);
-			p->instruct = core->op[board_value].instruct;
-			insert_process(&core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], p);
+			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
+			draw_process(&core->ncur, process);
+			print_process_info(&core->ncur, process);
+			process->instruct(core, process);
+			board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
+			process->instruct = core->op[board_value].instruct;
+			insert_process(&core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
+			wrefresh(core->ncur.playa[process->player->player_num - 1]);
 		}
-        game_speed(8); // 1 is fast, 50 is slow
         ++core->env.cycle;
+		print_game_info(core);
+		wrefresh(core->ncur.bored);
+		if (!cycle_handle(core))
+			break ;
+        game_speed(GAME_SPEED);
 	}
+}
+
+uint8_t	cycle_handle(t_corewar *core)
+{
+	(void)core;
+	return (1);
 }
 
 void    game_speed(uint8_t speed)

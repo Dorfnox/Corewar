@@ -33,6 +33,7 @@ void			add_new_player(t_corewar *core, char *filename, uint8_t p_num)
 	core->player[p_num - 1].header.prog_size = content_size;
 	core->player[p_num - 1].instruction_size = content_size - (INSTR + 16);
 	core->player[p_num - 1].player_num = p_num;
+	core->player[p_num - 1].num_of_processes = 1;
 	core->player[p_num - 1].filename = filename;
 }
 

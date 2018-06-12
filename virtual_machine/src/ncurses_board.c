@@ -11,25 +11,29 @@ void    init_ncurses(t_corewar *core)
     initscr();
     start_color();
     init_c_array(core);
-    init_bored_colors();   
+    init_ncurses_colors();   
     init_ncurses_bored(core);
     init_ncurses_playa(core);
+    init_ncurses_infoz(core);
+    curs_set(0);
 }
 
-void    init_bored_colors(void)
+void    init_ncurses_colors(void)
 {
     init_pair(P1, COLOR_GREEN, COLOR_BLACK);
     init_pair(P2, COLOR_BLUE, COLOR_BLACK);
     init_pair(P3, COLOR_RED, COLOR_BLACK);
     init_pair(P4, COLOR_MAGENTA, COLOR_BLACK);
     init_pair(DF, COLOR_WHITE, COLOR_BLACK);
+    init_pair(INFOZ, COLOR_BLACK, COLOR_GREEN);
 }
 
 void    init_ncurses_bored(t_corewar *core)
 {
     uint16_t    i;
 
-    core->ncur.bored = newwin(64, (64 * 2) + 63, 2, 5);
+    core->ncur.bored = newwin(64, (64 * 2) + 63, 1, 2);
+    MALL_ERR(core->ncur.bored, "Failed to create ncurses board");
     wattron(core->ncur.bored, COLOR_PAIR(DF));
     i = -1;
     while (++i < MEM_SIZE)
@@ -51,22 +55,39 @@ void    init_ncurses_playa(t_corewar *core)
     {
         if (core->player[i].player_num)
         {
-            core->ncur.playa[i] = newwin(5, 25, 5 * i, 200);
+            core->ncur.playa[i] = newwin(7, 40, (7 * i) + 7, 200);
+            MALL_ERR(core->ncur.bored, "Failed to create ncurses playa");
+            box(core->ncur.playa[i], 0, 0);
             wrefresh(core->ncur.playa[i]);
         }
     }
 }
-/*
-void    clear_process(t_ncurses *n, uint16_t index)
-{
-    uint8_t    y;
-    uint8_t    x;
 
-    y = process->curr_pc->index / 64;
-    x = (process->curr_pc->index % 64) * 3;
-    wattroff(n->bored, A_STANDOUT);
+void    init_ncurses_infoz(t_corewar *core)
+{
+    uint16_t    width;
+    uint16_t    height;
+    uint16_t    i;
+    uint16_t    j;
+
+    width = 40;
+    height = 6;
+    core->ncur.infoz = newwin(height, width, 1, 200);
+    MALL_ERR(core->ncur.infoz, "Failed to create ncurses infoz");
+    wattron(core->ncur.infoz, COLOR_PAIR(INFOZ));
+    wmove(core->ncur.infoz, 0, 0);
+    i = 0;
+    while (i++ < height)
+    {
+        j = 0;
+        while (j++ < width)
+            waddch(core->ncur.infoz, ' ');
+    }
+    box(core->ncur.infoz, 0, 0);
+    mvwprintw(core->ncur.infoz, 1, 1, "Information");
+    wrefresh(core->ncur.infoz);
 }
-*/
+
 void    draw_process(t_ncurses *n, t_process *process)
 {
     uint8_t    y;
