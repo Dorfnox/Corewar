@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/10 05:58:11 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/11 10:29:17 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,117 +14,15 @@
 # define ASSEMBLER_H
 
 # include "libft.h"
+# include "op.h"
 
 /*
 **  MACROS
 */
 
-#define	USAGE					"usage: <>"
-
-#define OP_SIZE					1
-#define ECB_SIZE				1
-#define IND_SIZE				2
-#define REG_SIZE				1
-#define DIR_SIZE_0				4
-#define DIR_SIZE_1				2
-
-# define IND_CODE				3
-# define REG_CODE				1
-# define DIR_CODE				2
-
-#define IDX_MOD					(MEM_SIZE / 8)
-#define CHAMP_MAX_SIZE			(MEM_SIZE / 6)
-
-#define COMMENT_CHAR			'#'
-#define LABEL_CHAR				':'
-#define REGISTER_CHAR			'r'
-#define DIRECT_CHAR				'%'
-#define SEPARATOR_CHAR			','
-
-#define LABEL_CHARS				"abcdefghijklmnopqrstuvwxyz_0123456789"
-
-#define NAME_CMD_STRING			".name"
-#define COMMENT_CMD_STRING		".comment"
-#define CMD_DELIMITER_CHAR		'\"'
-
-#define REG_NUMBER				16
-
-#define CYCLE_TO_DIE			1536
-#define CYCLE_DELTA				50
-#define NBR_LIVE				21
-#define MAX_CHECKS				10
-
-/*
-**	Arguments
-*/
-
-typedef char	t_arg_type;
-
-typedef struct	s_op
-{
-	char		*name;
-	int			arg_count;
-	t_arg_type	arg[3];
-	uint8_t		opcode;
-	size_t		cycles;
-	char		*description;
-	int			needs_acb;
-	int			short_direct;
-}				t_op;
-
-extern	t_op					g_ops[17];
-
-#define T_REG					1
-#define T_DIR					2
-#define T_IND					4
-#define T_LAB					8
-
-/*
-**	Header
-*/
-
-# define PROG_NAME_LENGTH		(128)
-# define COMMENT_LENGTH			(2048)
-# define COREWAR_EXEC_MAGIC		0xea83f3
-
-/*
-**	Token macros
-*/
-
-# define NONE					0
-# define LABEL					1
-# define OPERATION				2
-# define PARAMETER				3
-# define PARAM_SEPARATOR		4
-# define COMMENT				5
-# define MATH					6
-# define EOL					-1
-# define EMPTY					-2
-
-/*
-**	Operation codes
-*/
-
-# define LIVE					1
-# define LD						2
-# define ST						3
-# define ADD					4
-# define SUB					5
-# define AND					6
-# define OR						7
-# define XOR					8
-# define ZJUMP					9
-# define LDI					10
-# define STI					11
-# define FORK					12
-# define LLD					13
-# define LLDI					14
-# define LFORK					15
-# define AFF					16
-
-#define BYTE_TO_FILE(x)			ft_putchar_fd(x,assembler->fd)
-
-#define CAPACITY				30
+# define USAGE					"usage: <>"
+# define BYTE_TO_FILE(x)		ft_putchar_fd(x,assembler->fd)
+# define CAPACITY				30
 
 
 /*
@@ -139,14 +37,6 @@ typedef	struct			s_input
 	size_t				line_n;
 	char				current_char;
 }						t_input;
-
-typedef struct			s_header
-{
-	uint32_t			magic;
-	uint8_t				prog_name[PROG_NAME_LENGTH + 1];
-	uint32_t			prog_size;
-	uint8_t				comment[COMMENT_LENGTH + 1];
-}						t_header;
 
 typedef	struct			s_token
 {

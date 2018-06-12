@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/11 09:20:38 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/11 17:48:13 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	write_next_ast_into_file(t_asm *assembler)
 	
 	j = -1;
 	operation = dequeue_op(assembler->ops);
-	// (*byte_arr)[++(*i)] = operation->op;
+	// byte_arr[(*i)++] = operation->op;
 	ft_putchar_fd(operation->op, assembler->fd);
 	if (operation->ecb)
 		ft_putchar_fd(operation->ecb, assembler->fd);

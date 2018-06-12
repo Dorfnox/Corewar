@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/10 05:57:12 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/11 17:52:27 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	parse_operations(t_asm *assembler, t_input *line)
 			assembler->op_handler[current_token.subtype](line, assembler->ops, current_token.subtype);
 		}
 		else if (current_token.type != EOL || current_token.type != COMMENT)
-			asm_error(1, "Invalid syntax");
+			asm_error(1, ft_str256(2, "Invalid syntax in line ", itoa(line->line_n)));
 		line->line_n++;
 		ft_bzero((void *)line, sizeof(t_input));
 	}
