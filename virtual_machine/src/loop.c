@@ -51,6 +51,7 @@ void    loop_viz(t_corewar *core)
 			process->instruct = core->op[board_value].instruct;
 			insert_process(&core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
+			move_process_cursor(core, process);
 		}
         ++core->env.cycle;
 		print_game_info(core);

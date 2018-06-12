@@ -24,6 +24,10 @@ void    init_ncurses_colors(void)
     init_pair(P2, COLOR_BLUE, COLOR_BLACK);
     init_pair(P3, COLOR_RED, COLOR_BLACK);
     init_pair(P4, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(P1B, COLOR_BLACK, COLOR_GREEN);
+    init_pair(P2B, COLOR_BLACK, COLOR_BLUE);
+    init_pair(P3B, COLOR_BLACK, COLOR_RED);
+    init_pair(P4B, COLOR_BLACK, COLOR_MAGENTA);
     init_pair(DF, COLOR_WHITE, COLOR_BLACK);
     init_pair(INFOZ, COLOR_BLACK, COLOR_GREEN);
 }
@@ -32,7 +36,7 @@ void    init_ncurses_bored(t_corewar *core)
 {
     uint16_t    i;
 
-    core->ncur.bored = newwin(64, (64 * 2) + 63, 1, 2);
+    core->ncur.bored = newwin(64, (64 * 2) + 63, 0, 0);
     MALL_ERR(core->ncur.bored, "Failed to create ncurses board");
     wattron(core->ncur.bored, COLOR_PAIR(DF));
     i = -1;
@@ -72,7 +76,7 @@ void    init_ncurses_infoz(t_corewar *core)
 
     width = 40;
     height = 6;
-    core->ncur.infoz = newwin(height, width, 1, 200);
+    core->ncur.infoz = newwin(height, width, 0, 200);
     MALL_ERR(core->ncur.infoz, "Failed to create ncurses infoz");
     wattron(core->ncur.infoz, COLOR_PAIR(INFOZ));
     wmove(core->ncur.infoz, 0, 0);
@@ -83,6 +87,7 @@ void    init_ncurses_infoz(t_corewar *core)
         while (j++ < width)
             waddch(core->ncur.infoz, ' ');
     }
+    wclear(core->ncur.infoz);
     box(core->ncur.infoz, 0, 0);
     mvwprintw(core->ncur.infoz, 1, 1, "Information");
     wrefresh(core->ncur.infoz);

@@ -22,10 +22,10 @@
 
 # define CSEM "Corewar Conflict:\n"
 
-# define GAME_SPEED 3
+# define GAME_SPEED 5
 
 # define MALL_ERR_MSG(a) ft_str256(2, "Failure to malloc: ", (a))
-# define MALL_ERR(a, b) !(a) ? corewar_error(MALL_ERR_MSG(b), 1) : 0
+# define MALL_ERR(a, b) !(a) ? corewar_error(MALL_ERR_MSG(b), 1) : 1
 
 # define PROCESS_STACK_LEN 1024
 # define PROCESS_STACK core->process_stack
@@ -70,7 +70,7 @@ enum
 	P3,
 	P4,
 	DF,
-	P1B = 10,
+	P1B,
 	P2B,
 	P3B,
 	P4B,
@@ -163,7 +163,8 @@ typedef struct			s_process
 {
 	t_player			*player;
 	t_board_node		*curr_pc;
-	uint64_t			process_num;
+	WINDOW				*cursor;
+	uint64_t			id;
 	uint8_t				encoding_byte[3];
 	uint8_t				args[3][4];
 	uint8_t				carry;
@@ -263,9 +264,11 @@ void					init_player_processes(t_corewar *core);
 **	Processes
 */
 
-t_process				*new_process(t_player *player, t_board_node *b,
-							t_process *to_copy);
+t_process				*new_process(t_corewar *c, t_player *p, t_board_node *b,
+							t_process *cpy);
 void					insert_process(t_stack *s, t_process *p);
+void					new_process_cursor(t_corewar *core, t_process *p);
+void					move_process_cursor(t_corewar *core, t_process *p);
 
 /*
 ** Instructions
