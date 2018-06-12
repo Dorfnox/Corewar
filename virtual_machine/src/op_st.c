@@ -34,7 +34,6 @@ void		st_(t_corewar *core, t_process *process)
 	{
 		index = get_index(index, ARG10, ARG11);
 		write_number_to_board(core->node_addresses[index], REG[ARG00]);
-		VIZ(capture_ncur_data(&core->ncur, index, REG[ARG00], 4));
-		VIZ(draw_to_bored(&core->ncur, process->player->player_num));
+		VIZ(draw_to_bored(core, process->player->player_num, index, 4));
 	}
 }

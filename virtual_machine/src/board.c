@@ -56,15 +56,14 @@ void	init_board(t_corewar *core)
 		if (core->player[p].player_num)
 		{
 			j = ((++k - 1) * (MEM_SIZE / core->env.num_players));
-			push(&core->process_stack[0], new_process(core, &core->player[p],
+			push(&core->process_stack[0], new_process(&core->player[p],
 				core->node_addresses[j], NULL));
 			i = 0;
 			while (i < core->player[p].instruction_size)
 			{
 				instruction = &core->player[p].header.instructions[i++];
 				ft_memcpy(&core->node_addresses[j]->value, instruction, 1); // change this to core->node_addresses[j++]->value = (uint8_t)core->player[p].header.instructions[i++];
-				VIZ(capture_ncur_data(&core->ncur, j, &core->node_addresses[j]->value, 1));
-				VIZ(draw_to_bored(&core->ncur, core->player[p].player_num));
+				VIZ(draw_to_bored(core, core->player[p].player_num, j, 1));
 				++j;
 			}
 		}

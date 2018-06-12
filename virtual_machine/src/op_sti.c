@@ -33,7 +33,8 @@ void		sti_(t_corewar *core, t_process *process)
 	tmp = process->curr_pc;
 	a = 0;
 	b = 0;
-	parse_encoding_byte(process);
+	if (!parse_encoding_byte(process))
+		return ;
 	if (EB0 != REGISTER || EB1 == 0 || EB2 == INDIRECT || EB2 == 0)
 		return ;
 	if (!parse_arguments(process))
@@ -52,8 +53,10 @@ void		sti_(t_corewar *core, t_process *process)
 	else if (EB2 == DIRECT)
 		b = smash_bytes(process->args[2]) >> 16;
 	a += b;
+    mvwprintw(core->ncur.infoz, 5, 0, "idx: %i", tmp->index);
 	tmp = core->node_addresses[(tmp->index + (a % IDX_MOD)) % MEM_SIZE];
 	write_number_to_board(tmp, process->args[0]);
-	VIZ(capture_ncur_data(&core->ncur, tmp->index, unsmash_bytes(a), 4));
-	VIZ(draw_to_bored(&core->ncur, process->player->player_num));
+    wrefresh(core->ncur.infoz);
+	//wattron(core->ncur.bored, COLOR_PAIR(3));
+	VIZ(draw_to_bored(core, process->player->player_num, tmp->index, 4));
 }

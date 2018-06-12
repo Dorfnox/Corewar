@@ -25,7 +25,7 @@ void    loop(t_corewar *core)
 			process->instruct(core, process);
 			board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
 			process->instruct = core->op[board_value].instruct;
-			insert_process(&core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
+			insert_process(core, &core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
 		}
         ++core->env.cycle;
         if (!cycle_handle(core))
@@ -39,19 +39,18 @@ void    loop_viz(t_corewar *core)
 	uint8_t		board_value;
 	t_process	*process;
 
-	while (1) // live hasn't been called within the last cycle by at least 1 champion and other stuff
+	while (1)
 	{
 		while (!isemptys(&PROCESS_STACK[CURRENT_CYCLE]))
 		{
 			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
-			draw_process(&core->ncur, process);
+			pop_process_cursor(core, process);
 			print_process_info(&core->ncur, process);
 			process->instruct(core, process);
 			board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
 			process->instruct = core->op[board_value].instruct;
-			insert_process(&core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
+			insert_process(core, &core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
-			move_process_cursor(core, process);
 		}
         ++core->env.cycle;
 		print_game_info(core);

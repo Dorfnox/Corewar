@@ -69,11 +69,11 @@ enum
 	P2,
 	P3,
 	P4,
-	DF,
 	P1B,
 	P2B,
 	P3B,
 	P4B,
+	DF,
 	INFOZ
 };
 
@@ -122,9 +122,19 @@ typedef struct			s_ncurses_draw_data
 {
 	uint8_t				*value;
 	uint8_t				value_size;
+	uint8_t				index;
 	uint8_t				start_x;
 	uint8_t				start_y;
 }						t_ndd;
+
+typedef struct			s_cursor
+{
+	uint16_t			idx;
+	uint8_t				x;
+	uint8_t				y;
+	uint8_t				bored_color;
+	t_stack				cursor_stack;
+}						t_cursor;
 
 typedef struct			s_ncurses
 {
@@ -132,6 +142,7 @@ typedef struct			s_ncurses
 	WINDOW				*playa[4];
 	WINDOW				*infoz;
 	char				c_array[256][3];
+	t_cursor			cursor[MEM_SIZE];
 	t_ndd				ncur_data;
 }						t_ncurses;
 
@@ -163,7 +174,7 @@ typedef struct			s_process
 {
 	t_player			*player;
 	t_board_node		*curr_pc;
-	WINDOW				*cursor;
+	// WINDOW				*cursor;
 	uint64_t			id;
 	uint8_t				encoding_byte[3];
 	uint8_t				args[3][4];
@@ -230,7 +241,6 @@ void					init_board(t_corewar *core);
 void					init_operations(t_operation *core);
 void					init_wait_times(t_operation *core);
 
-void					init_c_array(t_corewar *core);
 
 /*
 **	NCurses Functionality
@@ -238,14 +248,15 @@ void					init_c_array(t_corewar *core);
 
 void					init_ncurses(t_corewar *core);
 void    				init_ncurses_colors(void);
+void					init_ncurses_arrays(t_corewar *core);
 void    				init_ncurses_bored(t_corewar *core);
 void    				init_ncurses_playa(t_corewar *core);
 void					init_ncurses_infoz(t_corewar *core);
+
 void					terminate_ncurses(t_corewar *core);
-void    				draw_process(t_ncurses *n, t_process *process);
-void    				capture_ncur_data(t_ncurses *n, uint16_t index,
-							uint8_t *value, uint8_t value_size);
-void    				draw_to_bored(t_ncurses *n, uint8_t player_num);
+
+void    				draw_to_bored(t_corewar *core,
+							uint8_t player_num, uint16_t idx, uint8_t len);
 
 void					print_process_info(t_ncurses *n, t_process *p);
 void					print_game_info(t_corewar *core);
@@ -264,11 +275,14 @@ void					init_player_processes(t_corewar *core);
 **	Processes
 */
 
-t_process				*new_process(t_corewar *c, t_player *p, t_board_node *b,
-							t_process *cpy);
-void					insert_process(t_stack *s, t_process *p);
-void					new_process_cursor(t_corewar *core, t_process *p);
-void					move_process_cursor(t_corewar *core, t_process *p);
+t_process				*new_process(t_player *p, t_board_node *b, t_process *cpy);
+void					insert_process(t_corewar *c, t_stack *s, t_process *p);
+
+void					push_process_cursor(t_corewar *core, t_process *process);
+void					pop_process_cursor(t_corewar *core, t_process *process);
+void					draw_cursor(t_corewar *core, t_cursor *c);
+// void					new_process_cursor(t_corewar *core, t_process *p);
+// void					move_process_cursor(t_corewar *core, t_process *p);
 
 /*
 ** Instructions

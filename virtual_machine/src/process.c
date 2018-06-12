@@ -18,7 +18,7 @@
 **	If given a previous process, will copy the register over as well.
 */
 
-t_process	*new_process(t_corewar *core, t_player *player,
+t_process	*new_process(t_player *player,
 	t_board_node *start_pos, t_process *cpy)
 {
 	t_process		*new;
@@ -41,11 +41,10 @@ t_process	*new_process(t_corewar *core, t_player *player,
 	new->reg[1][1] = cpy ? cpy->reg[1][1] : 0xFF;
 	new->reg[1][2] = cpy ? cpy->reg[1][2] : 0xFF;
 	new->reg[1][3] = cpy ? cpy->reg[1][3] : (~(player->player_num) + 1);
-	VIZ(new_process_cursor(core, new));
 	return (new);
 }
 
-void		insert_process(t_stack *s, t_process *p)
+void		insert_process(t_corewar *core, t_stack *s, t_process *p)
 {
 	t_node		*head;
 	t_node		*n;
@@ -71,29 +70,74 @@ void		insert_process(t_stack *s, t_process *p)
 		n->next = s->top;
 		s->top = head;
 	}
+	VIZ(push_process_cursor(core, p));
 }
 
-void		new_process_cursor(t_corewar *c, t_process *process)
-{
-	int start_x;
-	int	start_y;
+/*
+**	Adds to the cursor stack for the given index location
+*/
 
-	start_x = process->curr_pc->index / 64;
-	start_y = (process->curr_pc->index % 64) * 3;
-	MALL_ERR((process->cursor = newwin(1, 2, start_x, start_y)), "ncurses");
-	wattron(process->cursor, COLOR_PAIR(process->player->player_num + 4));
-	mvwaddstr(process->cursor, 0, 0, c->ncur.c_array[process->curr_pc->value]);
-	wrefresh(process->cursor);
+void		push_process_cursor(t_corewar *core, t_process *process)
+{
+	t_cursor	*cursor;
+
+	cursor = &(core->ncur.cursor[process->curr_pc->index]);
+	if (CE_2(process->instruct, fork_, lfork_))
+	{
+		while (!isemptys(&cursor->cursor_stack))
+			pop(&cursor->cursor_stack);
+	}
+	push(&cursor->cursor_stack, process);
+	draw_cursor(core, cursor);
 }
 
-void		move_process_cursor(t_corewar *c, t_process *process)
+void		pop_process_cursor(t_corewar *core, t_process *process)
 {
-	static int	start_x;
-	static int	start_y;
+	static t_cursor		*cursor;
+	static t_node		*p;
+	static t_node		*prev;
 
-	start_x = process->curr_pc->index / 64;
-	start_y = (process->curr_pc->index % 64) * 3;
-	mvwin(process->cursor, start_x, start_y);
-	mvwaddstr(process->cursor, 0, 0, c->ncur.c_array[process->curr_pc->value]);
-	wrefresh(process->cursor);
+	cursor = &(core->ncur.cursor[process->curr_pc->index]);
+	if (isemptys(&cursor->cursor_stack))
+		return ;
+	if (cursor->cursor_stack.size == 1 &&
+		peeks(&cursor->cursor_stack) != process)
+		return ;
+	if (peeks(&cursor->cursor_stack) == process)
+		pop(&cursor->cursor_stack);
+	else
+	{
+		p = cursor->cursor_stack.top;
+		while (peeks(&cursor->cursor_stack) != process)
+		{
+			prev = cursor->cursor_stack.top;
+			cursor->cursor_stack.top = cursor->cursor_stack.top->next;
+			if (cursor->cursor_stack.top == NULL)
+			{
+				cursor->cursor_stack.top = p;
+				return ;
+			}
+		}
+		pop(&cursor->cursor_stack);
+		prev->next = cursor->cursor_stack.top;
+		cursor->cursor_stack.top = p;
+	}
+	draw_cursor(core, cursor);
+}
+
+void		draw_cursor(t_corewar *core, t_cursor *c)
+{
+	t_process	*p;
+
+	if ((p = peeks(&c->cursor_stack)))
+	{
+	    wattron(core->ncur.bored, COLOR_PAIR(p->player->player_num + 4));
+	}
+	else
+	{
+		wattron(core->ncur.bored, COLOR_PAIR(c->bored_color));
+	}
+	mvwaddstr(core->ncur.bored, c->y, c->x,
+		core->ncur.c_array[core->node_addresses[c->idx]->value]);
+	wrefresh(core->ncur.bored);
 }
