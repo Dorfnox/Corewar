@@ -30,6 +30,7 @@ void    loop(t_corewar *core)
         ++core->env.cycle;
         if (!cycle_handle(core))
         	break ;
+        key_hit();
         game_speed(GAME_SPEED); // 1 is fast, 50 is slow
 	}
 }
@@ -57,6 +58,7 @@ void    loop_viz(t_corewar *core)
 		wrefresh(core->ncur.bored);
 		if (!cycle_handle(core))
 			break ;
+		// key_hit();
         game_speed(GAME_SPEED);
 	}
 }

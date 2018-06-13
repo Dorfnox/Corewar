@@ -14,7 +14,17 @@
 
 uint16_t 	get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
 {
-	return ((pc + ((((uint16_t)idx_byte1 << 8) | (u_int16_t)idx_byte2) % IDX_MOD)) % MEM_SIZE);
+	uint16_t index;
+
+	index = idx_byte1;
+	index <<= 8;
+	index |= idx_byte2;
+	if (idx_byte1 >> 7)
+	{
+		index = ~index + 1;
+		return ((pc - (index % IDX_MOD)) % MEM_SIZE);
+	}
+	return ((pc + (index % IDX_MOD)) % MEM_SIZE);
 }
 
 void		write_number_to_board(t_board_node *board, uint8_t *number)

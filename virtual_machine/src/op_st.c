@@ -33,6 +33,8 @@ void		st_(t_corewar *core, t_process *process)
 	if (EB1 == INDIRECT)
 	{
 		index = get_index(index, ARG10, ARG11);
+		// mvwprintw(core->ncur.infoz, 0, 0, "b1: %.2X, b2: %.2X", ARG10, ARG11);
+		// wrefresh(core->ncur.infoz);
 		write_number_to_board(core->node_addresses[index], REG[ARG00]);
 		VIZ(draw_to_bored(core, process->player->player_num, index, 4));
 	}

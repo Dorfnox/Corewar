@@ -9,13 +9,18 @@ void    init_ncurses(t_corewar *core)
     if (!core->flag.viz)
         return ;
     initscr();
+    noecho();
+    cbreak();
     start_color();
     init_ncurses_colors();   
     init_ncurses_arrays(core);
     init_ncurses_bored(core);
     init_ncurses_playa(core);
     init_ncurses_infoz(core);
+    scrollok(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
     curs_set(0);
+    sleep(1);
 }
 
 void    init_ncurses_colors(void)
@@ -102,12 +107,28 @@ void    draw_to_bored(t_corewar *core, uint8_t player_num,
     while (++i < len)
     {
         mvwprintw(core->ncur.infoz, 4, 0, "player num: %i", player_num);
-        // mvwprintw(core->ncur.infoz, 5, 0, "idx: %i", idx);
         wrefresh(core->ncur.infoz);
-        core->ncur.cursor[idx].bored_color = player_num;/////
+        core->ncur.cursor[idx].bored_color = player_num;
         draw_cursor(core, &core->ncur.cursor[idx]);
         idx = ((idx + 1) == MEM_SIZE) ? 0 : (idx + 1);
     }
+}
+
+
+int     key_hit(void)
+{
+    int             ch;
+
+    if ((ch = getch()) == ERR)
+    {
+        return (1);
+    }
+    else if (ch == ' ')
+    {
+        while ((ch = getch()) != ' ')
+            ;
+    }
+    return (1);
 }
 
 void    terminate_ncurses(t_corewar *core)

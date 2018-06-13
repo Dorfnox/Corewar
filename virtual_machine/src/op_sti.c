@@ -53,10 +53,7 @@ void		sti_(t_corewar *core, t_process *process)
 	else if (EB2 == DIRECT)
 		b = smash_bytes(process->args[2]) >> 16;
 	a += b;
-    mvwprintw(core->ncur.infoz, 5, 0, "idx: %i", tmp->index);
-	tmp = core->node_addresses[(tmp->index + (a % IDX_MOD)) % MEM_SIZE];
+	tmp = core->node_addresses[(tmp->index + (uint16_t)(a % IDX_MOD)) % MEM_SIZE];
 	write_number_to_board(tmp, process->args[0]);
-    wrefresh(core->ncur.infoz);
-	//wattron(core->ncur.bored, COLOR_PAIR(3));
 	VIZ(draw_to_bored(core, process->player->player_num, tmp->index, 4));
 }

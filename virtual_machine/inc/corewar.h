@@ -22,7 +22,7 @@
 
 # define CSEM "Corewar Conflict:\n"
 
-# define GAME_SPEED 5
+# define GAME_SPEED 50
 
 # define MALL_ERR_MSG(a) ft_str256(2, "Failure to malloc: ", (a))
 # define MALL_ERR(a, b) !(a) ? corewar_error(MALL_ERR_MSG(b), 1) : 1
@@ -253,6 +253,7 @@ void    				init_ncurses_bored(t_corewar *core);
 void    				init_ncurses_playa(t_corewar *core);
 void					init_ncurses_infoz(t_corewar *core);
 
+int     				key_hit(void);
 void					terminate_ncurses(t_corewar *core);
 
 void    				draw_to_bored(t_corewar *core,
