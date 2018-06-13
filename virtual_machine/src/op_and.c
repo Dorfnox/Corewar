@@ -28,22 +28,21 @@ void		and_(t_corewar *core, t_process *process)
 	uint32_t	b;
 	uint32_t	and_result;
 
-//	DB("and-ing");
 	index = process->curr_pc->index;
 	if (!parse_encoding_byte(process))
 		return ;
 	if (EB0 == 0 || EB1 == 0 || EB2 != REGISTER)
 		return ;
-	if (!parse_arguments(process) && !(process->carry = 0))
+	if (!parse_arguments(process, 0))
 		return ;
 	a = get_and_args(core, process, index, 0);
 	b = get_and_args(core, process, index, 1);
 	and_result = a & b;
-//	ft_printf("and result: %.8x\n", and_result);
-	process->reg[process->args[2][0]][0] = (uint8_t)(and_result >> 24);
-	process->reg[process->args[2][0]][1] = (uint8_t)(and_result >> 16);
-	process->reg[process->args[2][0]][2] = (uint8_t)(and_result >> 8);
-	process->reg[process->args[2][0]][3] = (uint8_t)(and_result >> 0);
+	REG[ARG20][0] = (uint8_t)(and_result >> 24);
+	REG[ARG20][1] = (uint8_t)(and_result >> 16);
+	REG[ARG20][2] = (uint8_t)(and_result >> 8);
+	REG[ARG20][3] = (uint8_t)(and_result >> 0);
+	process->carry = !smash_bytes(REG[ARG20]);
 }
 
 uint32_t	get_and_args(

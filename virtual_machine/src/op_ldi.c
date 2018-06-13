@@ -35,24 +35,25 @@ void		ldi_(t_corewar *core, t_process *process)
 
 	a = 0;
 	b = 0;
-	parse_encoding_byte(process);
+	if (!parse_encoding_byte(process))
+		return ;
 	if (EB2 != REGISTER || EB0 == 0 || EB1 == 0 || EB1 == INDIRECT)
 		return ;
-	if (!parse_arguments(process))
+	if (!parse_arguments(process, 1))
 		return ;
 	if (EB0 == REGISTER)
-		a = smash_bytes(process->reg[process->args[0][0]]);
+		a = smash_bytes(REG[ARG00]);
 	else if (EB0 == DIRECT)
-		a = smash_bytes(process->args[0]) >> 16;
+		a = smash_bytes(ARG0) >> 16;
 	else if (EB0 == INDIRECT)
 	{
-		index = get_index(process->curr_pc->index, process->args[0][0], process->args[0][1]);
+		index = get_index(process->curr_pc->index, ARG00, ARG01);
 		a = read_from_board(core->node_addresses[index], 4);
 	}
 	if (EB1 == REGISTER)
-		b = smash_bytes(process->reg[process->args[1][0]]);
+		b = smash_bytes(REG[ARG10]);
 	else if (EB1 == DIRECT)
-		b = smash_bytes(process->args[1]) >> 16;
+		b = smash_bytes(ARG1) >> 16;
 	a += b;
-	write_number_to_register(process->reg[process->args[2][0]], a);
+	write_number_to_register(REG[ARG20], a);
 }

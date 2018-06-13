@@ -20,7 +20,6 @@ void    init_ncurses(t_corewar *core)
     scrollok(stdscr, TRUE);
     nodelay(stdscr, TRUE);
     curs_set(0);
-    sleep(1);
 }
 
 void    init_ncurses_colors(void)

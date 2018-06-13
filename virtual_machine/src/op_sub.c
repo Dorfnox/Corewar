@@ -23,19 +23,16 @@ void		sub_(t_corewar *core, t_process *process)
 	uint32_t	subtractive_result;
 
 	(void)core;
-	subtractive_result = 0;
-	DB("subtracting");
 	if (!parse_encoding_byte(process))
-		return ; // Do we just treat the next argument as an operation?
+		return ;
 	if (EB0 != REGISTER || EB1 != REGISTER || EB2 != REGISTER)
 		return ;
-	if (!parse_arguments(process))
+	if (!parse_arguments(process, 0))
 		return ;
-	subtractive_result = smash_bytes(process->reg[process->args[0][0]]);
-	subtractive_result -= smash_bytes(process->reg[process->args[1][0]]);
-	ft_printf("subtractive result: %.8x\n", subtractive_result);
-	process->reg[process->args[2][0]][0] = (uint8_t)(subtractive_result >> 24);
-	process->reg[process->args[2][0]][1] = (uint8_t)(subtractive_result >> 16);
-	process->reg[process->args[2][0]][2] = (uint8_t)(subtractive_result >> 8);
-	process->reg[process->args[2][0]][3] = (uint8_t)(subtractive_result >> 0);
+	subtractive_result = smash_bytes(REG[ARG00]);
+	subtractive_result -= smash_bytes(REG[ARG10]);
+	REG[ARG20][0] = (uint8_t)(subtractive_result >> 24);
+	REG[ARG20][1] = (uint8_t)(subtractive_result >> 16);
+	REG[ARG20][2] = (uint8_t)(subtractive_result >> 8);
+	REG[ARG20][3] = (uint8_t)(subtractive_result >> 0);
 }

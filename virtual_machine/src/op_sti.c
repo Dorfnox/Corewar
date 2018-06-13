@@ -25,10 +25,11 @@
 
 void		sti_(t_corewar *core, t_process *process)
 {
-	uint32_t a;
-	uint32_t b;
-	uint16_t index;
-	t_board_node *tmp;
+	uint32_t		a;
+	uint32_t		b;
+	uint32_t		idx_result;
+	uint16_t		index;
+	t_board_node	*tmp;
 
 	tmp = process->curr_pc;
 	a = 0;
@@ -37,12 +38,14 @@ void		sti_(t_corewar *core, t_process *process)
 		return ;
 	if (EB0 != REGISTER || EB1 == 0 || EB2 == INDIRECT || EB2 == 0)
 		return ;
-	if (!parse_arguments(process))
+	if (!parse_arguments(process, 1))
 		return ;
 	if (EB1 == REGISTER)
-		a = smash_bytes(process->reg[process->args[1][0]]);
+		a = smash_bytes(process->reg[ARG10]);
 	else if (EB1 == DIRECT)
-		a = smash_bytes(process->args[1]) >> 16;
+	{
+		a = smash_bytes(ARG1) >> 16;
+	}
 	else if (EB1 == INDIRECT)
 	{
 		index = get_index(tmp->index, process->args[1][0], process->args[1][1]);
@@ -51,9 +54,22 @@ void		sti_(t_corewar *core, t_process *process)
 	if (EB2 == REGISTER)
 		b = smash_bytes(process->reg[process->args[2][0]]);
 	else if (EB2 == DIRECT)
-		b = smash_bytes(process->args[2]) >> 16;
-	a += b;
-	tmp = core->node_addresses[(tmp->index + (uint16_t)(a % IDX_MOD)) % MEM_SIZE];
-	write_number_to_board(tmp, process->args[0]);
+	{
+		b = smash_bytes(ARG2) >> 16;
+	}
+	idx_result = a + b; // 4023
+	if (idx_result > 32767)
+	{
+		idx_result = MEM_SIZE - (idx_result % MEM_SIZE);
+		if (tmp->index - idx_result > 0)
+			tmp = core->node_addresses[tmp->index - idx_result];
+		else
+			tmp = core->node_addresses[idx_result - tmp->index];
+	}
+	else
+	{
+		tmp = core->node_addresses[(tmp->index + (uint16_t)(idx_result % MEM_SIZE)) % MEM_SIZE];
+	}
+	write_number_to_board(tmp, REG[ARG00]);
 	VIZ(draw_to_bored(core, process->player->player_num, tmp->index, 4));
 }

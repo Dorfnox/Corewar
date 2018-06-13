@@ -22,7 +22,7 @@
 
 # define CSEM "Corewar Conflict:\n"
 
-# define GAME_SPEED 50
+# define GAME_SPEED 1
 
 # define MALL_ERR_MSG(a) ft_str256(2, "Failure to malloc: ", (a))
 # define MALL_ERR(a, b) !(a) ? corewar_error(MALL_ERR_MSG(b), 1) : 1
@@ -58,8 +58,6 @@
 # define ARG23 process->args[2][3]
 
 # define VIZ(a) core->flag.viz ? (a) : 0
-# define NCURSES_XLIMIT 189
-# define NCURSES_YLIMIT	64
 
 struct s_corewar;
 
@@ -344,7 +342,7 @@ void    				game_speed(uint8_t speed);
 */
 
 uint8_t					parse_encoding_byte(t_process *process);
-uint8_t					parse_arguments(t_process *process);
+uint8_t					parse_arguments(t_process *process, uint8_t read_two_bytes);
 uint32_t				smash_bytes(uint8_t *reg);
 uint8_t					*unsmash_bytes(uint32_t nbr);
 

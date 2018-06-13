@@ -16,7 +16,7 @@
 **	Utility functions for helping control the start of the game
 */
 
-uint8_t		parse_arguments(t_process *process)
+uint8_t		parse_arguments(t_process *process, uint8_t read_two_bytes)
 {
 	uint8_t i;
 	uint8_t	success;
@@ -38,7 +38,10 @@ uint8_t		parse_arguments(t_process *process)
 			process->args[i][1] = process->curr_pc->next->value;
 			process->args[i][2] = process->curr_pc->next->next->value;
 			process->args[i][3] = process->curr_pc->next->next->next->value;
-			process->curr_pc = process->curr_pc->next->next->next->next;
+			if (!read_two_bytes)
+				process->curr_pc = process->curr_pc->next->next->next->next;
+			else
+				process->curr_pc = process->curr_pc->next->next;
 		}
 		else if (process->encoding_byte[i] == INDIRECT)
 		{

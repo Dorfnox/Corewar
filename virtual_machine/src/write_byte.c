@@ -12,17 +12,38 @@
 
 # include "corewar.h"
 
-uint16_t 	get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
+uint16_t 	get_index_unchained(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
 {
 	uint16_t index;
 
-	index = idx_byte1;
-	index <<= 8;
+	index = (uint16_t)idx_byte1 << 8;
 	index |= idx_byte2;
 	if (idx_byte1 >> 7)
 	{
 		index = ~index + 1;
-		return ((pc - (index % IDX_MOD)) % MEM_SIZE);
+		return ((pc - index) % MEM_SIZE);
+	}
+	return ((pc + (index % IDX_MOD)) % MEM_SIZE);
+}
+
+uint16_t 	get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
+{
+	uint16_t index;
+
+	index = idx_byte1 << 8;
+	index |= idx_byte2;
+	if ((idx_byte1 >> 7))
+	{
+		// index = ((~index + 1) % IDX_MOD);
+		// if (pc < index)
+		// {
+		// 	index = MEM_SIZE - (index - pc);
+		// }
+		// else
+		// 	index = MEM_SIZE - (pc - index);
+		// return (index % MEM_SIZE);
+		index = ~index + 1;
+		return ((pc + index) % MEM_SIZE);
 	}
 	return ((pc + (index % IDX_MOD)) % MEM_SIZE);
 }
