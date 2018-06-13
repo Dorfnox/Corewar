@@ -27,11 +27,9 @@ void    loop(t_corewar *core)
 			process->instruct = core->op[board_value].instruct;
 			insert_process(core, &core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
 		}
-        ++core->env.cycle;
-        if (!cycle_handle(core))
-        	break ;
-        key_hit();
-        game_speed(GAME_SPEED); // 1 is fast, 50 is slow
+        cycle_handle(core);
+        key_hit(core);
+        game_speed(core->env.game_speed); // 1 is fast, 50 is slow
 	}
 }
 
@@ -53,20 +51,12 @@ void    loop_viz(t_corewar *core)
 			insert_process(core, &core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
 		}
-        ++core->env.cycle;
 		print_game_info(core);
 		wrefresh(core->ncur.bored);
-		if (!cycle_handle(core))
-			break ;
-		// key_hit();
-        game_speed(GAME_SPEED);
+		cycle_handle(core);
+		key_hit(core);
+        game_speed(core->env.game_speed);
 	}
-}
-
-uint8_t	cycle_handle(t_corewar *core)
-{
-	(void)core;
-	return (1);
 }
 
 void    game_speed(uint8_t speed)

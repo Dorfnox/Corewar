@@ -114,17 +114,17 @@ void    draw_to_bored(t_corewar *core, uint8_t player_num,
 }
 
 
-int     key_hit(void)
+int     key_hit(t_corewar *core)
 {
     int             ch;
 
-    if ((ch = getch()) == ERR)
+    if ((ch = wgetch(core->ncur.infoz)) == ERR)
     {
         return (1);
     }
     else if (ch == ' ')
     {
-        while ((ch = getch()) != ' ')
+        while ((ch = wgetch(core->ncur.infoz)) != ' ')
             ;
     }
     return (1);

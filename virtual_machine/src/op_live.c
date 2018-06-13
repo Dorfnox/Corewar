@@ -26,7 +26,7 @@ void		live_(t_corewar *core, t_process *process)
 
 	i = -1;
 	player_num = 0;
-	process->curr_pc = process->curr_pc->next; // Added this (moves to byte AFTER 0x01)
+	process->curr_pc = process->curr_pc->next;
 	while (++i < 4)
 	{
 		player_num <<= 8;
@@ -35,8 +35,9 @@ void		live_(t_corewar *core, t_process *process)
 	}
 	if (player_num < 0xFFFFFFFC)
 		return ;
-	// Do we need to minus one if we just don't do +1 in the first place?
 	player_num = ~player_num;
 	core->player[player_num].num_live++;
 	core->player[player_num].last_live = core->env.cycle;
+	core->env.nbr_live -= (core->env.nbr_live == 0) ? 0 : 1;
+	core->env.total_lives++;
 }

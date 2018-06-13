@@ -50,7 +50,6 @@ unsigned int	flag_dump(t_corewar *core, char ***argv)
 		corewar_error("Invalid cycle argument for option '-dump'", 1);
 	core->flag.dump = 1;
 	core->env.dump = ft_atoi(dump);
-	core->env.max_cycles = get_max_cycles(CYCLE_TO_DIE);
 	if (core->env.dump > core->env.max_cycles)
 	{
 		ft_pflite("TOOO MANY CYCLES. Max Cycles: %u\n", core->env.max_cycles);
@@ -89,11 +88,4 @@ unsigned int	flag_viz(t_corewar *core, char ***argv)
 	if (core->flag.viz)
 		corewar_error("You can't have two visualizers, silly!", 1);
 	return ((core->flag.viz = 1));
-}
-
-uint64_t		get_max_cycles(uint64_t init)
-{
-	if (init <= CYCLE_DELTA)
-		return (0);
-	return (init + get_max_cycles(init - CYCLE_DELTA));
 }

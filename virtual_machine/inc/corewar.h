@@ -33,11 +33,11 @@
 
 # define ZERO_AT_BAD_INSTR(a) ((a) < 17 ? (a) : 0)
 
+# define REG process->reg
+
 # define EB0 process->encoding_byte[0]
 # define EB1 process->encoding_byte[1]
 # define EB2 process->encoding_byte[2]
-
-# define REG process->reg
 
 # define ARG0 process->args[0]
 # define ARG00 process->args[0][0]
@@ -106,12 +106,18 @@ typedef struct			s_flag
 
 typedef struct			s_env
 {
-	uint64_t			cycle;
-	uint64_t			max_cycles;
-	uint64_t			dump;
+	uint32_t			cycle;
+	uint32_t			max_cycles;
+	uint32_t			cycle_to_die;
+	uint32_t			cycle_delta;
+	uint32_t			nbr_live;
+	uint32_t			total_lives;
+	uint32_t			max_checks;
+	uint32_t			dump;
 	uint8_t				num_players;
-}
-						t_env;
+	uint8_t				game_speed;
+}						t_env;
+
 /*
 **	Ncurses handling
 */
@@ -172,7 +178,6 @@ typedef struct			s_process
 {
 	t_player			*player;
 	t_board_node		*curr_pc;
-	// WINDOW				*cursor;
 	uint64_t			id;
 	uint8_t				encoding_byte[3];
 	uint8_t				args[3][4];
@@ -227,6 +232,8 @@ void					clean_flag_queue(t_queue *q);
 **	Initializing data
 */
 
+void					init_environment(t_corewar *core);
+
 void					retrieve_data(t_corewar *core, char **argv);
 unsigned int			flag_dump(t_corewar *core, char ***argv);
 unsigned int			flag_n(t_corewar *core, char ***argv);
@@ -251,7 +258,7 @@ void    				init_ncurses_bored(t_corewar *core);
 void    				init_ncurses_playa(t_corewar *core);
 void					init_ncurses_infoz(t_corewar *core);
 
-int     				key_hit(void);
+int     				key_hit(t_corewar *core);
 void					terminate_ncurses(t_corewar *core);
 
 void    				draw_to_bored(t_corewar *core,
@@ -356,5 +363,12 @@ void					write_board_to_register(uint8_t *reg, t_board_node *board);
 void					write_number_to_register(uint8_t *reg, uint32_t nbr);
 void					write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg);
 uint32_t				read_from_board(t_board_node *board, uint8_t bytes);
+
+/*
+**	Cycle checker
+*/
+
+void					terminate_players(t_corewar *core);
+void					game_over(t_corewar *core);
 
 #endif
