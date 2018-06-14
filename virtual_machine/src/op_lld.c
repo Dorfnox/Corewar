@@ -24,9 +24,9 @@
 
 void		lld_(t_corewar *core, t_process *process)
 {
-	t_board_node		*index;
+	uint16_t		index;
 
-	index = process->curr_pc;
+	index = process->curr_pc->index;
 	if (!parse_encoding_byte(process))
 		return ;
 	if ((EB0 < 2 || EB1 != 1 || EB2))
@@ -37,8 +37,11 @@ void		lld_(t_corewar *core, t_process *process)
 		ft_memcpy(REG[ARG10], ARG0, 4);
 	else if (EB0 == INDIRECT)
 	{
-		index = core->node_addresses[(index->index + ((smash_bytes(ARG0) >> 16))) % MEM_SIZE];
-		write_board_to_register(REG[ARG10], index);
+		index = get_index_unchained(index, ARG00, ARG01);
+		if (ARG00 >> 7)
+			write_board_to_register(REG[ARG10], core->node_addresses_rev[index]);
+		else
+			write_board_to_register(REG[ARG10], core->node_addresses[index]);
 	}
 	process->carry = !smash_bytes(REG[ARG10]);
 }

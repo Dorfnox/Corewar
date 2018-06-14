@@ -83,10 +83,10 @@ uint32_t	smash_bytes(uint8_t *reg)
 	uint32_t	result;
 
 	result = 0;
-	result |= (uint32_t)reg[0] << 24;
-	result |= (uint32_t)reg[1] << 16;
-	result |= (uint32_t)reg[2] << 8;
-	result |= (uint32_t)reg[3] << 0;
+	result |= ((uint32_t)reg[0]) << 24;
+	result |= ((uint32_t)reg[1]) << 16;
+	result |= ((uint32_t)reg[2]) << 8;
+	result |= ((uint32_t)reg[3]) << 0;
 	return (result);
 }
 

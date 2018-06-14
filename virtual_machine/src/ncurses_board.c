@@ -24,6 +24,7 @@ void    init_ncurses(t_corewar *core)
 
 void    init_ncurses_colors(void)
 {
+    init_color(COLOR_BLUE, 215, 1000, 1000);
     init_pair(P1, COLOR_GREEN, COLOR_BLACK);
     init_pair(P2, COLOR_BLUE, COLOR_BLACK);
     init_pair(P3, COLOR_RED, COLOR_BLACK);

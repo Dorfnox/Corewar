@@ -17,33 +17,32 @@ uint16_t 	get_index_unchained(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
 	uint16_t index;
 
 	index = (uint16_t)idx_byte1 << 8;
-	index |= idx_byte2;
+	index |= (uint16_t)idx_byte2;
 	if (idx_byte1 >> 7)
 	{
 		index = ~index + 1;
-		return ((pc - index) % MEM_SIZE);
+		return (((MEM_SIZE - pc - 1) + index) % MEM_SIZE);
 	}
-	return ((pc + (index % IDX_MOD)) % MEM_SIZE);
+	return ((pc + index) % MEM_SIZE);
 }
+
+/*
+**	Use the normal return for 'positive' indexes on the node_addresses array
+**	Use the idx_byte1 >> 7 return for 'negative' indexes on the
+**	node_addresses_rev array
+*/
 
 uint16_t 	get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
 {
 	uint16_t index;
 
-	index = idx_byte1 << 8;
-	index |= idx_byte2;
+	index = (uint16_t)idx_byte1 << 8;
+	index |= (uint16_t)idx_byte2;
 	if ((idx_byte1 >> 7))
 	{
-		// index = ((~index + 1) % IDX_MOD);
-		// if (pc < index)
-		// {
-		// 	index = MEM_SIZE - (index - pc);
-		// }
-		// else
-		// 	index = MEM_SIZE - (pc - index);
-		// return (index % MEM_SIZE);
 		index = ~index + 1;
-		return ((pc + index) % MEM_SIZE);
+		index %= IDX_MOD;
+		return (((MEM_SIZE - pc - 1) + index) % MEM_SIZE);
 	}
 	return ((pc + (index % IDX_MOD)) % MEM_SIZE);
 }

@@ -50,12 +50,16 @@ void    loop_viz(t_corewar *core)
 			process->instruct = core->op[board_value].instruct;
 			insert_process(core, &core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
+			if (smash_bytes(process->reg[4]) > 0)
+				DBI(core->env.cycle);
 		}
 		print_game_info(core);
 		wrefresh(core->ncur.bored);
 		cycle_handle(core);
-		key_hit(core);
         game_speed(core->env.game_speed);
+        if (core->env.cycle > 0)
+			key_hit(core);
+
 	}
 }
 

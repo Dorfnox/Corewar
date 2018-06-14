@@ -25,21 +25,38 @@
 
 void		sti_(t_corewar *core, t_process *process)
 {
-	uint32_t		a;
-	uint32_t		b;
 	uint32_t		idx_result;
 	uint16_t		index;
-	t_board_node	*tmp;
+	t_board_node	*location;
 
-	tmp = process->curr_pc;
-	a = 0;
-	b = 0;
+	index = process->curr_pc->index;
 	if (!parse_encoding_byte(process))
 		return ;
 	if (EB0 != REGISTER || EB1 == 0 || EB2 == INDIRECT || EB2 == 0)
 		return ;
 	if (!parse_arguments(process, 1))
 		return ;
+	idx_result = sti_a_index(core, process, index) + sti_b_index(process);
+	if (idx_result >> 7)
+	{
+		idx_result = ~idx_result + 1;
+		idx_result %= IDX_MOD;
+		index = (MEM_SIZE - index - 1);
+		location = core->node_addresses_rev[
+			(index + idx_result) % MEM_SIZE];
+	}
+	else
+		location = core->node_addresses[
+			(index + (idx_result % IDX_MOD)) % MEM_SIZE];
+	write_number_to_board(location, REG[ARG00]);
+	VIZ(draw_to_bored(core, process->player->player_num, location->index, 4));
+}
+
+uint32_t	sti_a_index(t_corewar *core, t_process *process, uint16_t index)
+{
+	uint32_t	a;
+
+	a = 0;
 	if (EB1 == REGISTER)
 		a = smash_bytes(process->reg[ARG10]);
 	else if (EB1 == DIRECT)
@@ -48,28 +65,27 @@ void		sti_(t_corewar *core, t_process *process)
 	}
 	else if (EB1 == INDIRECT)
 	{
-		index = get_index(tmp->index, process->args[1][0], process->args[1][1]);
-		a = read_from_board(core->node_addresses[index], 4);
+		index = get_index(index, ARG10, ARG11);
+		if (ARG10 >> 7)
+			a = read_from_board(core->node_addresses_rev[index], 4);
+		else
+			a = read_from_board(core->node_addresses[index], 4);
 	}
+	return (a);
+}
+
+uint32_t	sti_b_index(t_process *process)
+{
+	uint32_t	b;
+
+	b = 0;
 	if (EB2 == REGISTER)
-		b = smash_bytes(process->reg[process->args[2][0]]);
+	{
+		b = smash_bytes(REG[ARG20]);
+	}
 	else if (EB2 == DIRECT)
 	{
 		b = smash_bytes(ARG2) >> 16;
 	}
-	idx_result = a + b; // 4023
-	if (idx_result > 32767)
-	{
-		idx_result = MEM_SIZE - (idx_result % MEM_SIZE);
-		if (tmp->index - idx_result > 0)
-			tmp = core->node_addresses[tmp->index - idx_result];
-		else
-			tmp = core->node_addresses[idx_result - tmp->index];
-	}
-	else
-	{
-		tmp = core->node_addresses[(tmp->index + (uint16_t)(idx_result % MEM_SIZE)) % MEM_SIZE];
-	}
-	write_number_to_board(tmp, REG[ARG00]);
-	VIZ(draw_to_bored(core, process->player->player_num, tmp->index, 4));
+	return (b);
 }

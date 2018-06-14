@@ -36,7 +36,17 @@ void		ld_(t_corewar *core, t_process *process)
 	else if (EB0 == INDIRECT)
 	{
 		index = get_index(index, ARG00, ARG01);
-		write_board_to_register(REG[ARG10], core->node_addresses[index]);
+		if (ARG00 >> 7)
+			write_board_to_register(REG[ARG10], core->node_addresses_rev[index]);
+		else
+			write_board_to_register(REG[ARG10], core->node_addresses[index]);
 	}
+	// if (process->player->player_num == 1)
+	// {
+	// 	DBI(REG[ARG10][0]);
+	// 	DBI(REG[ARG10][1]);
+	// 	DBI(REG[ARG10][2]);
+	// 	DBI(REG[ARG10][3]);
+	// }
 	process->carry = !smash_bytes(REG[ARG10]);
 }

@@ -51,13 +51,24 @@ uint32_t	get_or_args(
 	uint16_t index,
 	uint8_t arg_num)
 {
+	t_board_node	*location;
+	uint32_t		ret;
+
+	ret = 0;
 	if (process->encoding_byte[arg_num] == REGISTER)
-		return (smash_bytes(REG[process->args[arg_num][0]]));
+		ret = smash_bytes(REG[process->args[arg_num][0]]);
 	else if (process->encoding_byte[arg_num] == DIRECT)
-		return (smash_bytes(process->args[arg_num]));
+		ret = smash_bytes(process->args[arg_num]);
 	else if (process->encoding_byte[arg_num] == INDIRECT)
-		return (read_from_board(core->node_addresses[
-			get_index(index, process->args[arg_num][0], process->args[arg_num][1])
-			], 4));
-	return (0);
+	{
+		index = get_index(index,
+			process->args[arg_num][0],
+			process->args[arg_num][1]);
+		if (process->args[arg_num][0] >> 7)
+			location = core->node_addresses_rev[index];
+		else
+			location = core->node_addresses[index];
+		ret = read_from_board(location, 4);
+	}
+	return (ret);
 }

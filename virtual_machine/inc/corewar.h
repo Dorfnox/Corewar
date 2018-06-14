@@ -199,6 +199,7 @@ typedef struct			s_corewar
 	t_queue				flag_queue;
 	t_board_node		*board;
 	t_board_node		*node_addresses[MEM_SIZE];
+	t_board_node		*node_addresses_rev[MEM_SIZE];
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
@@ -242,6 +243,9 @@ unsigned int			add_player_file(t_corewar *core, char *filename);
 uint64_t				get_max_cycles(uint64_t init);
 
 void					init_board(t_corewar *core);
+void					create_board(t_board_node **brd,
+							t_board_node **add, t_board_node **rev);
+
 
 void					init_operations(t_operation *core);
 void					init_wait_times(t_operation *core);
@@ -324,6 +328,9 @@ void					zjmp_(t_corewar *core, t_process *process);
 void					ldi_(t_corewar *core, t_process *process);
 
 void					sti_(t_corewar *core, t_process *process);
+uint32_t				sti_a_index(t_corewar *core, t_process *process,
+							uint16_t index);
+uint32_t				sti_b_index(t_process *process);
 
 void					fork_(t_corewar *core, t_process *process);
 
@@ -356,8 +363,11 @@ uint8_t					*unsmash_bytes(uint32_t nbr);
 /*
 ** Write Bytes
 */
+uint16_t 				get_index_unchained(uint16_t pc, uint8_t idx_byte1,
+							uint8_t idx_byte2);
+uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1,
+							uint8_t idx_byte2);
 
-uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2);
 void					write_number_to_board(t_board_node *board, uint8_t *number);
 void					write_board_to_register(uint8_t *reg, t_board_node *board);
 void					write_number_to_register(uint8_t *reg, uint32_t nbr);

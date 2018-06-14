@@ -12,7 +12,7 @@
 
 #include "corewar.h"
 
-void    create_board(t_board_node **board, t_board_node **addresses)
+void    create_board(t_board_node **brd, t_board_node **add, t_board_node **rev)
 {
 	int				i;
 	t_board_node	*tmp;
@@ -26,18 +26,19 @@ void    create_board(t_board_node **board, t_board_node **addresses)
 		tmp = ft_memalloc(sizeof(t_board_node));
 		if (!tmp)
 			corewar_error("Failed to create a board node", 0);
-		addresses[i] = tmp;
+		add[i] = tmp;
+		rev[MEM_SIZE - i - 1] = tmp;
 		if (tmpprev)
 			tmpprev->next = tmp;
 		tmp->prev = tmpprev;
-		if (!(*board))
-			*board = tmp;
+		if (!(*brd))
+			*brd = tmp;
 		tmp->index = i;
 		tmpprev = tmp;
 		tmp = tmp->next;
 	}
-	(*board)->prev = tmp;
-	tmpprev->next = *board;
+	(*brd)->prev = tmp;
+	tmpprev->next = *brd;
 }
 
 void	init_board(t_corewar *core)
@@ -48,7 +49,7 @@ void	init_board(t_corewar *core)
 	uint16_t	j;
 	char		*instruction;
 
-	create_board(&core->board, core->node_addresses);
+	create_board(&core->board, core->node_addresses, core->node_addresses_rev);
 	p = -1;
 	k = 0;
 	while (++p < 4)
