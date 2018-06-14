@@ -25,11 +25,12 @@ void    loop(t_corewar *core)
 			process->instruct(core, process);
 			board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
 			process->instruct = core->op[board_value].instruct;
-			insert_process(core, &core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
+			insert_process(core, &core->process_stack[(core->env.cycle +
+				core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
 		}
         cycle_handle(core);
         key_hit(core);
-        game_speed(core->env.game_speed); // 1 is fast, 50 is slow
+        game_speed(core->env.game_speed);
 	}
 }
 
@@ -48,7 +49,8 @@ void    loop_viz(t_corewar *core)
 			process->instruct(core, process);
 			board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
 			process->instruct = core->op[board_value].instruct;
-			insert_process(core, &core->process_stack[(core->env.cycle + core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
+			insert_process(core, &core->process_stack[(core->env.cycle +
+				core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
 			if (smash_bytes(process->reg[4]) > 0)
 				DBI(core->env.cycle);

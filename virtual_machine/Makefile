@@ -16,10 +16,11 @@ FILES = main \
 		error \
 		flag_handler \
 		environment data player process board instruction character cycle \
-		ncurses_board ncurses_info \
+		ncurses_board ncurses_info index \
 		loop \
 		parse_byte \
 		write_byte \
+		read_byte \
 		op_utility \
 		op_live \
 		op_ld \

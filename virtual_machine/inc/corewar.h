@@ -348,12 +348,27 @@ void					aff_(t_corewar *core, t_process *process);
 
 void					loop(t_corewar *core);
 void					loop_viz(t_corewar *core);
-uint8_t					cycle_handle(t_corewar *core);
 void    				game_speed(uint8_t speed);
 
 /*
-** Utilities
+**	Index
 */
+
+uint16_t 				get_index_unchained(uint16_t pc, uint8_t idx_byte1,
+							uint8_t idx_byte2);
+uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1,
+							uint8_t idx_byte2);
+
+/*
+** Write, Read, Parse Bytes
+*/
+
+void					write_number_to_board(t_board_node *board, uint8_t *number);
+void					write_board_to_register(uint8_t *reg, t_board_node *board);
+void					write_number_to_register(uint8_t *reg, uint32_t nbr);
+void					write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg);
+
+uint32_t				read_from_board(t_board_node *board, uint8_t bytes);
 
 uint8_t					parse_encoding_byte(t_process *process);
 uint8_t					parse_arguments(t_process *process, uint8_t read_two_bytes);
@@ -361,23 +376,10 @@ uint32_t				smash_bytes(uint8_t *reg);
 uint8_t					*unsmash_bytes(uint32_t nbr);
 
 /*
-** Write Bytes
-*/
-uint16_t 				get_index_unchained(uint16_t pc, uint8_t idx_byte1,
-							uint8_t idx_byte2);
-uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1,
-							uint8_t idx_byte2);
-
-void					write_number_to_board(t_board_node *board, uint8_t *number);
-void					write_board_to_register(uint8_t *reg, t_board_node *board);
-void					write_number_to_register(uint8_t *reg, uint32_t nbr);
-void					write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg);
-uint32_t				read_from_board(t_board_node *board, uint8_t bytes);
-
-/*
 **	Cycle checker
 */
 
+uint8_t					cycle_handle(t_corewar *core);
 void					terminate_players(t_corewar *core);
 void					game_over(t_corewar *core);
 

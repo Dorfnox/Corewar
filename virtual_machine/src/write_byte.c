@@ -12,41 +12,6 @@
 
 # include "corewar.h"
 
-uint16_t 	get_index_unchained(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
-{
-	uint16_t index;
-
-	index = (uint16_t)idx_byte1 << 8;
-	index |= (uint16_t)idx_byte2;
-	if (idx_byte1 >> 7)
-	{
-		index = ~index + 1;
-		return (((MEM_SIZE - pc - 1) + index) % MEM_SIZE);
-	}
-	return ((pc + index) % MEM_SIZE);
-}
-
-/*
-**	Use the normal return for 'positive' indexes on the node_addresses array
-**	Use the idx_byte1 >> 7 return for 'negative' indexes on the
-**	node_addresses_rev array
-*/
-
-uint16_t 	get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
-{
-	uint16_t index;
-
-	index = (uint16_t)idx_byte1 << 8;
-	index |= (uint16_t)idx_byte2;
-	if ((idx_byte1 >> 7))
-	{
-		index = ~index + 1;
-		index %= IDX_MOD;
-		return (((MEM_SIZE - pc - 1) + index) % MEM_SIZE);
-	}
-	return ((pc + (index % IDX_MOD)) % MEM_SIZE);
-}
-
 void		write_number_to_board(t_board_node *board, uint8_t *number)
 {
 	uint8_t i;
@@ -82,17 +47,4 @@ void		write_number_to_register(uint8_t *reg, uint32_t nbr)
 void		write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg)
 {
 	ft_memcpy(dst_reg, src_reg, 4);
-}
-
-uint32_t	read_from_board(t_board_node *board, uint8_t bytes)
-{
-	uint32_t	result;
-
-	result = 0;
-	while (bytes-- > 0)
-	{
-		result |= (uint32_t)board->value << (bytes * 8);
-		board = board->next;
-	}
-	return (result);
 }
