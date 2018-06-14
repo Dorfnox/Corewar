@@ -59,9 +59,8 @@ void    loop_viz(t_corewar *core)
 		wrefresh(core->ncur.bored);
 		cycle_handle(core);
         game_speed(core->env.game_speed);
-        if (core->env.cycle > 0)
+        if (core->env.cycle > 5700)
 			key_hit(core);
-
 	}
 }
 

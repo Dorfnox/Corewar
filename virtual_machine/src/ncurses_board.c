@@ -106,8 +106,6 @@ void    draw_to_bored(t_corewar *core, uint8_t player_num,
     i = -1;
     while (++i < len)
     {
-        mvwprintw(core->ncur.infoz, 4, 0, "player num: %i", player_num);
-        wrefresh(core->ncur.infoz);
         core->ncur.cursor[idx].bored_color = player_num;
         draw_cursor(core, &core->ncur.cursor[idx]);
         idx = ((idx + 1) == MEM_SIZE) ? 0 : (idx + 1);

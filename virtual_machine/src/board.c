@@ -51,12 +51,16 @@ void	init_board(t_corewar *core)
 
 	create_board(&core->board, core->node_addresses, core->node_addresses_rev);
 	p = -1;
+	// p = 4;
 	k = 0;
 	while (++p < 4)
+	// while (p > 0)
 	{
+		// --p;
 		if (core->player[p].player_num)
 		{
 			j = ((++k - 1) * (MEM_SIZE / core->env.num_players));
+			// j = p * 1024;
 			push(&core->process_stack[0], new_process(&core->player[p],
 				core->node_addresses[j], NULL));
 			i = 0;

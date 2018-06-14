@@ -29,16 +29,17 @@
 
 void		ldi_(t_corewar *core, t_process *process)
 {
-	uint32_t 	a;
-	uint32_t 	b;
-	uint16_t 	index;
+	uint32_t 		a;
+	uint32_t 		b;
+	uint16_t 		index;
+	t_board_node	*location;
 
 	a = 0;
 	b = 0;
 	index = process->curr_pc->index;
 	if (!parse_encoding_byte(process))
 		return ;
-	if (EB2 != REGISTER || EB0 == 0 || EB1 == 0 || EB1 == INDIRECT)
+	if (EB0 == 0 || EB1 == 0 || EB1 == INDIRECT || EB2 != REGISTER)
 		return ;
 	if (!parse_arguments(process, 1))
 		return ;
@@ -58,5 +59,15 @@ void		ldi_(t_corewar *core, t_process *process)
 		b = smash_bytes(REG[ARG10]);
 	else if (EB1 == DIRECT)
 		b = smash_bytes(ARG1) >> 16;
-	write_number_to_register(REG[ARG20], a + b);
+	a += b;
+	if (a >> 15)
+	{
+		a = (~a + 1);
+		a %= IDX_MOD;
+		index = (MEM_SIZE - index - 1);
+		location = core->node_addresses_rev[(index + a) % MEM_SIZE];
+	}
+	else
+		location = core->node_addresses[(index + (a % IDX_MOD)) % MEM_SIZE];
+	write_number_to_register(REG[ARG20], read_from_board(location, 4));
 }

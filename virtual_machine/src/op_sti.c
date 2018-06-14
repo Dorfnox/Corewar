@@ -32,12 +32,12 @@ void		sti_(t_corewar *core, t_process *process)
 	index = process->curr_pc->index;
 	if (!parse_encoding_byte(process))
 		return ;
-	if (EB0 != REGISTER || EB1 == 0 || EB2 == INDIRECT || EB2 == 0)
+	if (EB0 != REGISTER || EB1 == 0 || EB2 == 0 || EB2 == INDIRECT)
 		return ;
 	if (!parse_arguments(process, 1))
 		return ;
 	idx_result = sti_a_index(core, process, index) + sti_b_index(process);
-	if (idx_result >> 7)
+	if (idx_result >> 15)
 	{
 		idx_result = ~idx_result + 1;
 		idx_result %= IDX_MOD;

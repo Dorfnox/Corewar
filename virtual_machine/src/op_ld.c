@@ -41,12 +41,5 @@ void		ld_(t_corewar *core, t_process *process)
 		else
 			write_board_to_register(REG[ARG10], core->node_addresses[index]);
 	}
-	// if (process->player->player_num == 1)
-	// {
-	// 	DBI(REG[ARG10][0]);
-	// 	DBI(REG[ARG10][1]);
-	// 	DBI(REG[ARG10][2]);
-	// 	DBI(REG[ARG10][3]);
-	// }
 	process->carry = !smash_bytes(REG[ARG10]);
 }
