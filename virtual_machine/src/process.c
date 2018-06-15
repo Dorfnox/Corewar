@@ -18,8 +18,7 @@
 **	If given a previous process, will copy the register over as well.
 */
 
-t_process	*new_process(t_player *player,
-	t_board_node *start_pos, t_process *cpy)
+t_process	*new_process(t_player *player, t_board_node *start, t_process *cpy)
 {
 	t_process		*new;
 	int64_t			reg_ctr;
@@ -28,7 +27,7 @@ t_process	*new_process(t_player *player,
 
 	MALL_ERR((new = ft_memalloc(sizeof(t_process))), "Creating new process");
 	new->player = player;
-	new->curr_pc = start_pos;
+	new->curr_pc = start;
 	new->instruct = first_;
 	new->carry = cpy ? cpy->carry : 0;
 	new->id = id++;
@@ -127,9 +126,14 @@ void		pop_process_cursor(t_corewar *core, t_process *process)
 
 void		draw_cursor(t_corewar *core, t_cursor *c)
 {
-	t_process	*p;
+	t_process		*p;
+	static uint64_t	i;
 
-	if ((p = peeks(&c->cursor_stack)))
+	if (core->flag.epilepsy)
+	{
+		wattron(core->ncur.bored, COLOR_PAIR((i++ % 3) + 5));
+	}
+	else if ((p = peeks(&c->cursor_stack)))
 	{
 	    wattron(core->ncur.bored, COLOR_PAIR(p->player->player_num + 4));
 	}

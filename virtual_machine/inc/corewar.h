@@ -102,6 +102,7 @@ typedef struct			s_flag
 {
 	uint8_t				dump:1;
 	uint8_t				viz:1;
+	uint8_t				epilepsy:1;
 }						t_flag;
 
 /*
@@ -392,5 +393,11 @@ uint8_t					*unsmash_bytes(uint32_t nbr);
 uint8_t					cycle_handle(t_corewar *core);
 void					terminate_players(t_corewar *core);
 void					game_over(t_corewar *core);
+
+/*
+**	Bonus
+*/
+
+unsigned int			epilepsy_mode(t_corewar *core, char ***av);
 
 #endif

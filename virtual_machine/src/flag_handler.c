@@ -19,8 +19,12 @@
 void			init_flag_queue(t_queue *q)
 {
 	add_flag(q, "-n", flag_n);
+	add_flag(q, "-d", flag_dump);
 	add_flag(q, "-dump", flag_dump);
+	add_flag(q, "-v", flag_viz);
 	add_flag(q, "-viz", flag_viz);
+	add_flag(q, "-e", epilepsy_mode);
+	add_flag(q, "-epilepsy", epilepsy_mode);
 }
 
 /*

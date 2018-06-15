@@ -37,7 +37,8 @@ FILES = main \
 		op_lld \
 		op_lldi \
 		op_lfork \
-		op_aff
+		op_aff \
+		bonus
 
 C_FLAGS = -Wall -Wextra -Werror
 NCURSES = -L/usr/lib -lncurses
