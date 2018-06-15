@@ -29,6 +29,11 @@
 
 # define PROCESS_STACK_LEN 1024
 # define PROCESS_STACK core->process_stack
+# define PROCESS_STACK_P1 core->process_stack[3]
+# define PROCESS_STACK_P2 core->process_stack[2]
+# define PROCESS_STACK_P3 core->process_stack[1]
+# define PROCESS_STACK_P4 core->process_stack[0]
+
 # define CURRENT_CYCLE core->env.cycle % PROCESS_STACK_LEN
 
 # define ZERO_AT_BAD_INSTR(a) ((a) < 17 ? (a) : 0)
@@ -114,6 +119,8 @@ typedef struct			s_env
 	uint32_t			total_lives;
 	uint32_t			max_checks;
 	uint32_t			dump;
+	uint32_t			last_cycle_when_live_was_called;
+	uint8_t				last_player_to_call_live;
 	uint8_t				num_players;
 	uint8_t				game_speed;
 }						t_env;
@@ -200,6 +207,7 @@ typedef struct			s_corewar
 	t_board_node		*board;
 	t_board_node		*node_addresses[MEM_SIZE];
 	t_board_node		*node_addresses_rev[MEM_SIZE];
+	// t_stack				process_stack[4][PROCESS_STACK_LEN];
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
@@ -372,6 +380,8 @@ uint32_t				read_from_board(t_board_node *board, uint8_t bytes);
 
 uint8_t					parse_encoding_byte(t_process *process);
 uint8_t					parse_arguments(t_process *process, uint8_t read_two_bytes);
+void					move_pc_by_encoding_byte(t_process *process,
+							uint8_t read_two_bytes);
 uint32_t				smash_bytes(uint8_t *reg);
 uint8_t					*unsmash_bytes(uint32_t nbr);
 

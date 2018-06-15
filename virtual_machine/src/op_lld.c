@@ -27,10 +27,11 @@ void		lld_(t_corewar *core, t_process *process)
 	uint16_t		index;
 
 	index = process->curr_pc->index;
-	if (!parse_encoding_byte(process))
+	if (!parse_encoding_byte(process) || EB0 < 2 || EB1 != 1 || EB2)
+	{
+		move_pc_by_encoding_byte(process, 0);
 		return ;
-	if ((EB0 < 2 || EB1 != 1 || EB2))
-		return;
+	}
 	if (!parse_arguments(process, 0))
 		return ;
 	if (EB0 == DIRECT)

@@ -52,17 +52,53 @@ void    loop_viz(t_corewar *core)
 			insert_process(core, &core->process_stack[(core->env.cycle +
 				core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
-			if (smash_bytes(process->reg[4]) > 0)
-				DBI(core->env.cycle);
 		}
 		print_game_info(core);
 		wrefresh(core->ncur.bored);
 		cycle_handle(core);
         game_speed(core->env.game_speed);
-        if (core->env.cycle > 5700)
-			key_hit(core);
+   //      if (core->env.cycle > 950)
+			// key_hit(core);
 	}
 }
+
+// void	execute_process(t_corewar *core, uint8_t player_num)
+// {
+// 	static t_process	*process;
+// 	static uint8_t		board_value;
+
+// 	process = pop(&PROCESS_STACK[player_num][CURRENT_CYCLE]);
+// 	pop_process_cursor(core, process);
+// 	print_process_info(&core->ncur, process);
+// 	process->instruct(core, process);
+// 	board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
+// 	process->instruct = core->op[board_value].instruct;
+// 	insert_process(core,
+// 		&core->process_stack[player_num][(core->env.cycle +
+// 		core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
+// 	wrefresh(core->ncur.playa[player_num]);
+// }
+
+// void    loop_viz(t_corewar *core)
+// {
+// 	while (1)
+// 	{
+// 		while (!isemptys(&PROCESS_STACK[0][CURRENT_CYCLE]))
+// 			execute_process(core, 0);
+// 		while (!isemptys(&PROCESS_STACK[1][CURRENT_CYCLE]))
+// 			execute_process(core, 1);
+// 		while (!isemptys(&PROCESS_STACK[2][CURRENT_CYCLE]))
+// 			execute_process(core, 2);
+// 		while (!isemptys(&PROCESS_STACK[3][CURRENT_CYCLE]))
+// 			execute_process(core, 3);
+// 		print_game_info(core);
+// 		wrefresh(core->ncur.bored);
+// 		cycle_handle(core);
+//         game_speed(core->env.game_speed);
+//    //      if (core->env.cycle > 0)
+// 			// key_hit(core);
+// 	}
+// }
 
 void    game_speed(uint8_t speed)
 {

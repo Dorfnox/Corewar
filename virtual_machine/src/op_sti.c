@@ -30,10 +30,12 @@ void		sti_(t_corewar *core, t_process *process)
 	t_board_node	*location;
 
 	index = process->curr_pc->index;
-	if (!parse_encoding_byte(process))
+	if (!parse_encoding_byte(process) ||
+		EB0 != REGISTER || EB1 == 0 || EB2 == 0 || EB2 == INDIRECT)
+	{
+		move_pc_by_encoding_byte(process, 1);
 		return ;
-	if (EB0 != REGISTER || EB1 == 0 || EB2 == 0 || EB2 == INDIRECT)
-		return ;
+	}
 	if (!parse_arguments(process, 1))
 		return ;
 	idx_result = sti_a_index(core, process, index) + sti_b_index(process);

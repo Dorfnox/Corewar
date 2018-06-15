@@ -51,16 +51,12 @@ void	init_board(t_corewar *core)
 
 	create_board(&core->board, core->node_addresses, core->node_addresses_rev);
 	p = -1;
-	// p = 4;
 	k = 0;
 	while (++p < 4)
-	// while (p > 0)
 	{
-		// --p;
 		if (core->player[p].player_num)
 		{
 			j = ((++k - 1) * (MEM_SIZE / core->env.num_players));
-			// j = p * 1024;
 			push(&core->process_stack[0], new_process(&core->player[p],
 				core->node_addresses[j], NULL));
 			i = 0;
@@ -74,3 +70,32 @@ void	init_board(t_corewar *core)
 		}
 	}
 }
+
+// void	init_board(t_corewar *core)
+// {
+// 	uint8_t		p;
+// 	uint16_t	i;
+// 	uint16_t	j;
+// 	char		*instruction;
+
+// 	create_board(&core->board, core->node_addresses, core->node_addresses_rev);
+// 	p = 4;
+// 	while (p > 0)
+// 	{
+// 		--p;
+// 		if (core->player[p].player_num)
+// 		{
+// 			j = p * (1024 + 1024);
+// 			push(&core->process_stack[p][0], new_process(&core->player[p],
+// 				core->node_addresses[j], NULL));
+// 			i = 0;
+// 			while (i < core->player[p].instruction_size)
+// 			{
+// 				instruction = &core->player[p].header.instructions[i++];
+// 				ft_memcpy(&core->node_addresses[j]->value, instruction, 1); // change this to core->node_addresses[j++]->value = (uint8_t)core->player[p].header.instructions[i++];
+// 				VIZ(draw_to_bored(core, core->player[p].player_num, j, 1));
+// 				++j;
+// 			}
+// 		}
+// 	}
+// }

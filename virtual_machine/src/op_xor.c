@@ -29,10 +29,12 @@ void		xor_(t_corewar *core, t_process *process)
 	uint32_t	xor_result;
 
 	index = process->curr_pc->index;
-	if (!parse_encoding_byte(process))
+	if (!parse_encoding_byte(process) ||
+		EB0 == 0 || EB1 == 0 || EB2 != REGISTER)
+	{
+		move_pc_by_encoding_byte(process, 0);
 		return ;
-	if (EB0 == 0 || EB1 == 0 || EB2 != REGISTER)
-		return ;
+	}
 	if (!parse_arguments(process, 0))
 		return ;
 	a = get_or_args(core, process, index, 0);

@@ -37,10 +37,12 @@ void		ldi_(t_corewar *core, t_process *process)
 	a = 0;
 	b = 0;
 	index = process->curr_pc->index;
-	if (!parse_encoding_byte(process))
+	if (!parse_encoding_byte(process) ||
+		EB0 == 0 || EB1 == 0 || EB1 == INDIRECT || EB2 != REGISTER)
+	{
+		move_pc_by_encoding_byte(process, 1);
 		return ;
-	if (EB0 == 0 || EB1 == 0 || EB1 == INDIRECT || EB2 != REGISTER)
-		return ;
+	}
 	if (!parse_arguments(process, 1))
 		return ;
 	if (EB0 == REGISTER)

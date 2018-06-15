@@ -28,9 +28,9 @@
 
 void		zjmp_(t_corewar *core, t_process *process)
 {
-	uint8_t jump_index_a;
-	uint8_t jump_index_b;
-	uint16_t index;
+	uint8_t		jump_index_a;
+	uint8_t		jump_index_b;
+	uint16_t	index;
 
 	if (process->carry)
 	{
