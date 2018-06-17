@@ -23,19 +23,19 @@ void		add_(t_corewar *core, t_process *process)
 	uint32_t	additive_result;
 
 	(void)core;
-	additive_result = 0;
-//	DB("adding");
-	if (!parse_encoding_byte(process))
-		return ; // Do we just treat the next argument as an operation?
-	if (EB0 != REGISTER || EB1 != REGISTER || EB2 != REGISTER)
+	if (!parse_encoding_byte(process) ||
+		EB0 != REGISTER || EB1 != REGISTER || EB2 != REGISTER)
+	{
+		move_pc_by_encoding_byte(process, 0);
 		return ;
-	if (!parse_arguments(process))
+	}
+	if (!parse_arguments(process, 0))
 		return ;
-	additive_result = smash_bytes(process->reg[process->args[0][0]]);
-	additive_result += smash_bytes(process->reg[process->args[1][0]]);
-	ft_printf("additive result: %.8x\n", additive_result);
-	process->reg[process->args[2][0]][0] = (uint8_t)(additive_result >> 24);
-	process->reg[process->args[2][0]][1] = (uint8_t)(additive_result >> 16);
-	process->reg[process->args[2][0]][2] = (uint8_t)(additive_result >> 8);
-	process->reg[process->args[2][0]][3] = (uint8_t)(additive_result >> 0);
+	additive_result = smash_bytes(REG[ARG00]);
+	additive_result += smash_bytes(REG[ARG10]);
+	REG[ARG20][0] = (uint8_t)(additive_result >> 24);
+	REG[ARG20][1] = (uint8_t)(additive_result >> 16);
+	REG[ARG20][2] = (uint8_t)(additive_result >> 8);
+	REG[ARG20][3] = (uint8_t)(additive_result >> 0);
+	process->carry = !smash_bytes(REG[ARG20]);
 }

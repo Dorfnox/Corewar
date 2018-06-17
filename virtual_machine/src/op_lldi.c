@@ -30,30 +30,45 @@ void		lldi_(t_corewar *core, t_process *process)
 {
 	uint32_t 		a;
 	uint32_t 		b;
-	t_board_node	*index;
+	uint16_t 		index;
+	t_board_node	*location;
 
 	a = 0;
 	b = 0;
-	index = process->curr_pc;
-	parse_encoding_byte(process);
-	if (EB2 != REGISTER || EB0 == 0 || EB1 == 0 || EB1 == INDIRECT)
+	index = process->curr_pc->index;
+	if (!parse_encoding_byte(process) ||
+		EB0 == 0 || EB1 == 0 || EB1 == INDIRECT || EB2 != REGISTER)
+	{
+		move_pc_by_encoding_byte(process, 1);
 		return ;
-	if (!parse_arguments(process))
+	}
+	if (!parse_arguments(process, 1))
 		return ;
 	if (EB0 == REGISTER)
-		a = smash_bytes(process->reg[process->args[0][0]]);
+		a = smash_bytes(REG[ARG00]);
 	else if (EB0 == DIRECT)
-		a = smash_bytes(process->args[0]) >> 16;
+		a = smash_bytes(ARG0) >> 16;
 	else if (EB0 == INDIRECT)
 	{
-		index = core->node_addresses[(index->index + ((smash_bytes(process->args[0]) >> 16))) % MEM_SIZE];
-		a = read_from_board(index, 4);
+		index = get_index_unchained(index, ARG00, ARG01);
+		if (ARG00 >> 7)
+			a = read_from_board(core->node_addresses_rev[index], 4);
+		else
+			a = read_from_board(core->node_addresses[index], 4);
 	}
 	if (EB1 == REGISTER)
-		b = smash_bytes(process->reg[process->args[1][0]]);
+		b = smash_bytes(REG[ARG10]);
 	else if (EB1 == DIRECT)
-		b = smash_bytes(process->args[1]) >> 16;
+		b = smash_bytes(ARG1) >> 16;
 	a += b;
-	write_number_to_register(process->reg[process->args[2][0]], a);
-	process->carry = !smash_bytes(process->reg[process->args[2][0]]);
+	if (a >> 15)
+	{
+		a = (~a + 1);
+		index = (MEM_SIZE - index - 1);
+		location = core->node_addresses_rev[(index + a) % MEM_SIZE];
+	}
+	else
+		location = core->node_addresses[(index + a) % MEM_SIZE];
+	write_number_to_register(REG[ARG20], read_from_board(location, 4));
+	process->carry = !smash_bytes(REG[ARG20]);
 }

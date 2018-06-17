@@ -22,22 +22,27 @@
 
 # define CSEM "Corewar Conflict:\n"
 
-# define GAME_SPEED 3
+# define GAME_SPEED 1
 
 # define MALL_ERR_MSG(a) ft_str256(2, "Failure to malloc: ", (a))
-# define MALL_ERR(a, b) !(a) ? corewar_error(MALL_ERR_MSG(b), 1) : 0
+# define MALL_ERR(a, b) !(a) ? corewar_error(MALL_ERR_MSG(b), 1) : 1
 
 # define PROCESS_STACK_LEN 1024
 # define PROCESS_STACK core->process_stack
+# define PROCESS_STACK_P1 core->process_stack[3]
+# define PROCESS_STACK_P2 core->process_stack[2]
+# define PROCESS_STACK_P3 core->process_stack[1]
+# define PROCESS_STACK_P4 core->process_stack[0]
+
 # define CURRENT_CYCLE core->env.cycle % PROCESS_STACK_LEN
 
 # define ZERO_AT_BAD_INSTR(a) ((a) < 17 ? (a) : 0)
 
+# define REG process->reg
+
 # define EB0 process->encoding_byte[0]
 # define EB1 process->encoding_byte[1]
 # define EB2 process->encoding_byte[2]
-
-# define REG process->reg
 
 # define ARG0 process->args[0]
 # define ARG00 process->args[0][0]
@@ -58,8 +63,6 @@
 # define ARG23 process->args[2][3]
 
 # define VIZ(a) core->flag.viz ? (a) : 0
-# define NCURSES_XLIMIT 189
-# define NCURSES_YLIMIT	64
 
 struct s_corewar;
 
@@ -69,11 +72,11 @@ enum
 	P2,
 	P3,
 	P4,
-	DF,
-	P1B = 10,
+	P1B,
 	P2B,
 	P3B,
 	P4B,
+	DF,
 	INFOZ
 };
 
@@ -99,6 +102,7 @@ typedef struct			s_flag
 {
 	uint8_t				dump:1;
 	uint8_t				viz:1;
+	uint8_t				epilepsy:1;
 }						t_flag;
 
 /*
@@ -108,12 +112,20 @@ typedef struct			s_flag
 
 typedef struct			s_env
 {
-	uint64_t			cycle;
-	uint64_t			max_cycles;
-	uint64_t			dump;
+	uint32_t			cycle;
+	uint32_t			max_cycles;
+	uint32_t			cycle_to_die;
+	uint32_t			cycle_delta;
+	uint32_t			nbr_live;
+	uint32_t			total_lives;
+	uint32_t			max_checks;
+	uint32_t			dump;
+	uint32_t			last_cycle_when_live_was_called;
+	uint8_t				last_player_to_call_live;
 	uint8_t				num_players;
-}
-						t_env;
+	uint8_t				game_speed;
+}						t_env;
+
 /*
 **	Ncurses handling
 */
@@ -122,9 +134,19 @@ typedef struct			s_ncurses_draw_data
 {
 	uint8_t				*value;
 	uint8_t				value_size;
+	uint8_t				index;
 	uint8_t				start_x;
 	uint8_t				start_y;
 }						t_ndd;
+
+typedef struct			s_cursor
+{
+	uint16_t			idx;
+	uint8_t				x;
+	uint8_t				y;
+	uint8_t				bored_color;
+	t_stack				cursor_stack;
+}						t_cursor;
 
 typedef struct			s_ncurses
 {
@@ -132,6 +154,7 @@ typedef struct			s_ncurses
 	WINDOW				*playa[4];
 	WINDOW				*infoz;
 	char				c_array[256][3];
+	t_cursor			cursor[MEM_SIZE];
 	t_ndd				ncur_data;
 }						t_ncurses;
 
@@ -163,7 +186,7 @@ typedef struct			s_process
 {
 	t_player			*player;
 	t_board_node		*curr_pc;
-	uint64_t			process_num;
+	uint64_t			id;
 	uint8_t				encoding_byte[3];
 	uint8_t				args[3][4];
 	uint8_t				carry;
@@ -184,6 +207,8 @@ typedef struct			s_corewar
 	t_queue				flag_queue;
 	t_board_node		*board;
 	t_board_node		*node_addresses[MEM_SIZE];
+	t_board_node		*node_addresses_rev[MEM_SIZE];
+	// t_stack				process_stack[4][PROCESS_STACK_LEN];
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
@@ -217,6 +242,8 @@ void					clean_flag_queue(t_queue *q);
 **	Initializing data
 */
 
+void					init_environment(t_corewar *core);
+
 void					retrieve_data(t_corewar *core, char **argv);
 unsigned int			flag_dump(t_corewar *core, char ***argv);
 unsigned int			flag_n(t_corewar *core, char ***argv);
@@ -225,11 +252,13 @@ unsigned int			add_player_file(t_corewar *core, char *filename);
 uint64_t				get_max_cycles(uint64_t init);
 
 void					init_board(t_corewar *core);
+void					create_board(t_board_node **brd,
+							t_board_node **add, t_board_node **rev);
+
 
 void					init_operations(t_operation *core);
 void					init_wait_times(t_operation *core);
 
-void					init_c_array(t_corewar *core);
 
 /*
 **	NCurses Functionality
@@ -237,14 +266,16 @@ void					init_c_array(t_corewar *core);
 
 void					init_ncurses(t_corewar *core);
 void    				init_ncurses_colors(void);
+void					init_ncurses_arrays(t_corewar *core);
 void    				init_ncurses_bored(t_corewar *core);
 void    				init_ncurses_playa(t_corewar *core);
 void					init_ncurses_infoz(t_corewar *core);
+
+int     				key_hit(t_corewar *core);
 void					terminate_ncurses(t_corewar *core);
-void    				draw_process(t_ncurses *n, t_process *process);
-void    				capture_ncur_data(t_ncurses *n, uint16_t index,
-							uint8_t *value, uint8_t value_size);
-void    				draw_to_bored(t_ncurses *n, uint8_t player_num);
+
+void    				draw_to_bored(t_corewar *core,
+							uint8_t player_num, uint16_t idx, uint8_t len);
 
 void					print_process_info(t_ncurses *n, t_process *p);
 void					print_game_info(t_corewar *core);
@@ -263,9 +294,14 @@ void					init_player_processes(t_corewar *core);
 **	Processes
 */
 
-t_process				*new_process(t_player *player, t_board_node *b,
-							t_process *to_copy);
-void					insert_process(t_stack *s, t_process *p);
+t_process				*new_process(t_player *p, t_board_node *b, t_process *cpy);
+void					insert_process(t_corewar *c, t_stack *s, t_process *p);
+
+void					push_process_cursor(t_corewar *core, t_process *process);
+void					pop_process_cursor(t_corewar *core, t_process *process);
+void					draw_cursor(t_corewar *core, t_cursor *c);
+// void					new_process_cursor(t_corewar *core, t_process *p);
+// void					move_process_cursor(t_corewar *core, t_process *p);
 
 /*
 ** Instructions
@@ -301,6 +337,9 @@ void					zjmp_(t_corewar *core, t_process *process);
 void					ldi_(t_corewar *core, t_process *process);
 
 void					sti_(t_corewar *core, t_process *process);
+uint32_t				sti_a_index(t_corewar *core, t_process *process,
+							uint16_t index);
+uint32_t				sti_b_index(t_process *process);
 
 void					fork_(t_corewar *core, t_process *process);
 
@@ -318,27 +357,47 @@ void					aff_(t_corewar *core, t_process *process);
 
 void					loop(t_corewar *core);
 void					loop_viz(t_corewar *core);
-uint8_t					cycle_handle(t_corewar *core);
 void    				game_speed(uint8_t speed);
 
 /*
-** Utilities
+**	Index
 */
 
-uint8_t					parse_encoding_byte(t_process *process);
-uint8_t					parse_arguments(t_process *process);
-uint32_t				smash_bytes(uint8_t *reg);
-uint8_t					*unsmash_bytes(uint32_t nbr);
+uint16_t 				get_index_unchained(uint16_t pc, uint8_t idx_byte1,
+							uint8_t idx_byte2);
+uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1,
+							uint8_t idx_byte2);
 
 /*
-** Write Bytes
+** Write, Read, Parse Bytes
 */
 
-uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2);
 void					write_number_to_board(t_board_node *board, uint8_t *number);
 void					write_board_to_register(uint8_t *reg, t_board_node *board);
 void					write_number_to_register(uint8_t *reg, uint32_t nbr);
 void					write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg);
+
 uint32_t				read_from_board(t_board_node *board, uint8_t bytes);
+
+uint8_t					parse_encoding_byte(t_process *process);
+uint8_t					parse_arguments(t_process *process, uint8_t read_two_bytes);
+void					move_pc_by_encoding_byte(t_process *process,
+							uint8_t read_two_bytes);
+uint32_t				smash_bytes(uint8_t *reg);
+uint8_t					*unsmash_bytes(uint32_t nbr);
+
+/*
+**	Cycle checker
+*/
+
+uint8_t					cycle_handle(t_corewar *core);
+void					terminate_players(t_corewar *core);
+void					game_over(t_corewar *core);
+
+/*
+**	Bonus
+*/
+
+unsigned int			epilepsy_mode(t_corewar *core, char ***av);
 
 #endif

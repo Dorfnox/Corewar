@@ -51,7 +51,7 @@ size_t			import_player_file(char *filename, uint8_t **contents)
 	stat(filename, &path_stat);
 	if (!S_ISREG(path_stat.st_mode))
 		corewar_error("Invalid file type. Please use a [.cor] file", 1);
-	content_size = getfilecontents(filename, (char**)contents);
+	content_size = getfilecontents(filename, contents);
 	if (!content_size)
 	{
 		ft_str256(3, "Failed to gather file's contents: '", filename ,"'");
@@ -62,5 +62,5 @@ size_t			import_player_file(char *filename, uint8_t **contents)
 		ft_str256(3, "The file '", filename, "' is of incorrect size");
 		corewar_error(ft_str256(0), 1);
 	}
-	return content_size;
+	return (content_size);
 }

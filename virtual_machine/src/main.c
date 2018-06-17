@@ -40,6 +40,7 @@ int		main(int argc, char **argv)
 	if (argc == 1)
 		corewar_error(USAGE, 1);
 	ft_bzero(&core, sizeof(t_corewar));
+	init_environment(&core);
 	retrieve_data(&core, ++argv);
 	init_ncurses(&core);
 	init_board(&core);

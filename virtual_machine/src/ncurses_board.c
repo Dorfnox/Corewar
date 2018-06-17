@@ -9,21 +9,30 @@ void    init_ncurses(t_corewar *core)
     if (!core->flag.viz)
         return ;
     initscr();
+    noecho();
+    cbreak();
     start_color();
-    init_c_array(core);
     init_ncurses_colors();   
+    init_ncurses_arrays(core);
     init_ncurses_bored(core);
     init_ncurses_playa(core);
     init_ncurses_infoz(core);
+    scrollok(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
     curs_set(0);
 }
 
 void    init_ncurses_colors(void)
 {
+    init_color(COLOR_BLUE, 215, 1000, 1000);
     init_pair(P1, COLOR_GREEN, COLOR_BLACK);
     init_pair(P2, COLOR_BLUE, COLOR_BLACK);
     init_pair(P3, COLOR_RED, COLOR_BLACK);
     init_pair(P4, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(P1B, COLOR_BLACK, COLOR_GREEN);
+    init_pair(P2B, COLOR_BLACK, COLOR_BLUE);
+    init_pair(P3B, COLOR_BLACK, COLOR_RED);
+    init_pair(P4B, COLOR_BLACK, COLOR_MAGENTA);
     init_pair(DF, COLOR_WHITE, COLOR_BLACK);
     init_pair(INFOZ, COLOR_BLACK, COLOR_GREEN);
 }
@@ -32,7 +41,7 @@ void    init_ncurses_bored(t_corewar *core)
 {
     uint16_t    i;
 
-    core->ncur.bored = newwin(64, (64 * 2) + 63, 1, 2);
+    core->ncur.bored = newwin(64, (64 * 2) + 63, 2, 2);
     MALL_ERR(core->ncur.bored, "Failed to create ncurses board");
     wattron(core->ncur.bored, COLOR_PAIR(DF));
     i = -1;
@@ -72,7 +81,7 @@ void    init_ncurses_infoz(t_corewar *core)
 
     width = 40;
     height = 6;
-    core->ncur.infoz = newwin(height, width, 1, 200);
+    core->ncur.infoz = newwin(height, width, 0, 200);
     MALL_ERR(core->ncur.infoz, "Failed to create ncurses infoz");
     wattron(core->ncur.infoz, COLOR_PAIR(INFOZ));
     wmove(core->ncur.infoz, 0, 0);
@@ -83,57 +92,41 @@ void    init_ncurses_infoz(t_corewar *core)
         while (j++ < width)
             waddch(core->ncur.infoz, ' ');
     }
+    wclear(core->ncur.infoz);
     box(core->ncur.infoz, 0, 0);
     mvwprintw(core->ncur.infoz, 1, 1, "Information");
     wrefresh(core->ncur.infoz);
 }
 
-void    draw_process(t_ncurses *n, t_process *process)
-{
-    uint8_t    y;
-    uint8_t    x;
-
-    
-    y = process->curr_pc->index / 64;
-    x = (process->curr_pc->index % 64) * 3;
-    wattron(n->bored, COLOR_PAIR(process->player->player_num));
-//    wattroff(n->bored, A_BOLD);
-    wmove(n->bored, y, x);
-//    mvwprintw(n->bored, y, x, n->c_array[process->curr_pc->value]);
-    wrefresh(n->bored);
-    //wattroff(n->bored, A_BLINK);
-}
-
-void    capture_ncur_data(t_ncurses *n, uint16_t index, uint8_t *value, uint8_t value_size)
-{
-    n->ncur_data.value = value;
-    n->ncur_data.value_size = value_size;
-    n->ncur_data.start_y = index / 64;
-    n->ncur_data.start_x = (index % 64) * 3;
-}
-
-void    draw_to_bored(t_ncurses *n, uint8_t player_num)
+void    draw_to_bored(t_corewar *core, uint8_t player_num,
+    uint16_t idx, uint8_t len)
 {
     uint8_t     i;
 
     i = -1;
-    wattron(n->bored, COLOR_PAIR(player_num));
-    while (++i < n->ncur_data.value_size)
+    while (++i < len)
     {
-        mvwprintw(n->bored, n->ncur_data.start_y, n->ncur_data.start_x, 
-            n->c_array[n->ncur_data.value[i]]);
-        if (n->ncur_data.start_x == NCURSES_XLIMIT)
-        {
-            if (n->ncur_data.start_y + 1 == NCURSES_YLIMIT)
-                n->ncur_data.start_y = 0;
-            else
-                n->ncur_data.start_y++;
-            n->ncur_data.start_x = 0;
-        }
-        else
-            n->ncur_data.start_x += 3;
+        core->ncur.cursor[idx].bored_color = player_num;
+        draw_cursor(core, &core->ncur.cursor[idx]);
+        idx = ((idx + 1) == MEM_SIZE) ? 0 : (idx + 1);
     }
-    wrefresh(n->bored);
+}
+
+
+int     key_hit(t_corewar *core)
+{
+    int             ch;
+
+    if ((ch = wgetch(core->ncur.infoz)) == ERR)
+    {
+        return (1);
+    }
+    else if (ch == ' ')
+    {
+        while ((ch = wgetch(core->ncur.infoz)) != ' ')
+            ;
+    }
+    return (1);
 }
 
 void    terminate_ncurses(t_corewar *core)

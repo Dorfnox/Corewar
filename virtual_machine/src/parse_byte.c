@@ -16,7 +16,7 @@
 **	Utility functions for helping control the start of the game
 */
 
-uint8_t		parse_arguments(t_process *process)
+uint8_t		parse_arguments(t_process *process, uint8_t read_two_bytes)
 {
 	uint8_t i;
 	uint8_t	success;
@@ -38,7 +38,10 @@ uint8_t		parse_arguments(t_process *process)
 			process->args[i][1] = process->curr_pc->next->value;
 			process->args[i][2] = process->curr_pc->next->next->value;
 			process->args[i][3] = process->curr_pc->next->next->next->value;
-			process->curr_pc = process->curr_pc->next->next->next->next;
+			if (read_two_bytes)
+				process->curr_pc = process->curr_pc->next->next;
+			else
+				process->curr_pc = process->curr_pc->next->next->next->next;
 		}
 		else if (process->encoding_byte[i] == INDIRECT)
 		{
@@ -57,18 +60,55 @@ uint8_t		parse_arguments(t_process *process)
 **	Returns 1 = success, 0 = FAILURE
 */
 
+// uint8_t		parse_encoding_byte(t_process *process)
+// {
+// 	uint8_t encoding_byte;
+
+// 	encoding_byte = process->curr_pc->next->value;
+// 	process->curr_pc = process->curr_pc->next->next;
+// 	if (encoding_byte > 0xF8 || (encoding_byte & 0b11) > 0)
+// 		return (0);
+// 	process->encoding_byte[0] = (encoding_byte >> 6) & 0b11;
+// 	process->encoding_byte[1] = (encoding_byte >> 4) & 0b11;
+// 	process->encoding_byte[2] = (encoding_byte >> 2) & 0b11;
+// 	return (1);
+// }
+
 uint8_t		parse_encoding_byte(t_process *process)
 {
 	uint8_t encoding_byte;
 
 	encoding_byte = process->curr_pc->next->value;
 	process->curr_pc = process->curr_pc->next->next;
-	if (encoding_byte > 0xF8 || (encoding_byte & 0b11) > 0)
-		return (0);
 	process->encoding_byte[0] = (encoding_byte >> 6) & 0b11;
 	process->encoding_byte[1] = (encoding_byte >> 4) & 0b11;
 	process->encoding_byte[2] = (encoding_byte >> 2) & 0b11;
-	return (1);
+	return (!(encoding_byte > 0xF8 || (encoding_byte & 0b11) > 0));
+}
+
+/*
+**	Processes an encoding byte and moves the pc
+*/
+
+void		move_pc_by_encoding_byte(t_process *process, uint8_t read_two_bytes)
+{
+	uint8_t		i;
+
+	i = -1;
+	while (++i < 3)
+	{
+		if (process->encoding_byte[i] == REGISTER)
+			process->curr_pc = process->curr_pc->next;
+		else if (process->encoding_byte[i] == DIRECT)
+		{
+			if (read_two_bytes)
+				process->curr_pc = process->curr_pc->next->next;
+			else
+				process->curr_pc = process->curr_pc->next->next->next->next;
+		}
+		else if (process->encoding_byte[i] == INDIRECT)
+			process->curr_pc = process->curr_pc->next->next;
+	}
 }
 
 /*
@@ -80,10 +120,10 @@ uint32_t	smash_bytes(uint8_t *reg)
 	uint32_t	result;
 
 	result = 0;
-	result |= (uint32_t)reg[0] << 24;
-	result |= (uint32_t)reg[1] << 16;
-	result |= (uint32_t)reg[2] << 8;
-	result |= (uint32_t)reg[3] << 0;
+	result |= ((uint32_t)reg[0]) << 24;
+	result |= ((uint32_t)reg[1]) << 16;
+	result |= ((uint32_t)reg[2]) << 8;
+	result |= ((uint32_t)reg[3]) << 0;
 	return (result);
 }
 

@@ -21,20 +21,27 @@
 void		st_(t_corewar *core, t_process *process)
 {
 	uint16_t		index;
+	t_board_node	*location;
 
 	index = process->curr_pc->index;
-	parse_encoding_byte(process);
-	if (EB0 != REGISTER || EB1 == DIRECT)
+	if (!parse_encoding_byte(process) ||
+		EB0 != REGISTER || EB1 == 0 || EB1 == DIRECT)
+	{
+		move_pc_by_encoding_byte(process, 0);
 		return ;
-	if (!parse_arguments(process))
+	}
+	if (!parse_arguments(process, 0))
 		return ;
 	if (EB1 == REGISTER)
 		write_reg_to_reg(REG[ARG10], REG[ARG00]);
-	if (EB1 == INDIRECT)
+	else if (EB1 == INDIRECT)
 	{
 		index = get_index(index, ARG10, ARG11);
-		write_number_to_board(core->node_addresses[index], REG[ARG00]);
-		VIZ(capture_ncur_data(&core->ncur, index, REG[ARG00], 4));
-		VIZ(draw_to_bored(&core->ncur, process->player->player_num));
+		if (ARG10 >> 7)
+			location = core->node_addresses_rev[index];
+		else
+			location = core->node_addresses[index];
+		write_number_to_board(location, REG[ARG00]);
+		VIZ(draw_to_bored(core, process->player->player_num, location->index, 4));
 	}
 }

@@ -15,11 +15,12 @@ NAME = corewar
 FILES = main \
 		error \
 		flag_handler \
-		data player process board instruction character \
-		ncurses_board ncurses_info \
+		environment data player process board instruction character cycle \
+		ncurses_board ncurses_info index \
 		loop \
 		parse_byte \
 		write_byte \
+		read_byte \
 		op_utility \
 		op_live \
 		op_ld \
@@ -36,7 +37,8 @@ FILES = main \
 		op_lld \
 		op_lldi \
 		op_lfork \
-		op_aff
+		op_aff \
+		bonus
 
 C_FLAGS = -Wall -Wextra -Werror
 NCURSES = -L/usr/lib -lncurses

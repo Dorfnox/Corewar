@@ -1,37 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op_aff.c                                           :+:      :+:    :+:   */
+/*   read_byte.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 14:56:22 by bpierce          ###   ########.fr       */
+/*   Created: 2018/06/13 21:47:52 by bpierce           #+#    #+#             */
+/*   Updated: 2018/06/13 21:48:04 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-/*
-**	0x10 - AFF...?
-**	- - - - - - - - - -
-**	Displays a character on the standard output % 256
-**
-**	Takes a parameter encoding byte
-*/
-
-void		aff_(t_corewar *core, t_process *process)
+uint32_t	read_from_board(t_board_node *board, uint8_t bytes)
 {
-	(void)core;
-	
-	if (!parse_encoding_byte(process) ||
-		EB0 != REGISTER || EB1 || EB2)
+	uint32_t	result;
+
+	result = 0;
+	while (bytes-- > 0)
 	{
-		move_pc_by_encoding_byte(process, 0);
-		return ;
+		result |= (uint32_t)board->value << (bytes * 8);
+		board = board->next;
 	}
-	if (!parse_arguments(process, 0))
-		return ;
-	ft_putchar((int)smash_bytes(process->args[0]) % 256);	
-	
+	return (result);
 }

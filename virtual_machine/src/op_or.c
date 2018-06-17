@@ -28,22 +28,23 @@ void		or_(t_corewar *core, t_process *process)
 	uint32_t	b;
 	uint32_t	or_result;
 
-	DB("or-ing");
 	index = process->curr_pc->index;
-	if (!parse_encoding_byte(process))
+	if (!parse_encoding_byte(process) ||
+		EB0 == 0 || EB1 == 0 || EB2 != REGISTER)
+	{
+		move_pc_by_encoding_byte(process, 0);
 		return ;
-	if (EB0 == 0 || EB1 == 0 || EB2 != REGISTER)
-		return ;
-	if (!parse_arguments(process) && !(process->carry = 0))
+	}
+	if (!parse_arguments(process, 0))
 		return ;
 	a = get_or_args(core, process, index, 0);
 	b = get_or_args(core, process, index, 1);
 	or_result = a | b;
-	ft_printf("or result: %.8x\n", or_result);
-	process->reg[process->args[2][0]][0] = (uint8_t)(or_result >> 24);
-	process->reg[process->args[2][0]][1] = (uint8_t)(or_result >> 16);
-	process->reg[process->args[2][0]][2] = (uint8_t)(or_result >> 8);
-	process->reg[process->args[2][0]][3] = (uint8_t)(or_result >> 0);
+	REG[ARG20][0] = (uint8_t)(or_result >> 24);
+	REG[ARG20][1] = (uint8_t)(or_result >> 16);
+	REG[ARG20][2] = (uint8_t)(or_result >> 8);
+	REG[ARG20][3] = (uint8_t)(or_result >> 0);
+	process->carry = !smash_bytes(REG[ARG20]);
 }
 
 uint32_t	get_or_args(
@@ -52,13 +53,24 @@ uint32_t	get_or_args(
 	uint16_t index,
 	uint8_t arg_num)
 {
+	t_board_node	*location;
+	uint32_t		ret;
+
+	ret = 0;
 	if (process->encoding_byte[arg_num] == REGISTER)
-		return (smash_bytes(process->reg[process->args[arg_num][0]]));
+		ret = smash_bytes(REG[process->args[arg_num][0]]);
 	else if (process->encoding_byte[arg_num] == DIRECT)
-		return (smash_bytes(process->args[arg_num]));
+		ret = smash_bytes(process->args[arg_num]);
 	else if (process->encoding_byte[arg_num] == INDIRECT)
-		return (read_from_board(core->node_addresses[
-			get_index(index, process->args[arg_num][0], process->args[arg_num][1])
-			], 4));
-	return (0);
+	{
+		index = get_index(index,
+			process->args[arg_num][0],
+			process->args[arg_num][1]);
+		if (process->args[arg_num][0] >> 7)
+			location = core->node_addresses_rev[index];
+		else
+			location = core->node_addresses[index];
+		ret = read_from_board(location, 4);
+	}
+	return (ret);
 }
