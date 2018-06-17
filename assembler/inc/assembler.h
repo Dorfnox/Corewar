@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/16 16:26:24 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/16 19:32:18 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ void					remove_label_char(char **s);
 void					asm_error(int error_code, char *error_message);
 int						is_space(char c);
 size_t					char_at(char *s, char c, size_t start);
+void					write_bytes(int fd, uintmax_t num, uint8_t bytes);
 
 t_ast					*dequeue_op(t_ops *queue);
 void					enqueue_op(t_ops *queue, t_ast *node);

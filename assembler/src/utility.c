@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/16 15:50:09 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/16 19:35:17 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,4 +132,24 @@ size_t	char_at(char *s, char c, size_t start)
 		}
 	}
 	return (-1);
+}
+
+void	write_bytes(int fd, uintmax_t num, uint8_t bytes)
+{
+	if (bytes >= 8)
+		ft_putchar_fd(((num >> 56) & 0xFF), fd);
+	if (bytes >= 7)
+		ft_putchar_fd(((num >> 48) & 0xFF), fd);
+	if (bytes >= 6)
+		ft_putchar_fd(((num >> 40) & 0xFF), fd);
+	if (bytes >= 5)
+		ft_putchar_fd(((num >> 32) & 0xFF), fd);
+	if (bytes >= 4)
+		ft_putchar_fd(((num >> 24) & 0xFF), fd);
+	if (bytes >= 3)
+		ft_putchar_fd(((num >> 16) & 0xFF), fd);
+	if (bytes >= 2)
+		ft_putchar_fd(((num >> 8) & 0xFF), fd);
+	if (bytes >= 1)
+		ft_putchar_fd((num & 0xFF), fd);
 }
