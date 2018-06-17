@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/08 03:58:33 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/16 15:50:09 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ t_asm	*init_asm(void)
 
 	new_asm = (t_asm *)ft_memalloc(sizeof(t_asm));
 	new_asm->header = (t_header *)ft_memalloc(sizeof(t_header));
+	ft_memset(new_asm->header, 0, sizeof(new_asm->header));
 	new_asm->ops = init_op_queue();
 	init_op_handler(new_asm);
 	return (new_asm);
@@ -82,10 +83,12 @@ int8_t	char_is_separator(char c)
 	return (0);
 }
 
-int8_t	token_is_label(char *s, size_t len)
+int8_t	token_is_label(char *s)
 {
 	size_t	i;
+	size_t	len;
 
+	len = ft_strlen(s);
 	i = -1;
 	if (len > 1 && s[len - 1] == LABEL_CHAR)
 	{
@@ -106,12 +109,27 @@ int8_t	token_is_label(char *s, size_t len)
 	
 // }
 
-void	remove_label_char(char **s, size_t len)
+void	remove_label_char(char **s)
 {
-	char *new_s;
+	size_t	len;
+	char	*new_s;
 
+	len = ft_strlen(*s);
 	new_s = ft_strsub(*s, 0, len - 1);
 	ft_strdel(s);
 	*s = new_s;
 }
 
+size_t	char_at(char *s, char c, size_t start)
+{
+	if (s)
+	{
+		while (s[start])
+		{
+			if (s[start] == c)
+				return (start);
+			start++;
+		}
+	}
+	return (-1);
+}

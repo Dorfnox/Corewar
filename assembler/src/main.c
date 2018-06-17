@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/10 06:22:53 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/16 16:51:41 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@ int		main(int ac, char **av)
 	parse_input(assembler, av[1]);
 	printf("total bytes: %i\n", assembler->ops->total_bytes);
 	create_bytecode(assembler);
+	while(1) ;
 	return (0);
 }

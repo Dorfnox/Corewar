@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 20:27:31 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/10 06:19:56 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/16 16:27:14 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,7 @@ char	*parse_value(t_input *line)
 
 void	get_token_type(t_token *token)
 {
-	size_t	len;
-	uint8_t	op;
-	uint8_t	param;
+	uint8_t	subtype;
 	
 	// ft_putstr(token->value);
 	if (!token->value)
@@ -58,22 +56,26 @@ void	get_token_type(t_token *token)
 		token->subtype = EMPTY;
 		return ;
 	}
-	len = ft_strlen(token->value);
-	if (token_is_label(token->value, len))
+	if ((subtype = check_if_header(token->value)))
 	{
-		remove_label_char(&token->value, len);
+		token->type = HEADER;
+		token->subtype = subtype;
+	}
+	else if (token_is_label(token->value))
+	{
+		remove_label_char(&token->value);
 		token->type = LABEL;
 		token->subtype = LABEL;
 	}
-	else if ((op = compare_to_ops(token->value)))
+	else if ((subtype = compare_to_ops(token->value)))
 	{
 		token->type = OPERATION;
-		token->subtype = op;
+		token->subtype = subtype;
 	}
-	else if ((param = compare_to_params(token->value)))
+	else if ((subtype = compare_to_params(token->value)))
 	{
 		token->type = PARAMETER;
-		token->subtype = param;
+		token->subtype = subtype;
 	}
 	else
 	{
@@ -83,13 +85,14 @@ void	get_token_type(t_token *token)
 	// ft_putnbr(token->type);
 }
 
-t_token	get_next_token(t_input *line)
+t_token	*get_next_token(t_input *line)
 {
-	t_token		new_token;
+	t_token		*new_token;
 
-	new_token.value = parse_value(line);
+	new_token = (t_token *)ft_memalloc(sizeof(t_token));
+	new_token->value = parse_value(line);
 	// ft_putstr(new_token.value);
-	get_token_type(&new_token);
+	get_token_type(new_token);
 	// ft_putnbr(new_token.type);
 	return (new_token);
 }

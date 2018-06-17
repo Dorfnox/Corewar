@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 00:02:13 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/04 13:28:42 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/16 16:49:18 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,20 @@ uint8_t	compare_to_params(char *s)
 		return (IND_CODE);
 	else
 		return (0);
+}
+
+uint8_t	check_if_header(char *s)
+{
+	size_t	len;
+
+	len = ft_strlen(s);
+	if (len == 5 || len == 8)
+	{
+		if (!ft_strcmp(s, NAME_CMD_STRING))
+			return HEADER_NAME;
+		else if (!ft_strcmp(s, COMMENT_CMD_STRING))
+			return HEADER_COMMENT;
+	}
+	return (0);
 }
 

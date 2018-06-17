@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2018/06/11 17:27:11 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/16 15:56:59 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,14 @@
 # define DIR_SIZE_1				2
 
 
-# define REG_CODE				1
-# define DIR_CODE				2
-# define IND_CODE				3
-
 # define CHAMP_MAX_SIZE			(MEM_SIZE / 6)
 
 # define COMMENT_CHAR			'#'
-# define LABEL_CHAR				':'
 # define DIRECT_CHAR			'%'
-# define SEPARATOR_CHAR			','
 # define REGISTER_CHAR			'r'
-
+# define SEPARATOR_CHAR			','
+# define LABEL_CHAR				':'
 # define LABEL_CHARS			"abcdefghijklmnopqrstuvwxyz_0123456789"
-
 # define NAME_CMD_STRING		".name"
 # define COMMENT_CMD_STRING		".comment"
 # define COMMENT_DELIMITER_CHAR	'\"'
@@ -68,39 +62,6 @@ typedef struct		s_header
   char				comment[COMMENT_LENGTH + 1];
 }					t_header;
 
-/*
-**	Token macros
-*/
 
-# define NONE					0
-# define LABEL					1
-# define OPERATION				2
-# define PARAMETER				3
-# define PARAM_SEPARATOR		4
-# define COMMENT				5
-# define MATH					6
-# define EOL					-1
-# define EMPTY					-2
-
-/*
-**	Operation codes
-*/
-
-# define LIVE					1
-# define LD						2
-# define ST						3
-# define ADD					4
-# define SUB					5
-# define AND					6
-# define OR						7
-# define XOR					8
-# define ZJUMP					9
-# define LDI					10
-# define STI					11
-# define FORK					12
-# define LLD					13
-# define LLDI					14
-# define LFORK					15
-# define AFF					16
 
 #endif

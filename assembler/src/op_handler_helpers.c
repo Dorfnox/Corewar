@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 17:26:46 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/08 00:44:25 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/16 16:29:43 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_token		*get_params(t_input *line, uint8_t len_tokens)
 	tokens = (t_token *)ft_memalloc(sizeof(t_token) * len_tokens);
 	while (++i < len_tokens)
 	{
-		tokens[i] = get_next_token(line);
+		tokens[i] = *get_next_token(line);
 		if (tokens[i].type != PARAMETER)
 			asm_error(1, "Expected a parameter, stupid\n"); //print line and column as well
 	}
