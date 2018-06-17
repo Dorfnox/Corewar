@@ -50,9 +50,9 @@ unsigned int	flag_dump(t_corewar *core, char ***argv)
 		corewar_error("Invalid cycle argument for option '-dump'", 1);
 	core->flag.dump = 1;
 	core->env.dump = ft_atoi(dump);
-	if (core->env.dump > core->env.max_cycles)
+	if (core->env.dump == 0)
 	{
-		ft_pflite("TOOO MANY CYCLES. Max Cycles: %u\n", core->env.max_cycles);
+		ft_pflite("'-dump' must not be 0. Please provide a valid argument");
 		corewar_error(NULL, 1);
 	}
 	(*argv) = args;

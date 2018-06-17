@@ -23,17 +23,16 @@ void    create_board(t_board_node **brd, t_board_node **add, t_board_node **rev)
 	tmpprev = NULL;
 	while (++i < MEM_SIZE)
 	{
-		tmp = ft_memalloc(sizeof(t_board_node));
-		if (!tmp)
-			corewar_error("Failed to create a board node", 0);
+		MALL_ERR((tmp = ft_memalloc(sizeof(t_board_node))), "Creating board");
 		add[i] = tmp;
 		rev[MEM_SIZE - i - 1] = tmp;
-		if (tmpprev)
-			tmpprev->next = tmp;
+		tmpprev ? (tmpprev->next = tmp) : 0;
 		tmp->prev = tmpprev;
-		if (!(*brd))
-			*brd = tmp;
+		*brd = !(*brd) ? tmp : *brd;
 		tmp->index = i;
+		tmp->y = i / 64;
+		tmp->x = (i % 64) * 3;
+		tmp->bored_color = DF;
 		tmpprev = tmp;
 		tmp = tmp->next;
 	}
@@ -70,32 +69,3 @@ void	init_board(t_corewar *core)
 		}
 	}
 }
-
-// void	init_board(t_corewar *core)
-// {
-// 	uint8_t		p;
-// 	uint16_t	i;
-// 	uint16_t	j;
-// 	char		*instruction;
-
-// 	create_board(&core->board, core->node_addresses, core->node_addresses_rev);
-// 	p = 4;
-// 	while (p > 0)
-// 	{
-// 		--p;
-// 		if (core->player[p].player_num)
-// 		{
-// 			j = p * (1024 + 1024);
-// 			push(&core->process_stack[p][0], new_process(&core->player[p],
-// 				core->node_addresses[j], NULL));
-// 			i = 0;
-// 			while (i < core->player[p].instruction_size)
-// 			{
-// 				instruction = &core->player[p].header.instructions[i++];
-// 				ft_memcpy(&core->node_addresses[j]->value, instruction, 1); // change this to core->node_addresses[j++]->value = (uint8_t)core->player[p].header.instructions[i++];
-// 				VIZ(draw_to_bored(core, core->player[p].player_num, j, 1));
-// 				++j;
-// 			}
-// 		}
-// 	}
-// }

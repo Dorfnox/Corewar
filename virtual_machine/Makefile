@@ -15,8 +15,8 @@ NAME = corewar
 FILES = main \
 		error \
 		flag_handler \
-		environment data player process board instruction character cycle \
-		ncurses_board ncurses_info index \
+		environment data player process board instruction cycle index \
+		ncurses_init ncurses_infoz ncurses_board ncurses_playa \
 		loop \
 		parse_byte \
 		write_byte \

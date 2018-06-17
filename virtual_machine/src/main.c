@@ -12,27 +12,6 @@
 
 #include "corewar.h"
 
-void	print_board(t_corewar *core, t_process *p)
-{
-	int i;
-
-	i = 0;
-	while (i < MEM_SIZE)
-	{
-		if (p->curr_pc->index == i)
-			printf("\033[42;92m");
-		else
-			printf("\033[0m");
-		printf("%0.2x", core->board->value);
-		printf(" ");
-		if (!(i % 63) && i >= 63)
-			printf("\n");
-		core->board = core->board->next;
-		i++;
-	}
-	write(1, "\n\n", 2);
-}
-
 int		main(int argc, char **argv)
 {
 	t_corewar	core;

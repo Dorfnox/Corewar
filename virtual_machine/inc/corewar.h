@@ -113,7 +113,7 @@ typedef struct			s_flag
 typedef struct			s_env
 {
 	uint32_t			cycle;
-	uint32_t			max_cycles;
+	uint32_t			cycle_counter;
 	uint32_t			cycle_to_die;
 	uint32_t			cycle_delta;
 	uint32_t			nbr_live;
@@ -130,32 +130,12 @@ typedef struct			s_env
 **	Ncurses handling
 */
 
-typedef struct			s_ncurses_draw_data
-{
-	uint8_t				*value;
-	uint8_t				value_size;
-	uint8_t				index;
-	uint8_t				start_x;
-	uint8_t				start_y;
-}						t_ndd;
-
-typedef struct			s_cursor
-{
-	uint16_t			idx;
-	uint8_t				x;
-	uint8_t				y;
-	uint8_t				bored_color;
-	t_stack				cursor_stack;
-}						t_cursor;
-
 typedef struct			s_ncurses
 {
 	WINDOW				*bored;
 	WINDOW				*playa[4];
 	WINDOW				*infoz;
 	char				c_array[256][3];
-	t_cursor			cursor[MEM_SIZE];
-	t_ndd				ncur_data;
 }						t_ncurses;
 
 /*
@@ -168,9 +148,10 @@ typedef struct			s_player
 	char				*filename;
 	uint8_t				player_num;
 	uint16_t			num_of_processes;
-	uint64_t			last_live;
-	uint64_t			num_live;
+	uint32_t			last_live;
+	uint32_t			num_live;
 	uint16_t			instruction_size;
+	uint8_t				dead;
 	header_t			header;
 }						t_player;
 
@@ -180,6 +161,10 @@ typedef struct			s_board_node
 	uint16_t			index;
 	struct s_board_node	*next;
 	struct s_board_node	*prev;
+	uint8_t				x;
+	uint8_t				y;
+	uint8_t				bored_color;
+	t_stack				cursor_stack;
 }						t_board_node;
 
 typedef struct			s_process
@@ -208,19 +193,12 @@ typedef struct			s_corewar
 	t_board_node		*board;
 	t_board_node		*node_addresses[MEM_SIZE];
 	t_board_node		*node_addresses_rev[MEM_SIZE];
-	// t_stack				process_stack[4][PROCESS_STACK_LEN];
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
 	t_operation			op[17];
 	t_ncurses			ncur;
 }						t_corewar;
-
-/*
-** For Debugging
-*/
-
-void					print_board(t_corewar *core, t_process *p);
 
 /*
 **	Error functions
@@ -266,7 +244,7 @@ void					init_wait_times(t_operation *core);
 
 void					init_ncurses(t_corewar *core);
 void    				init_ncurses_colors(void);
-void					init_ncurses_arrays(t_corewar *core);
+void					init_ncurses_character_array(t_corewar *core);
 void    				init_ncurses_bored(t_corewar *core);
 void    				init_ncurses_playa(t_corewar *core);
 void					init_ncurses_infoz(t_corewar *core);
@@ -299,9 +277,7 @@ void					insert_process(t_corewar *c, t_stack *s, t_process *p);
 
 void					push_process_cursor(t_corewar *core, t_process *process);
 void					pop_process_cursor(t_corewar *core, t_process *process);
-void					draw_cursor(t_corewar *core, t_cursor *c);
-// void					new_process_cursor(t_corewar *core, t_process *p);
-// void					move_process_cursor(t_corewar *core, t_process *p);
+void					draw_cursor(t_corewar *core, t_board_node *board);
 
 /*
 ** Instructions
@@ -392,6 +368,8 @@ uint8_t					*unsmash_bytes(uint32_t nbr);
 
 uint8_t					cycle_handle(t_corewar *core);
 void					terminate_players(t_corewar *core);
+void					terminate_player_processes(t_stack *stk,
+							uint8_t pnum, uint16_t i);
 void					game_over(t_corewar *core);
 
 /*

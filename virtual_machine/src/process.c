@@ -78,53 +78,54 @@ void		insert_process(t_corewar *core, t_stack *s, t_process *p)
 
 void		push_process_cursor(t_corewar *core, t_process *process)
 {
-	t_cursor	*cursor;
+	t_board_node	*board;
 
-	cursor = &(core->ncur.cursor[process->curr_pc->index]);
+	board = core->node_addresses[process->curr_pc->index];
 	if (CE_2(process->instruct, fork_, lfork_))
 	{
-		while (!isemptys(&cursor->cursor_stack))
-			pop(&cursor->cursor_stack);
+		while (!isemptys(&board->cursor_stack))
+			pop(&board->cursor_stack);
 	}
-	push(&cursor->cursor_stack, process);
-	draw_cursor(core, cursor);
+	push(&board->cursor_stack, process);
+	draw_cursor(core, board);
 }
 
 void		pop_process_cursor(t_corewar *core, t_process *process)
 {
-	static t_cursor		*cursor;
+	// static t_cursor		*cursor;
+	t_board_node		*board;
 	static t_node		*p;
 	static t_node		*prev;
 
-	cursor = &(core->ncur.cursor[process->curr_pc->index]);
-	if (isemptys(&cursor->cursor_stack))
+	board = core->node_addresses[process->curr_pc->index];
+	if (isemptys(&board->cursor_stack))
 		return ;
-	if (cursor->cursor_stack.size == 1 &&
-		peeks(&cursor->cursor_stack) != process)
+	if (board->cursor_stack.size == 1 &&
+		peeks(&board->cursor_stack) != process)
 		return ;
-	if (peeks(&cursor->cursor_stack) == process)
-		pop(&cursor->cursor_stack);
+	if (peeks(&board->cursor_stack) == process)
+		pop(&board->cursor_stack);
 	else
 	{
-		p = cursor->cursor_stack.top;
-		while (peeks(&cursor->cursor_stack) != process)
+		p = board->cursor_stack.top;
+		while (peeks(&board->cursor_stack) != process)
 		{
-			prev = cursor->cursor_stack.top;
-			cursor->cursor_stack.top = cursor->cursor_stack.top->next;
-			if (cursor->cursor_stack.top == NULL)
+			prev = board->cursor_stack.top;
+			board->cursor_stack.top = board->cursor_stack.top->next;
+			if (board->cursor_stack.top == NULL)
 			{
-				cursor->cursor_stack.top = p;
+				board->cursor_stack.top = p;
 				return ;
 			}
 		}
-		pop(&cursor->cursor_stack);
-		prev->next = cursor->cursor_stack.top;
-		cursor->cursor_stack.top = p;
+		pop(&board->cursor_stack);
+		prev->next = board->cursor_stack.top;
+		board->cursor_stack.top = p;
 	}
-	draw_cursor(core, cursor);
+	draw_cursor(core, board);
 }
 
-void		draw_cursor(t_corewar *core, t_cursor *c)
+void		draw_cursor(t_corewar *core, t_board_node *b)
 {
 	t_process		*p;
 	static uint64_t	i;
@@ -133,15 +134,15 @@ void		draw_cursor(t_corewar *core, t_cursor *c)
 	{
 		wattron(core->ncur.bored, COLOR_PAIR((i++ % 3) + 5));
 	}
-	else if ((p = peeks(&c->cursor_stack)))
+	else if ((p = peeks(&b->cursor_stack)))
 	{
 	    wattron(core->ncur.bored, COLOR_PAIR(p->player->player_num + 4));
 	}
 	else
 	{
-		wattron(core->ncur.bored, COLOR_PAIR(c->bored_color));
+		wattron(core->ncur.bored, COLOR_PAIR(b->bored_color));
 	}
-	mvwaddstr(core->ncur.bored, c->y, c->x,
-		core->ncur.c_array[core->node_addresses[c->idx]->value]);
+	mvwaddstr(core->ncur.bored, b->y, b->x,
+		core->ncur.c_array[core->node_addresses[b->index]->value]);
 	wrefresh(core->ncur.bored);
 }
