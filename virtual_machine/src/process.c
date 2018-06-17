@@ -92,7 +92,6 @@ void		push_process_cursor(t_corewar *core, t_process *process)
 
 void		pop_process_cursor(t_corewar *core, t_process *process)
 {
-	// static t_cursor		*cursor;
 	t_board_node		*board;
 	static t_node		*p;
 	static t_node		*prev;

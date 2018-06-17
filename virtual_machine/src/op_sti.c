@@ -39,7 +39,7 @@ void		sti_(t_corewar *core, t_process *process)
 	if (!parse_arguments(process, 1))
 		return ;
 	idx_result = sti_a_index(core, process, index) + sti_b_index(process);
-	if (idx_result >> 15)
+	if (idx_result & 0x8000)
 	{
 		idx_result = ~idx_result + 1;
 		idx_result %= IDX_MOD;

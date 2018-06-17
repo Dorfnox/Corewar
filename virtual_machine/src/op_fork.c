@@ -37,9 +37,6 @@ void		fork_(t_corewar *core, t_process *process)
 	else
 		start = core->node_addresses[idx];
 	new_p = new_process(process->player, start, process);
-	// insert_process(core,
-	// 	&core->process_stack[process->player->player_num - 1][core->env.cycle %
-	// 		PROCESS_STACK_LEN], new_p);
 	insert_process(core,
 		&core->process_stack[core->env.cycle % PROCESS_STACK_LEN], new_p);
 	process->player->num_of_processes++;
