@@ -6,21 +6,23 @@
 #    By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/06/10 05:30:13 by rzarate          ###   ########.fr        #
+#    Updated: 2018/06/17 17:07:12 by rzarate          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = asm
 
 FILES = main \
-		parse_input \
+		parse \
 		tokenizer \
-		token_verifiers \
-		op_queue \
+		token_type_verifiers \
+		token_subtype_verifiers \
+		tokenizer_helpers \
 		op_handler_1 \
 		op_handler_2 \
 		op_handler_helpers \
 		bytecode \
+		op_queue \
 		label_hashtable \
 		utility \
 

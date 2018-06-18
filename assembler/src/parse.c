@@ -1,54 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_input.c                                      :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/16 16:34:38 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/17 19:29:37 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "assembler.h"
-
-// Doing a AST instead of this shit
-
-// char	*get_name(char *s, char **name)
-// {
-// 	char	*p;
-// 	int		i;
-	
-
-// 	if ((p = ft_strstr(s, NAME_CMD_STRING)) != NULL)
-// 	{
-// 		while (p[i])
-// 		{
-// 			if ()
-// 		}
-// 	}
-// 	return (0);
-// }
-
-// int 	parse_header(t_asm *assembler, t_input *line)
-// {
-// 	uint8_t	name_set;
-// 	uint8_t	comment_set;
-// 	t_token	current_token;
-
-// 	name_set = 0;
-// 	comment_set = 0;
-// 	while (ft_gnl(assembler->fd, &line) && !(name_set && comment_set))
-// 	{
-// 		if (!name_set && get_name(line, assembler->header->prog_name) == 1)
-// 			name_set = 1;
-// 		else if (!comment_set && get_name(line, assembler->header->prog_name) == 1)
-// 			comment_set = 1;
-// 		ft_strdel(&line);
-// 	}
-// 	if (!name_set || !comment_set)
-// 		asm_error(1, "Couldn't find program's name and/or comment");
-// }
 
 void	get_header_value(t_asm *assembler, t_input *line, uint8_t subtype)
 {
@@ -84,6 +46,7 @@ void	parse_header(t_asm *assembler, t_input *line)
 	comment_set = 0;
 	while (ft_gnl(assembler->fd, &line->s) > 0 && !(name_set && comment_set))
 	{
+		remove_comment(&line->s);
 		line->len = ft_strlen(line->s);
 		current_token = get_next_token(line);
 		printf("value: %s - type: %i, - subtype: %i\n", current_token->value, current_token->type, current_token->subtype);
@@ -107,11 +70,13 @@ void	parse_header(t_asm *assembler, t_input *line)
 		else if (current_token->type != EMPTY || current_token->type != COMMENT)
 			asm_error(1, ft_str128(2, "Invalid syntax in line ", ft_itoa(line->line_n)));
 		line->line_n++;
-		// free(line->s);
 		// free(current_token->value);
 		free(current_token);
-		ft_bzero((void *)line, sizeof(t_input));
+		// ft_bzero((void *)line, sizeof(t_input));
 		ft_bzero(&current_token, sizeof(current_token));
+		line->index = 0;
+		// if (line->s)
+		// 	ft_strdel(&line->s);
 	}
 }
 
@@ -123,6 +88,7 @@ void	parse_operations(t_asm *assembler, t_input *line)
 	label_carry = NULL;
 	while (ft_gnl(assembler->fd, &line->s) > 0)
 	{
+		remove_comment(&line->s);
 		ft_bzero(&current_token, sizeof(current_token));
 		line->len = ft_strlen(line->s);
 		current_token = get_next_token(line);
@@ -144,17 +110,20 @@ void	parse_operations(t_asm *assembler, t_input *line)
 			asm_error(1, ft_str128(2, "Invalid syntax in line ", ft_itoa(line->line_n)));
 		line->line_n++;
 		ft_bzero((void *)line, sizeof(t_input));
+		// line->index = 0;
+		// ft_strclr(line->s);
+		// if (line->s)
+		// 	ft_strdel(&line->s);
 	}
 }
 
-void		parse_input(t_asm *assembler, char *file)
+void		parse_input(t_asm *assembler)
 {
 	t_input		*line;
 
 	line = (t_input *)ft_memalloc(sizeof(t_input));
-	if ((assembler->fd = open(file, O_RDONLY | O_CREAT)) == -1)
-		asm_error(1, "Couldn't open file");
 	parse_header(assembler, line);
 	printf("Name: %s, Header: %s\n", assembler->header->prog_name, assembler->header->comment);
 	parse_operations(assembler, line);
+	assembler->header->prog_size = assembler->ops->total_bytes;
 }

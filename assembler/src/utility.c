@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/16 19:35:17 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/17 17:53:31 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,7 @@ int		is_space(char c)
 	return ((c == ' ' || c == '\t') ? (1) : (0));
 }
 
-void	skip_whitespaces(t_input *line)
-{
-	while (char_is_separator(line->current_char))
-		advance(line);
-}
-
-void	verify_input(int ac, char **av)
+void	verify_input(int ac, char **av, t_asm *assembler)
 {
 	size_t	len;
 
@@ -32,6 +26,8 @@ void	verify_input(int ac, char **av)
 	len = ft_strlen(av[1]);
 	if (len < 3  || av[1][len - 2] != '.' || av[1][len - 1] != 's')
 		asm_error(1, USAGE);
+	if ((assembler->fd = open(av[1], O_RDONLY | O_CREAT)) == -1)
+		asm_error(1, "Couldn't open file");
 }
 
 void	asm_error(int error_code, char *error_message)
@@ -49,6 +45,7 @@ t_asm	*init_asm(void)
 	new_asm = (t_asm *)ft_memalloc(sizeof(t_asm));
 	new_asm->header = (t_header *)ft_memalloc(sizeof(t_header));
 	ft_memset(new_asm->header, 0, sizeof(new_asm->header));
+	new_asm->header->magic = COREWAR_EXEC_MAGIC;
 	new_asm->ops = init_op_queue();
 	init_op_handler(new_asm);
 	return (new_asm);
@@ -75,52 +72,7 @@ void	init_op_handler(t_asm *assembler)
 	assembler->op_handler[16] = &aff_;
 }
 
-int8_t	char_is_separator(char c)
-{
-	if (!c || c == SEPARATOR_CHAR ||
-			c == COMMENT_CHAR || ft_iswhitespace(c))
-		return (1);
-	return (0);
-}
-
-int8_t	token_is_label(char *s)
-{
-	size_t	i;
-	size_t	len;
-
-	len = ft_strlen(s);
-	i = -1;
-	if (len > 1 && s[len - 1] == LABEL_CHAR)
-	{
-		while (++i < len - 1)
-		{
-			if (!(s[i] >='a' && s[i] <= 'z') && 
-				!(s[i] >= '0' && s[i] <= '9') &&
-				s[i] != '_')
-				return (0);
-		}
-		return (1);
-	}
-	return (0);
-}
-
-// int8_t	token_is_parameter(char *s, size_t len)
-// {
-	
-// }
-
-void	remove_label_char(char **s)
-{
-	size_t	len;
-	char	*new_s;
-
-	len = ft_strlen(*s);
-	new_s = ft_strsub(*s, 0, len - 1);
-	ft_strdel(s);
-	*s = new_s;
-}
-
-size_t	char_at(char *s, char c, size_t start)
+int	char_at(char *s, char c, int start)
 {
 	if (s)
 	{
@@ -132,24 +84,4 @@ size_t	char_at(char *s, char c, size_t start)
 		}
 	}
 	return (-1);
-}
-
-void	write_bytes(int fd, uintmax_t num, uint8_t bytes)
-{
-	if (bytes >= 8)
-		ft_putchar_fd(((num >> 56) & 0xFF), fd);
-	if (bytes >= 7)
-		ft_putchar_fd(((num >> 48) & 0xFF), fd);
-	if (bytes >= 6)
-		ft_putchar_fd(((num >> 40) & 0xFF), fd);
-	if (bytes >= 5)
-		ft_putchar_fd(((num >> 32) & 0xFF), fd);
-	if (bytes >= 4)
-		ft_putchar_fd(((num >> 24) & 0xFF), fd);
-	if (bytes >= 3)
-		ft_putchar_fd(((num >> 16) & 0xFF), fd);
-	if (bytes >= 2)
-		ft_putchar_fd(((num >> 8) & 0xFF), fd);
-	if (bytes >= 1)
-		ft_putchar_fd((num & 0xFF), fd);
 }

@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/16 19:32:18 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/17 18:17:55 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,39 +132,76 @@ typedef struct			s_asm
 }						t_asm;
 
 /*
-**  FUNCTIONS
+**  Main functions
+**	---------------------------------------------------------------------------
 */
 
 t_asm					*init_asm(void);
+void					verify_input(int ac, char **av, t_asm *assembler);
 
-void					create_bytecode(t_asm *assembler);
 
-void					parse_input(t_asm *assembler, char *file);
+void					parse_input(t_asm *assembler);
 void					parse_operations(t_asm *assembler, t_input *line);
 void 					parse_header(t_asm *assembler, t_input *line);
-void					verify_input(int ac, char **av);
 
+/*
+**	Tokenizer functions
+**	---------------------------------------------------------------------------
+*/
 
 t_token					*get_next_token(t_input *line);
 void					get_token_type(t_token *token);
 char					*parse_value(t_input *line);
-void					advance(t_input *line);
-void					skip_whitespaces(t_input *line);
-int8_t					char_is_separator(char c);
-uint8_t					compare_to_ops(char *s);
-uint8_t					compare_to_params(char *s);
-uint8_t					verify_if_register(char *s);
-uint8_t					verify_if_direct(char *s);
-uint8_t					verify_if_indirect(char *s);
+
 uint8_t					check_if_header(char *s);
 
 int8_t					token_is_label(char *s);
 void					remove_label_char(char **s);
 
+void					init_op_handler(t_asm *assembler);
+uint8_t					compare_to_ops(char *s);
+void					unknown_(t_input *line, t_ops *ops, uint8_t op_code);
+void					live_(t_input *line, t_ops *ops, uint8_t op_code);
+void					ld_lld_(t_input *line, t_ops *ops, uint8_t op_code);
+void					st_(t_input *line, t_ops *ops, uint8_t op_code);
+void					add_sub_(t_input *line, t_ops *ops, uint8_t op_code);
+void					and_or_xor_(t_input *line, t_ops *ops, uint8_t op_code);
+void					zjump_fork_lfork_(t_input *line, t_ops *ops, uint8_t op_code);
+void					ldi_lldi_(t_input *line, t_ops *ops, uint8_t op_code);
+void					sti_(t_input *line, t_ops *ops, uint8_t op_code);
+void					aff_(t_input *line, t_ops *ops, uint8_t op_code);
+
+t_token					*get_params(t_input *line, uint8_t len_tokens);
+uint8_t					compare_to_params(char *s);
+uint8_t					verify_if_register(char *s);
+uint8_t					verify_if_direct(char *s);
+uint8_t					verify_if_indirect(char *s);
+uint8_t					create_ecb(t_token *tokens, uint8_t len_tokens);
+
+void					advance(t_input *line);
+void					skip_whitespaces(t_input *line);
+int8_t					char_is_separator(char c);
+void					remove_comment(char **s);
+
+/*
+**	Hexdump function
+**	---------------------------------------------------------------------------
+*/
+
+void					create_bytecode(t_asm *assembler);
+void					write_header(int fd, t_header *header);
+void					write_ops(int fd, t_ops *ops, t_labels *labels);
+void					write_params(int fd, t_ast *operation, t_labels *labels);
+void					write_bytes(int fd, uintmax_t num, uint8_t bytes);
+
+/*
+**	Utility functions
+**	---------------------------------------------------------------------------
+*/
+
 void					asm_error(int error_code, char *error_message);
 int						is_space(char c);
-size_t					char_at(char *s, char c, size_t start);
-void					write_bytes(int fd, uintmax_t num, uint8_t bytes);
+int32_t					char_at(char *s, char c, int32_t start);
 
 t_ast					*dequeue_op(t_ops *queue);
 void					enqueue_op(t_ops *queue, t_ast *node);
@@ -176,21 +213,5 @@ size_t					hash(char *label);
 t_labels				*labelsInit(size_t capacity);
 int8_t					labelsInsert(t_labels *dict, char *key, uint32_t byte_start);
 uint32_t				labelsSearch(t_labels *dict, char *key);
-
-
-void					live_(t_input *line, t_ops *ops, uint8_t op_code);
-void					ld_lld_(t_input *line, t_ops *ops, uint8_t op_code);
-void					st_(t_input *line, t_ops *ops, uint8_t op_code);
-void					add_sub_(t_input *line, t_ops *ops, uint8_t op_code);
-void					and_or_xor_(t_input *line, t_ops *ops, uint8_t op_code);
-void					zjump_fork_lfork_(t_input *line, t_ops *ops, uint8_t op_code);
-void					ldi_lldi_(t_input *line, t_ops *ops, uint8_t op_code);
-void					sti_(t_input *line, t_ops *ops, uint8_t op_code);
-void					aff_(t_input *line, t_ops *ops, uint8_t op_code);
-void					unknown_(t_input *line, t_ops *ops, uint8_t op_code);
-
-void					init_op_handler(t_asm *assembler);
-t_token					*get_params(t_input *line, uint8_t len_tokens);
-uint8_t					create_ecb(t_token *tokens, uint8_t len_tokens);
 
 #endif

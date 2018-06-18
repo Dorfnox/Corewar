@@ -6,66 +6,39 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/16 19:54:00 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/17 19:21:42 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "assembler.h"
 
-// uint8_t	*resolve_params(t_token *params, uint8_t len_params, t_labels *labels)
-// {
-// 	uint8_t	*arr;
-// 	int8_t	i;
-
-// 	arr = (uint8_t *)ft_memalloc(sizeof(uint8_t) * len_params);
-// 	while (++i < len_params)
-// 	{
-// 		if (params[i].subtype == REG_CODE)
-			
-// 	}
-// }
-
-// int32_t	get_int()
-// {
-	
-// }
-
-// void	add_int_to_bytes(int32_t num, uint8_t num_bytes, int fd)
-// {
-
-// 	if (num_bytes == REG_SIZE)
-// 		ft_putchar_fd((num & 0xF), fd);
-// 		// (*byte_arr)[(*i)++] = num & 0xFF;
-// 	else if (num_bytes == IND_SIZE || num_bytes == DIR_SIZE_1)
-// 	{
-// 		ft_putchar_fd(((num >> 8) & 0xFF), fd);
-// 		ft_putchar_fd((num & 0xF), fd);
-// 		// (*byte_arr)[(*i)++] = (num >> 8) & 0xFF;
-// 		// (*byte_arr)[(*i)++] = num & 0xFF;		
-// 	}
-// 	else if (num_bytes == DIR_SIZE_0)
-// 	{
-// 		write_bytes(fd, num, )
-// 		ft_putchar_fd(((num >> 24) & 0xFF), fd);
-// 		ft_putchar_fd(((num >> 16) & 0xFF), fd);
-// 		ft_putchar_fd(((num >> 8) & 0xFF), fd);
-// 		ft_putchar_fd((num & 0xF), fd);
-// 	}
-// }
-
-void	write_ast_into_file(t_asm *assembler)
+void	write_bytes(int fd, uintmax_t num, uint8_t bytes)
 {
-	t_ast		*operation;
-	int32_t		tmp;
+	if (bytes >= 8)
+		ft_putchar_fd(((num >> 56) & 0xFF), fd);
+	if (bytes >= 7)
+		ft_putchar_fd(((num >> 48) & 0xFF), fd);
+	if (bytes >= 6)
+		ft_putchar_fd(((num >> 40) & 0xFF), fd);
+	if (bytes >= 5)
+		ft_putchar_fd(((num >> 32) & 0xFF), fd);
+	if (bytes >= 4)
+		ft_putchar_fd(((num >> 24) & 0xFF), fd);
+	if (bytes >= 3)
+		ft_putchar_fd(((num >> 16) & 0xFF), fd);
+	if (bytes >= 2)
+		ft_putchar_fd(((num >> 8) & 0xFF), fd);
+	if (bytes >= 1)
+		ft_putchar_fd((num & 0xFF), fd);
+}
+
+void	write_params(int fd, t_ast *operation, t_labels *labels)
+{
 	int8_t		j;
+	int32_t		tmp;
 	uint8_t		bytes;
 	
 	j = -1;
-	operation = dequeue_op(assembler->ops);
-	write_bytes(assembler->fd, operation->op, 1);
-	if (operation->ecb)
-		ft_putchar_fd(operation->ecb, assembler->fd);
-	printf("Op_code: %d, ecb: %d, params %d\n", operation->op, operation->ecb, operation->len_params);
 	while (++j < operation->len_params)
 	{
 		if (operation->params[j].subtype == REG_CODE)
@@ -81,7 +54,7 @@ void	write_ast_into_file(t_asm *assembler)
 		else if (operation->params[j].subtype == DIR_CODE)
 		{
 			if (operation->params[j].value[1] == LABEL_CHAR)
-				tmp = labelsSearch(assembler->ops->labels, &operation->params[j].value[2]);
+				tmp = labelsSearch(labels, &operation->params[j].value[2]);
 			else
 				tmp = ft_atoi(&operation->params[j].value[1]);
 			if ((operation->op >= LIVE && operation->op <= XOR) ||
@@ -90,8 +63,37 @@ void	write_ast_into_file(t_asm *assembler)
 			else 
 				bytes = DIR_SIZE_1;
 		}
-		write_bytes(assembler->fd, tmp, bytes);
+		write_bytes(fd, tmp, bytes);
 	}
+}
+
+void	write_ops(int fd, t_ops *ops, t_labels *labels)
+{
+	t_ast		*operation;
+	
+	while (!op_queue_is_empty(ops))
+	{
+		operation = dequeue_op(ops);
+		write_bytes(fd, operation->op, 1);
+		if (operation->ecb)
+			write_bytes(fd, operation->ecb, 1);
+		printf("Op_code: %d, ecb: %d, params %d\n", operation->op, operation->ecb, operation->len_params);
+		write_params(fd, operation, labels);
+	}
+}
+
+void	write_header(int fd, t_header *header)
+{
+	size_t	len_name;
+	size_t	len_comment;
+
+	len_name = ft_strlen(header->prog_name);
+	len_comment = ft_strlen(header->comment);
+	write_bytes(fd, header->magic, 4);
+	write(fd, header->prog_name, PROG_NAME_LENGTH + 1);
+	write_bytes(fd, header->prog_size, 4);
+	write(fd, header->comment, COMMENT_LENGTH + 1);
+	
 }
 
 void	create_bytecode(t_asm *assembler)
@@ -103,9 +105,7 @@ void	create_bytecode(t_asm *assembler)
 	close(assembler->fd);
 	if (!(assembler->fd = open("test.cor", O_WRONLY | O_CREAT, 0666)))
 		asm_error(1, "Couldn't create output file");
-	// write_bytes()
+	write_header(assembler->fd, assembler->header);
 	byte_arr = (uint8_t *)ft_memalloc(sizeof(uint8_t) * assembler->ops->total_bytes);
-	while (!op_queue_is_empty(assembler->ops))
-		write_ast_into_file(assembler);
-	// write(assembler->fd, byte_arr, assembler->ops->total_bytes);
+	write_ops(assembler->fd, assembler->ops, assembler->ops->labels);
 }
