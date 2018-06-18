@@ -19,9 +19,9 @@ void    init_ncurses_infoz(t_corewar *core)
     uint16_t    i;
     uint16_t    j;
 
-    width = 40;
-    height = 6;
-    core->ncur.infoz = newwin(height, width, 0, 200);
+    width = 60;
+    height = 40;
+    core->ncur.infoz = newwin(height, width, 22, 200);
     MALL_ERR(core->ncur.infoz, "Failed to create ncurses infoz");
     wattron(core->ncur.infoz, COLOR_PAIR(INFOZ));
     wmove(core->ncur.infoz, 0, 0);
@@ -40,7 +40,27 @@ void    init_ncurses_infoz(t_corewar *core)
 
 void		print_game_info(t_corewar *core)
 {
+	t_node	*node;
+	t_process *p;
+	uint8_t	i;
+
 	mvwprintw(core->ncur.infoz, 2, 1, "Cycle: %u", core->env.cycle);
-	mvwprintw(core->ncur.infoz, 3, 1, "Cycle To Die: %u", core->env.cycle);
+	if (core->env.cycle > 7400)
+	{
+		node = core->process_stack[(core->env.cycle + 1) % PROCESS_STACK_LEN].top;
+		i = 3;
+		while (node)
+		{
+			p = node->content;
+			mvwprintw(core->ncur.infoz, i++, 1, "pl: %u, id: %u, inst: %2u, x:%3u, y:%2u",
+				p->player->player_num,
+				p->id,
+				p->curr_pc->value,
+				p->curr_pc->x,
+				p->curr_pc->y);
+			node = node->next;
+		}
+		mvwprintw(core->ncur.infoz, i++, 1, "------------");
+	}
 	wrefresh(core->ncur.infoz);
 }

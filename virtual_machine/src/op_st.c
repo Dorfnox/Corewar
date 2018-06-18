@@ -21,6 +21,7 @@
 void		st_(t_corewar *core, t_process *process)
 {
 	uint16_t		index;
+	uint32_t		idx_result;
 	t_board_node	*location;
 
 	index = process->curr_pc->index;
@@ -33,7 +34,21 @@ void		st_(t_corewar *core, t_process *process)
 	if (!parse_arguments(process, 0))
 		return ;
 	if (EB1 == REGISTER)
-		write_reg_to_reg(REG[ARG10], REG[ARG00]);
+	{
+		idx_result = smashbytes(REG[ARG10]);
+		// write_reg_to_reg(REG[ARG10], REG[ARG00]);
+		if (idx_result & 0x8000)
+		{
+			idx_result = ~idx_result + 1;
+			idx_result %= IDX_MOD;
+			index = (MEM_SIZE - index - 1);
+			location = core->node_addresses_rev[
+				(index + idx_result) % MEM_SIZE];
+		}
+		else
+			location = core->node_addresses[
+				(index + (idx_result % IDX_MOD)) % MEM_SIZE];
+	}
 	else if (EB1 == INDIRECT)
 	{
 		index = get_index(index, ARG10, ARG11);
