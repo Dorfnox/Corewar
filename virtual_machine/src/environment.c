@@ -14,18 +14,11 @@
 
 void		init_environment(t_corewar *core)
 {
-	core->env.cycle = 0;
+	core->env.cycle = -1;
 	core->env.game_speed = GAME_SPEED;
 	core->env.cycle_to_die = CYCLE_TO_DIE;
-	core->env.cycle_counter = CYCLE_TO_DIE;
+	core->env.cycle_counter = CYCLE_TO_DIE + 1;
 	core->env.cycle_delta = CYCLE_DELTA;
 	core->env.nbr_live = NBR_LIVE;
 	core->env.max_checks = MAX_CHECKS;
 }
-
-// uint64_t		get_max_cycles(uint64_t init)
-// {
-// 	if (init <= CYCLE_DELTA)
-// 		return (0);
-// 	return (init + get_max_cycles(init - CYCLE_DELTA));
-// }

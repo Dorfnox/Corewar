@@ -24,6 +24,7 @@ void		st_(t_corewar *core, t_process *process)
 	uint32_t		idx_result;
 	t_board_node	*location;
 
+	location = NULL;
 	index = process->curr_pc->index;
 	if (!parse_encoding_byte(process) ||
 		EB0 != REGISTER || EB1 == 0 || EB1 == DIRECT)
@@ -35,7 +36,7 @@ void		st_(t_corewar *core, t_process *process)
 		return ;
 	if (EB1 == REGISTER)
 	{
-		idx_result = smashbytes(REG[ARG10]);
+		idx_result = smash_bytes(REG[ARG10]);
 		// write_reg_to_reg(REG[ARG10], REG[ARG00]);
 		if (idx_result & 0x8000)
 		{
@@ -56,7 +57,7 @@ void		st_(t_corewar *core, t_process *process)
 			location = core->node_addresses_rev[index];
 		else
 			location = core->node_addresses[index];
-		write_number_to_board(location, REG[ARG00]);
-		VIZ(draw_to_bored(core, process->player->player_num, location->index, 4));
 	}
+	write_number_to_board(location, REG[ARG00]);
+	VIZ(draw_to_bored(core, process->player->player_num, location->index, 4));
 }

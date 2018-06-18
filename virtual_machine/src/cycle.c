@@ -14,7 +14,6 @@
 
 uint8_t		cycle_handle(t_corewar *core)
 {
-	++core->env.cycle;
 	if (--core->env.cycle_counter == 0)
 	{
 		terminate_players(core);
@@ -49,6 +48,10 @@ void		terminate_players(t_corewar *core)
 			}
 		}
 	}
+	mvwprintw(core->ncur.playa[0], 2, 1, "Process cnt: %4u", core->player[0].num_of_processes); // delete
+	mvwprintw(core->ncur.playa[1], 2, 1, "Process cnt: %4u", core->player[1].num_of_processes); // delete
+	wrefresh(core->ncur.playa[0]); // delete
+	wrefresh(core->ncur.playa[1]); // delete
 }
 
 /*
@@ -73,6 +76,7 @@ void	terminate_player_processes(t_stack *stk, uint8_t pnum, uint16_t i)
 		{
 			while (tmp && tmp->player->player_num == pnum)
 			{
+				--tmp->player->num_of_processes;
 				free(pop(stk2));
 				tmp = peeks(stk2);
 			}
