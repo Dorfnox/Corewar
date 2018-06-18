@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 20:27:31 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/17 19:32:51 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/18 15:17:38 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_token	*get_next_token(t_input *line)
 	new_token = (t_token *)ft_memalloc(sizeof(t_token));
 	new_token->value = parse_value(line);
 	get_token_type(new_token);
+	printf("value: %s - type: %i, - subtype: %i\n", new_token->value, new_token->type, new_token->subtype);
 	return (new_token);
 }
 
@@ -42,7 +43,7 @@ char	*parse_value(t_input *line)
 			}
 			advance(line);
 		}
-		printf("start: %zu, last: %zu\n", start, line->index);
+		printf("start: %zu, last: %zu, line: %zu\t\t", start, line->index, line->line_n);
 		return (ft_strsub(line->s, start, line->index - start));
 	}
 }

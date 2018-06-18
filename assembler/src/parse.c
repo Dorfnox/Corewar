@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/17 19:29:37 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/18 15:39:45 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	get_header_value(t_asm *assembler, t_input *line, uint8_t subtype)
 void	parse_header(t_asm *assembler, t_input *line)
 {
 	t_token		*current_token;
-	int	name_set;
-	int	comment_set;
+	int			name_set;
+	int			comment_set;
 
 	name_set = 0;
 	comment_set = 0;
@@ -72,7 +72,7 @@ void	parse_header(t_asm *assembler, t_input *line)
 		line->line_n++;
 		// free(current_token->value);
 		free(current_token);
-		// ft_bzero((void *)line, sizeof(t_input));
+		ft_bzero((void *)line, sizeof(t_input));
 		ft_bzero(&current_token, sizeof(current_token));
 		line->index = 0;
 		// if (line->s)
@@ -92,7 +92,6 @@ void	parse_operations(t_asm *assembler, t_input *line)
 		ft_bzero(&current_token, sizeof(current_token));
 		line->len = ft_strlen(line->s);
 		current_token = get_next_token(line);
-		printf("value: %s - type: %i, - subtype: %i\n", current_token->value, current_token->type, current_token->subtype);
 		if (current_token->type == LABEL)
 		{
 			if (label_carry != NULL)
@@ -110,8 +109,8 @@ void	parse_operations(t_asm *assembler, t_input *line)
 			asm_error(1, ft_str128(2, "Invalid syntax in line ", ft_itoa(line->line_n)));
 		line->line_n++;
 		ft_bzero((void *)line, sizeof(t_input));
-		// line->index = 0;
-		// ft_strclr(line->s);
+		line->index = 0;
+		ft_strclr(line->s);
 		// if (line->s)
 		// 	ft_strdel(&line->s);
 	}
@@ -122,6 +121,7 @@ void		parse_input(t_asm *assembler)
 	t_input		*line;
 
 	line = (t_input *)ft_memalloc(sizeof(t_input));
+	line->line_n = 1;
 	parse_header(assembler, line);
 	printf("Name: %s, Header: %s\n", assembler->header->prog_name, assembler->header->comment);
 	parse_operations(assembler, line);
