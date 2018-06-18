@@ -45,14 +45,14 @@ void		print_game_info(t_corewar *core)
 	uint8_t	i;
 
 	mvwprintw(core->ncur.infoz, 2, 1, "Cycle: %u", core->env.cycle);
-	if (core->env.cycle > 7400)
+	if (core->env.cycle > 7410)
 	{
 		node = core->process_stack[(core->env.cycle + 1) % PROCESS_STACK_LEN].top;
 		i = 3;
 		while (node)
 		{
 			p = node->content;
-			mvwprintw(core->ncur.infoz, i++, 1, "pl: %u, id: %u, inst: %2u, x:%3u, y:%2u",
+			mvwprintw(core->ncur.infoz, i++, 1, "pl: %u, id: %3u, inst: %2u, x:%3u, y:%2u",
 				p->player->player_num,
 				p->id,
 				p->curr_pc->value,
@@ -60,7 +60,7 @@ void		print_game_info(t_corewar *core)
 				p->curr_pc->y);
 			node = node->next;
 		}
-		mvwprintw(core->ncur.infoz, i++, 1, "------------");
+		mvwprintw(core->ncur.infoz, i++, 1, "-----------------------------------");
 	}
 	wrefresh(core->ncur.infoz);
 }

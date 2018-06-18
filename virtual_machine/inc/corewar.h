@@ -64,7 +64,8 @@
 
 # define VIZ(a) core->flag.viz ? (a) : 0
 
-struct s_corewar;
+struct					s_corewar;
+struct					s_process;
 
 enum
 {
@@ -167,6 +168,13 @@ typedef struct			s_board_node
 	t_stack				cursor_stack;
 }						t_board_node;
 
+typedef struct			s_operation
+{
+	void				(*instruct)(struct s_corewar *, struct s_process *);
+	uint16_t			wait_time;
+	char				name[6];
+}						t_operation;
+
 typedef struct			s_process
 {
 	t_player			*player;
@@ -176,14 +184,8 @@ typedef struct			s_process
 	uint8_t				args[3][4];
 	uint8_t				carry;
 	uint8_t				reg[REG_NUMBER + 1][REG_SIZE];
-	void				(*instruct)(struct s_corewar *, struct s_process *);
+	t_operation			*op;
 }						t_process;
-
-typedef struct			s_operation
-{
-	void				(*instruct)(struct s_corewar *, struct s_process *);
-	uint16_t			wait_time;
-}						t_operation;
 
 typedef struct			s_corewar
 {
@@ -196,7 +198,7 @@ typedef struct			s_corewar
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
-	t_operation			op[17];
+	t_operation			op[18];
 	t_ncurses			ncur;
 }						t_corewar;
 
@@ -234,8 +236,9 @@ void					create_board(t_board_node **brd,
 							t_board_node **add, t_board_node **rev);
 
 
-void					init_operations(t_operation *core);
-void					init_wait_times(t_operation *core);
+void					init_operations(t_operation *op);
+void					init_wait_times(t_operation *op);
+void        			init_instruction_names(t_operation *op);
 
 
 /*
@@ -272,7 +275,8 @@ void					init_player_processes(t_corewar *core);
 **	Processes
 */
 
-t_process				*new_process(t_player *p, t_board_node *b, t_process *cpy);
+t_process				*new_process(t_corewar *core,
+							t_player *p, t_board_node *b, t_process *cpy);
 void					insert_process(t_corewar *c, t_stack *s, t_process *p);
 
 void					push_process_cursor(t_corewar *core, t_process *process);

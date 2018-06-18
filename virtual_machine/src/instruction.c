@@ -35,6 +35,7 @@ void       init_operations(t_operation *op)
     op[14].instruct = lldi_;
     op[15].instruct = lfork_;
     op[16].instruct = aff_;
+    op[17].instruct = first_;
     init_wait_times(op);
 }
 
@@ -57,4 +58,28 @@ void		init_wait_times(t_operation *op)
     op[14].wait_time = 50;
     op[15].wait_time = 1000;
     op[16].wait_time = 2;
+    op[17].wait_time = 0;
+    init_instruction_names(op);
+}
+
+void        init_instruction_names(t_operation *op)
+{
+    ft_memcpy(&op[0].name, "bad", 3);
+    ft_memcpy(&op[1].name, "live", 4);
+    ft_memcpy(&op[2].name, "ld", 2);
+    ft_memcpy(&op[3].name, "st", 2);
+    ft_memcpy(&op[4].name, "add", 3);
+    ft_memcpy(&op[5].name, "sub", 3);
+    ft_memcpy(&op[6].name, "and", 3);
+    ft_memcpy(&op[7].name, "or", 2);
+    ft_memcpy(&op[8].name, "xor", 3);
+    ft_memcpy(&op[9].name, "zjmp", 4);
+    ft_memcpy(&op[10].name, "ldi", 3);
+    ft_memcpy(&op[11].name, "sti", 3);
+    ft_memcpy(&op[12].name, "fork", 4);
+    ft_memcpy(&op[13].name, "lld", 3);
+    ft_memcpy(&op[14].name, "lldi", 4);
+    ft_memcpy(&op[15].name, "lfork", 5);
+    ft_memcpy(&op[16].name, "aff", 3);
+    ft_memcpy(&op[17].name, "first", 5);
 }

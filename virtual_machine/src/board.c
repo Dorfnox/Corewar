@@ -56,8 +56,9 @@ void	init_board(t_corewar *core)
 		if (core->player[p].player_num)
 		{
 			j = ((++k - 1) * (MEM_SIZE / core->env.num_players));
-			push(&core->process_stack[0], new_process(&core->player[p],
-				core->node_addresses[j], NULL));
+			push(&core->process_stack[0],
+				new_process(core,
+					&core->player[p], core->node_addresses[j], NULL));
 			i = 0;
 			while (i < core->player[p].instruction_size)
 			{

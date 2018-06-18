@@ -19,17 +19,17 @@ void    loop(t_corewar *core)
 
 	while (1)
 	{
+		++core->env.cycle;
+        cycle_handle(core);
 		while (!isemptys(&PROCESS_STACK[CURRENT_CYCLE]))
 		{
 			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
-			process->instruct(core, process);
+			process->op->instruct(core, process);
 			board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
-			process->instruct = core->op[board_value].instruct;
+			process->op = &core->op[board_value];
 			insert_process(core, &core->process_stack[(core->env.cycle +
-				core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
+				process->op->wait_time) % PROCESS_STACK_LEN], process);
 		}
-        cycle_handle(core);
-        key_hit(core);
         game_speed(core->env.game_speed);
 	}
 }
@@ -41,24 +41,29 @@ void    loop_viz(t_corewar *core)
 
 	while (1)
 	{
+		++core->env.cycle;
+		cycle_handle(core);
 		while (!isemptys(&PROCESS_STACK[CURRENT_CYCLE]))
 		{
 			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
+			if (process->id == 52)
+			{
+				mvwprintw(core->ncur.infoz, 0, 3, "PROCESS - x: %3u, y: %3u, inst: %s", process->curr_pc->x, process->curr_pc->y, process->op->name);
+				wrefresh(core->ncur.infoz);
+			}
 			pop_process_cursor(core, process);
 			print_process_info(&core->ncur, process);
-			process->instruct(core, process);
+			process->op->instruct(core, process);
 			board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
-			process->instruct = core->op[board_value].instruct;
+			process->op = &core->op[board_value];
 			insert_process(core, &core->process_stack[(core->env.cycle +
-				core->op[board_value].wait_time) % PROCESS_STACK_LEN], process);
+				process->op->wait_time) % PROCESS_STACK_LEN], process);
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
 		}
 		print_game_info(core);
-		wrefresh(core->ncur.bored);
-		cycle_handle(core);
-        game_speed(core->env.game_speed);
         if (core->env.cycle > 7400)
 			key_hit(core);
+        game_speed(core->env.game_speed);
 	}
 }
 

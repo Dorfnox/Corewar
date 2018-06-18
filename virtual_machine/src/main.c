@@ -20,10 +20,10 @@ int		main(int argc, char **argv)
 		corewar_error(USAGE, 1);
 	ft_bzero(&core, sizeof(t_corewar));
 	init_environment(&core);
+	init_operations(core.op);
 	retrieve_data(&core, ++argv);
 	init_ncurses(&core);
 	init_board(&core);
-	init_operations(core.op);
 	core.flag.viz ? loop_viz(&core) : loop(&core);
 	terminate_ncurses(&core);
 	return (0);
