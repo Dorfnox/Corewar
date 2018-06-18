@@ -278,6 +278,8 @@ void					init_player_processes(t_corewar *core);
 t_process				*new_process(t_corewar *core,
 							t_player *p, t_board_node *b, t_process *cpy);
 void					insert_process(t_corewar *c, t_stack *s, t_process *p);
+void					insert_process_at_bottom(t_corewar *c,
+							t_stack *s, t_process *p);
 
 void					push_process_cursor(t_corewar *core, t_process *process);
 void					pop_process_cursor(t_corewar *core, t_process *process);

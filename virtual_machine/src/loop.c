@@ -48,7 +48,7 @@ void    loop_viz(t_corewar *core)
 			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
 			if (process->id == 52)
 			{
-				mvwprintw(core->ncur.infoz, 0, 3, "PROCESS - x: %3u, y: %3u, inst: %s", process->curr_pc->x, process->curr_pc->y, process->op->name);
+				mvwprintw(core->ncur.infoz, 0, 3, "PROCESS - x: %3u, y: %3u, inst: %s", process->curr_pc->x / 3, process->curr_pc->y, process->op->name);
 				wrefresh(core->ncur.infoz);
 			}
 			pop_process_cursor(core, process);
