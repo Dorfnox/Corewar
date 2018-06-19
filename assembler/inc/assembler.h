@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/17 18:17:55 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/18 18:11:27 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,8 @@ void					verify_input(int ac, char **av, t_asm *assembler);
 
 
 void					parse_input(t_asm *assembler);
-void					parse_operations(t_asm *assembler, t_input *line);
-void 					parse_header(t_asm *assembler, t_input *line);
+void					parse_operations(t_asm *assembler, t_input *line, t_token *current_token, char *label_carry);
+void					parse_header(t_asm *assembler, t_input *line, t_token *current_token, int *name_set, int *comment_set);
 
 /*
 **	Tokenizer functions

@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/17 19:21:42 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/18 17:39:55 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,11 @@ void	write_params(int fd, t_ast *operation, t_labels *labels)
 				bytes = DIR_SIZE_0;
 			else 
 				bytes = DIR_SIZE_1;
+
+			free(operation->params[j].value);
 		}
 		write_bytes(fd, tmp, bytes);
+		free(operation->params);
 	}
 }
 
@@ -79,6 +82,7 @@ void	write_ops(int fd, t_ops *ops, t_labels *labels)
 			write_bytes(fd, operation->ecb, 1);
 		printf("Op_code: %d, ecb: %d, params %d\n", operation->op, operation->ecb, operation->len_params);
 		write_params(fd, operation, labels);
+		free(operation);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 20:27:31 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/18 15:17:38 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/18 19:37:31 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ t_token	*get_next_token(t_input *line)
 	new_token = (t_token *)ft_memalloc(sizeof(t_token));
 	new_token->value = parse_value(line);
 	get_token_type(new_token);
+	if (new_token->type != PARAMETER)
+		free(new_token->value);
 	printf("value: %s - type: %i, - subtype: %i\n", new_token->value, new_token->type, new_token->subtype);
 	return (new_token);
 }
@@ -34,8 +36,9 @@ char	*parse_value(t_input *line)
 	else
 	{
 		start = line->index;
-		while (!char_is_separator(line->current_char))
+		while (!char_is_separator(line->current_char) || !line->current_char)
 		{
+			DB("TES");
 			if (line->current_char == LABEL_CHAR)
 			{
 				advance(line);

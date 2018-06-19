@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/17 16:14:13 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/17 16:58:52 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/18 19:36:01 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	remove_comment(char **s)
 void	advance(t_input *line)
 {
 	line->index++;
-	if (line->index > line->len - 1)
+	if (!line->len || line->index > line->len - 1)
 		line->current_char = '\0';
 	else
 		line->current_char = line->s[line->index];
@@ -38,7 +38,9 @@ void	advance(t_input *line)
 void	skip_whitespaces(t_input *line)
 {
 	while (char_is_separator(line->current_char))
+	{
 		advance(line);
+	}
 }
 
 void	remove_label_char(char **s)
@@ -54,7 +56,7 @@ void	remove_label_char(char **s)
 
 int8_t	char_is_separator(char c)
 {
-	if (!c || c == SEPARATOR_CHAR || ft_iswhitespace(c))
+	if (c == SEPARATOR_CHAR || ft_iswhitespace(c))
 		return (1);
 	return (0);
 }
