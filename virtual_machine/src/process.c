@@ -73,31 +73,6 @@ void		insert_process(t_corewar *core, t_stack *s, t_process *p)
 	VIZ(push_process_cursor(core, p));
 }
 
-void		insert_process_at_bottom(t_corewar *core, t_stack *s, t_process *p)
-{
-	t_node		*head;
-	t_node		*prev;
-
-	if (s->top == NULL)
-		push(s, p);
-	else
-	{
-		head = s->top;
-		prev = NULL;
-		while (s->top)
-		{
-			prev = s->top;
-			s->top = s->top->next;
-		}
-		push(s, p);
-		if (prev)
-			prev->next = s->top;
-		s->top = head;
-	}
-	if (s->size == 1)
-		VIZ(push_process_cursor(core, p));
-}
-
 /*
 **	Adds to the cursor stack for the given index location
 */

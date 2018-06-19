@@ -46,11 +46,6 @@ void    loop_viz(t_corewar *core)
 		while (!isemptys(&PROCESS_STACK[CURRENT_CYCLE]))
 		{
 			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
-			if (process->id == 52)
-			{
-				mvwprintw(core->ncur.infoz, 0, 3, "PROCESS - x: %3u, y: %3u, inst: %s", process->curr_pc->x / 3, process->curr_pc->y, process->op->name);
-				wrefresh(core->ncur.infoz);
-			}
 			pop_process_cursor(core, process);
 			print_process_info(&core->ncur, process);
 			process->op->instruct(core, process);
@@ -61,8 +56,8 @@ void    loop_viz(t_corewar *core)
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
 		}
 		print_game_info(core);
-        if (core->env.cycle > 7400)
-			key_hit(core);
+		// if (core->env.cycle > 3304)
+		// 	key_hit(core);
         game_speed(core->env.game_speed);
 	}
 }

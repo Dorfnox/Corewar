@@ -26,7 +26,7 @@ void		add_(t_corewar *core, t_process *process)
 	if (!parse_encoding_byte(process) ||
 		EB0 != REGISTER || EB1 != REGISTER || EB2 != REGISTER)
 	{
-		move_pc_by_encoding_byte(process, 0);
+		move_pc_by_encoding_byte(process, 0, 3);
 		return ;
 	}
 	if (!parse_arguments(process, 0))
