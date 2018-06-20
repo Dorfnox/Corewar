@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/18 19:31:06 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/19 17:05:52 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ void	get_header_value(t_asm *assembler, t_input *line, uint8_t subtype)
 	char_at_start = (subtype == HEADER_NAME) ? ft_strlen(NAME_CMD_STRING) : ft_strlen(COMMENT_CMD_STRING);
 	max_chars = (subtype == HEADER_NAME) ? PROG_NAME_LENGTH : COMMENT_LENGTH;
 	if ((value_start = char_at(line->s, COMMENT_DELIMITER_CHAR, char_at_start)) == -1)
-		asm_error(1, "Couldn't find header value in line #");
+		syntax_error_without_token(assembler, line, HEADER_VALUE_ABSENT);
 	if ((value_end = char_at(line->s, COMMENT_DELIMITER_CHAR, value_start + 1)) == -1)
-		asm_error(1, "Couldn't find closing \"");
+		syntax_error_without_token(assembler, line, HEADER_VALUE_INCOMPLETE);
 	value = ft_strsub(line->s, value_start + 1, (value_end - value_start - 1));
 	if (ft_strlen(value) > max_chars)
-		asm_error(1, "# of chars exceeded for header name/comment");
+		syntax_error_without_token(assembler, line, HEADER_VALUE_LONG);
 	if (subtype == HEADER_NAME)
 		ft_strcpy(assembler->header->prog_name, value);
 	else
@@ -41,21 +41,21 @@ void	parse_header(t_asm *assembler, t_input *line, t_token *current_token, int *
 	if (current_token->type == HEADER && current_token->subtype == HEADER_NAME)
 	{
 		if (*name_set)
-			asm_error(1, "Srsly??? Name ......again ningi????");
+			syntax_error_without_token(assembler, line, HEADER_NAME_REPEATED);
 		get_header_value(assembler, line, current_token->subtype);
 		*name_set = 1;
 	}
 	else if (current_token->type == HEADER && current_token->subtype == HEADER_COMMENT)
 	{
 		if (!*name_set)
-			asm_error(1, "Header comment was found before the name. Name should be first.");
+			syntax_error_without_token(assembler, line, HEADER_COMMENT_FIRST);
 		if (*comment_set)
-			asm_error(1, "Srsly??? Name ......again ningi????");
+			syntax_error_without_token(assembler, line, HEADER_COMMENT_REPEATED);
 		get_header_value(assembler, line, current_token->subtype);
 		*comment_set = 1;
 	}
 	else if (current_token->type != EMPTY)
-		asm_error(1, ft_str128(2, "Invalid syntax in line ", ft_itoa(line->line_n)));
+		syntax_error_with_token(assembler, line, UNEXPECTED_TOKEN, current_token->value);
 }
 
 void	parse_operations(t_asm *assembler, t_input *line, t_token *current_token, char *label_carry)
@@ -63,11 +63,12 @@ void	parse_operations(t_asm *assembler, t_input *line, t_token *current_token, c
 	if (current_token->type == LABEL)
 	{
 		if (label_carry != NULL)
+		syntax_error_with_token(assembler, line, HEADER_VALUE_INCOMPLETE, current_token->value);
 			asm_error(1, "Expected an op, stupid\n");
 		label_carry = current_token->value;
 		current_token = get_next_token(line);
 	}
-	else if (current_token->type == OPERATION)
+	if (current_token->type == OPERATION)
 	{
 		if (label_carry != NULL)
 			labelsInsert(assembler->ops->labels, label_carry, assembler->ops->total_bytes + 1);
@@ -99,8 +100,8 @@ void	read_file(t_asm *assembler, t_input *line)
 		else
 			parse_operations(assembler, line, current_token, label_carry);
 		line->line_n++;
-		// ft_bzero((void *)line, sizeof(t_input));
 		line->index = 0;
+		// ft_bzero((void *)line, sizeof(t_input));
 		// if (line->s)
 		// 	ft_strclr(line->s);
 	}

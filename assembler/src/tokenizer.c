@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 20:27:31 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/18 19:37:31 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/19 13:46:10 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,19 @@ char	*parse_value(t_input *line)
 	size_t	start;
 	
 	line->current_char = line->s[line->index];
-	skip_whitespaces(line);
+	skip_separators(line);
 	if (!line->current_char || !ft_isprint(line->current_char))
 		return (NULL);
 	else
 	{
 		start = line->index;
-		while (!char_is_separator(line->current_char) || !line->current_char)
+		while (line->current_char && !char_is_separator(line->current_char))
 		{
-			DB("TES");
-			if (line->current_char == LABEL_CHAR)
-			{
-				advance(line);
-				break ;
-			}
+			// if (line->current_char == LABEL_CHAR)
+			// {
+			// 	advance(line);
+			// 	break ;
+			// }
 			advance(line);
 		}
 		printf("start: %zu, last: %zu, line: %zu\t\t", start, line->index, line->line_n);

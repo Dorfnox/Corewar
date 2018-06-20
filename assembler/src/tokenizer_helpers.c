@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/17 16:14:13 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/18 19:36:01 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/19 13:45:55 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	remove_comment(char **s)
 	if (pound_index != -1)
 	{
 		tmp = ft_strsub(*s, 0, pound_index);
-		// free(s);
 		*s = tmp;
 	}
 }
@@ -35,7 +34,7 @@ void	advance(t_input *line)
 		line->current_char = line->s[line->index];
 }
 
-void	skip_whitespaces(t_input *line)
+void	skip_separators(t_input *line)
 {
 	while (char_is_separator(line->current_char))
 	{

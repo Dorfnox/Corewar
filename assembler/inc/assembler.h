@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/18 18:11:27 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/19 16:56:59 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,23 @@
 # define REG_CODE				1
 # define DIR_CODE				2
 # define IND_CODE				3
+
+/*
+**	Error macros
+*/
+
+# define UNEXPECTED_TOKEN			"Unexpected token encountered"
+
+# define HEADER_VALUE_ABSENT		"Expected a header value"
+# define HEADER_VALUE_INCOMPLETE	"Expected a closing \""
+# define HEADER_VALUE_LONG			"Header value too long"
+# define HEADER_NAME_REPEATED		"Token \".name\" repeated"
+# define HEADER_COMMENT_REPEATED	"Token \".comment\" repeated"
+# define HEADER_COMMENT_FIRST		"Token \".comment\" found before \".name\" repeated"
+
+# define PARAM_ERROR_ABSENT			"Expected a parameter"
+# define PARAM_ERROR_INCORRECT		"Incorrect parameter type"
+
 
 /*
 **  STRUCTURES
@@ -179,7 +196,7 @@ uint8_t					verify_if_indirect(char *s);
 uint8_t					create_ecb(t_token *tokens, uint8_t len_tokens);
 
 void					advance(t_input *line);
-void					skip_whitespaces(t_input *line);
+void					skip_separators(t_input *line);
 int8_t					char_is_separator(char c);
 void					remove_comment(char **s);
 
@@ -200,6 +217,8 @@ void					write_bytes(int fd, uintmax_t num, uint8_t bytes);
 */
 
 void					asm_error(int error_code, char *error_message);
+void					syntax_error_with_token(t_asm *assembler, t_input *line, char *error_message, char *token_value);
+void					syntax_error_without_token(t_asm *assembler, t_input *line, char *error_message);
 int						is_space(char c);
 int32_t					char_at(char *s, char c, int32_t start);
 

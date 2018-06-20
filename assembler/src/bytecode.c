@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/18 17:39:55 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/19 14:01:29 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	write_params(int fd, t_ast *operation, t_labels *labels)
 			free(operation->params[j].value);
 		}
 		write_bytes(fd, tmp, bytes);
-		free(operation->params);
+		// free(operation->params);
 	}
 }
 
@@ -82,7 +82,7 @@ void	write_ops(int fd, t_ops *ops, t_labels *labels)
 			write_bytes(fd, operation->ecb, 1);
 		printf("Op_code: %d, ecb: %d, params %d\n", operation->op, operation->ecb, operation->len_params);
 		write_params(fd, operation, labels);
-		free(operation);
+		// free(operation);
 	}
 }
 
@@ -94,22 +94,17 @@ void	write_header(int fd, t_header *header)
 	len_name = ft_strlen(header->prog_name);
 	len_comment = ft_strlen(header->comment);
 	write_bytes(fd, header->magic, 4);
-	write(fd, header->prog_name, PROG_NAME_LENGTH + 1);
+	write(fd, header->prog_name, PROG_NAME_LENGTH + 4);
 	write_bytes(fd, header->prog_size, 4);
-	write(fd, header->comment, COMMENT_LENGTH + 1);
+	write(fd, header->comment, COMMENT_LENGTH + 4);
 	
 }
 
 void	create_bytecode(t_asm *assembler)
 {
-	uint8_t		*byte_arr;
-	uint16_t	i;
-
-	i = 0;
 	close(assembler->fd);
 	if (!(assembler->fd = open("test.cor", O_WRONLY | O_CREAT, 0666)))
 		asm_error(1, "Couldn't create output file");
 	write_header(assembler->fd, assembler->header);
-	byte_arr = (uint8_t *)ft_memalloc(sizeof(uint8_t) * assembler->ops->total_bytes);
 	write_ops(assembler->fd, assembler->ops, assembler->ops->labels);
 }
