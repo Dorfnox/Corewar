@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 13:51:21 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/13 13:51:39 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 02:19:25 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 uint8_t		cycle_handle(t_corewar *core)
 {
+	if (core->flag.dump && core->env.dump == core->env.cycle)
+	{
+		if (!core->flag.viz)
+			dump_board((t_board_node *)core->node_addresses);
+		game_over(core);
+	}
 	if (--core->env.cycle_counter == 0)
 	{
 		terminate_players(core);
@@ -40,7 +46,8 @@ void		terminate_players(t_corewar *core)
 	{
 		if (core->player[i].player_num && !core->player[i].dead)
 		{
-			if (core->player[i].last_live < (core->env.cycle - core->env.cycle_to_die))
+			if (core->player[i].last_live <
+				(core->env.cycle - core->env.cycle_to_die))
 			{
 				core->player[i].dead = 1;
 				terminate_player_processes(core->process_stack,
@@ -55,7 +62,7 @@ void		terminate_players(t_corewar *core)
 **	a player number.
 */
 
-void	terminate_player_processes(t_stack *stk, uint8_t pnum, uint16_t i)
+void		terminate_player_processes(t_stack *stk, uint8_t pnum, uint16_t i)
 {
 	t_node		*head;
 	t_node		*prev;
@@ -89,4 +96,3 @@ void		game_over(t_corewar *core)
 {
 	(void)core;
 }
-

@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 15:34:28 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 13:46:28 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 01:24:58 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,17 +131,11 @@ void		draw_cursor(t_corewar *core, t_board_node *b)
 	static uint64_t	i;
 
 	if (core->flag.epilepsy)
-	{
 		wattron(core->ncur.bored, COLOR_PAIR((i++ % 3) + 5));
-	}
 	else if ((p = peeks(&b->cursor_stack)))
-	{
-	    wattron(core->ncur.bored, COLOR_PAIR(p->player->player_num + 4));
-	}
+		wattron(core->ncur.bored, COLOR_PAIR(p->player->player_num + 4));
 	else
-	{
 		wattron(core->ncur.bored, COLOR_PAIR(b->bored_color));
-	}
 	mvwaddstr(core->ncur.bored, b->y, b->x,
 		core->ncur.c_array[core->node_addresses[b->index]->value]);
 	wrefresh(core->ncur.bored);

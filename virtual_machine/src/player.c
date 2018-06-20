@@ -6,11 +6,12 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 15:43:23 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 13:46:23 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 01:23:40 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#define PLAYA core->player[p_num - 1]
 
 void			add_new_player(t_corewar *core, char *filename, uint8_t p_num)
 {
@@ -21,20 +22,22 @@ void			add_new_player(t_corewar *core, char *filename, uint8_t p_num)
 		corewar_error("Too many players", 1);
 	if (core->player[p_num - 1].player_num)
 	{
-		ft_pflite("%s\tPlayer number assigned for more than one player\n", CSEM);
+		ft_pflite("%s\tPlayer number assigned for more than one player\n"
+				, CSEM);
 		ft_pflite("\tPlayer %u: Player '%s' and Player '%s'\n",
-			p_num, core->player[p_num - 1].filename, filename);
+			p_num, PLAYA.filename, filename);
 		corewar_error(NULL, 1);
 	}
 	content_size = import_player_file(filename, &contents);
-	ft_memcpy(core->player[p_num - 1].header.prog_name, &contents[4], PROG_NAME_LENGTH);
-	ft_memcpy(core->player[p_num - 1].header.comment, &contents[128 + 12], COMMENT_LENGTH);
-	ft_memcpy(core->player[p_num - 1].header.instructions, &contents[INSTR + 16], content_size - INSTR);
-	core->player[p_num - 1].header.prog_size = content_size;
-	core->player[p_num - 1].instruction_size = content_size - (INSTR + 16);
-	core->player[p_num - 1].player_num = p_num;
-	core->player[p_num - 1].num_of_processes = 1;
-	core->player[p_num - 1].filename = filename;
+	ft_memcpy(PLAYA.header.prog_name, &contents[4], PROG_NAME_LENGTH);
+	ft_memcpy(PLAYA.header.comment, &contents[140], COMMENT_LENGTH);
+	ft_memcpy(PLAYA.header.instructions, &contents[INSTR + 16],
+			content_size - INSTR);
+	PLAYA.header.prog_size = content_size;
+	PLAYA.instruction_size = content_size - (INSTR + 16);
+	PLAYA.player_num = p_num;
+	PLAYA.num_of_processes = 1;
+	PLAYA.filename = filename;
 }
 
 /*
@@ -54,10 +57,10 @@ size_t			import_player_file(char *filename, uint8_t **contents)
 	content_size = getfilecontents(filename, contents);
 	if (!content_size)
 	{
-		ft_str256(3, "Failed to gather file's contents: '", filename ,"'");
+		ft_str256(3, "Failed to gather file's contents: '", filename, "'");
 		corewar_error(ft_str256(0), 1);
 	}
-	if (content_size < INSTR ||	content_size > INSTR + CHAMP_MAX_SIZE)
+	if ((content_size < INSTR) || (content_size > INSTR + CHAMP_MAX_SIZE))
 	{
 		ft_str256(3, "The file '", filename, "' is of incorrect size");
 		corewar_error(ft_str256(0), 1);

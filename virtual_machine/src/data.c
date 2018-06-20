@@ -6,13 +6,13 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 13:00:55 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 13:46:13 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 00:15:17 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	retrieve_data(t_corewar *core, char **argv)
+void			retrieve_data(t_corewar *core, char **argv)
 {
 	init_flag_queue(&core->flag_queue);
 	while (!flag_handler(core, &argv))

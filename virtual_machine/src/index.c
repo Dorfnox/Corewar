@@ -6,19 +6,19 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 21:46:18 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/13 21:47:01 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 00:17:23 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-uint16_t 	get_index_unchained(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
+uint16_t	get_index_unchained(uint16_t pc, uint8_t byte1, uint8_t byte2)
 {
 	uint16_t index;
 
-	index = (uint16_t)idx_byte1 << 8;
-	index |= (uint16_t)idx_byte2;
-	if (idx_byte1 >> 7)
+	index = (uint16_t)byte1 << 8;
+	index |= (uint16_t)byte2;
+	if (byte1 >> 7)
 	{
 		index = ~index + 1;
 		return (((MEM_SIZE - pc - 1) + index) % MEM_SIZE);
@@ -32,7 +32,7 @@ uint16_t 	get_index_unchained(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
 **	node_addresses_rev array
 */
 
-uint16_t 	get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
+uint16_t	get_index(uint16_t pc, uint8_t idx_byte1, uint8_t idx_byte2)
 {
 	uint16_t index;
 

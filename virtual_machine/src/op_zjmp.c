@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 14:57:59 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 01:31:39 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@
 
 void		zjmp_(t_corewar *core, t_process *process)
 {
-	uint8_t		jump_index_a;
-	uint8_t		jump_index_b;
+	uint8_t		jump_idx_a;
+	uint8_t		jump_idx_b;
 	uint16_t	index;
 
 	if (process->carry)
 	{
-		jump_index_a = (uint8_t)read_from_board(process->curr_pc->next, 1);
-		jump_index_b = (uint8_t)read_from_board(process->curr_pc->next->next, 1);
-		index = get_index(process->curr_pc->index, jump_index_a, jump_index_b);
-		if (jump_index_a >> 7)
+		jump_idx_a = (uint8_t)read_from_board(process->curr_pc->next, 1);
+		jump_idx_b = (uint8_t)read_from_board(process->curr_pc->next->next, 1);
+		index = get_index(process->curr_pc->index, jump_idx_a, jump_idx_b);
+		if (jump_idx_a >> 7)
 			process->curr_pc = core->node_addresses_rev[index];
 		else
 			process->curr_pc = core->node_addresses[index];

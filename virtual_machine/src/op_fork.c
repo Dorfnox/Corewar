@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 14:56:31 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 00:46:51 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 **	Not followed by parameter encoding byte
 **
 **	executes process at PC + index, with a % IDX_MOD restriction
-**
 */
 
 void		fork_(t_corewar *core, t_process *process)
@@ -39,8 +38,8 @@ void		fork_(t_corewar *core, t_process *process)
 	new_p = new_process(core, process->player, start, process);
 	new_p->op = &core->op[ZERO_AT_BAD_INSTR(start->value)];
 	insert_process(core,
-		&core->process_stack[(core->env.cycle + new_p->op->wait_time) % PROCESS_STACK_LEN],
-		new_p);
+		&core->process_stack[(core->env.cycle + new_p->op->wait_time)
+						% PROCESS_STACK_LEN], new_p);
 	process->player->num_of_processes++;
 	process->curr_pc = process->curr_pc->next->next->next;
 }

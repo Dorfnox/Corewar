@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 14:57:47 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 01:12:18 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,7 @@ void		sti_(t_corewar *core, t_process *process)
 	index = process->curr_pc->index;
 	if (!parse_encoding_byte(process) ||
 		EB0 != REGISTER || EB1 == 0 || EB2 == 0 || EB2 == INDIRECT)
-	{
-		move_pc_by_encoding_byte(process, 1, 3);
-		return ;
-	}
+		return (move_pc_by_encoding_byte(process, 1, 3));
 	if (!parse_arguments(process, 1))
 		return ;
 	idx_result = sti_a_index(core, process, index) + sti_b_index(process);

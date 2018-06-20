@@ -6,11 +6,11 @@
 /*   By: dmontoya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 17:27:36 by dmontoya          #+#    #+#             */
-/*   Updated: 2018/06/04 17:27:39 by dmontoya         ###   ########.fr       */
+/*   Updated: 2018/06/20 01:25:32 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "corewar.h"
+#include "corewar.h"
 
 void		write_number_to_board(t_board_node *board, uint8_t *number)
 {

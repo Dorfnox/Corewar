@@ -6,13 +6,13 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 13:45:23 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 14:28:58 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 00:24:54 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void    loop(t_corewar *core)
+void	loop(t_corewar *core)
 {
 	uint8_t		board_value;
 	t_process	*process;
@@ -20,7 +20,7 @@ void    loop(t_corewar *core)
 	while (1)
 	{
 		++core->env.cycle;
-        cycle_handle(core);
+		cycle_handle(core);
 		while (!isemptys(&PROCESS_STACK[CURRENT_CYCLE]))
 		{
 			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
@@ -30,11 +30,11 @@ void    loop(t_corewar *core)
 			insert_process(core, &core->process_stack[(core->env.cycle +
 				process->op->wait_time) % PROCESS_STACK_LEN], process);
 		}
-        game_speed(core->env.game_speed);
+		game_speed(core->env.game_speed);
 	}
 }
 
-void    loop_viz(t_corewar *core)
+void	loop_viz(t_corewar *core)
 {
 	uint8_t		board_value;
 	t_process	*process;
@@ -58,14 +58,19 @@ void    loop_viz(t_corewar *core)
 		print_game_info(core);
 		// if (core->env.cycle > 3304)
 		// 	key_hit(core);
-        game_speed(core->env.game_speed);
+		game_speed(core->env.game_speed);
 	}
 }
 
-void    game_speed(uint8_t speed)
+void	game_speed(uint8_t speed)
 {
-    int j = 0;
+	int		j;
+	int64_t	d;
 
-    while (j++ < ((speed * PROCESS_STACK_LEN * 10) << 3))
-        for (int64_t d = 0; d < speed; d++){}
+	d = -1;
+	j = 0;
+	while (j++ < ((speed * PROCESS_STACK_LEN * 10) << 3))
+		while (++d < speed)
+		{
+		}
 }

@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 20:47:54 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/04 20:48:18 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 01:15:55 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ uint8_t		parse_encoding_byte(t_process *process)
 	process->curr_pc = process->curr_pc->next->next;
 	process->encoding_byte[0] = (encoding_byte >> 6) & 0b11;
 	process->encoding_byte[1] = (encoding_byte >> 4) & 0b11;
-	process->encoding_byte[2] = (encoding_byte >> 2) & 0b11; //error
+	process->encoding_byte[2] = (encoding_byte >> 2) & 0b11;
 	return (!(encoding_byte > 0xF8 || (encoding_byte & 0b11) > 0));
 }
 
