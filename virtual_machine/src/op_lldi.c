@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 14:57:29 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 01:29:34 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@
 
 void		lldi_(t_corewar *core, t_process *process)
 {
-	uint32_t 		a;
-	uint32_t 		b;
-	uint16_t 		index;
+	uint32_t		a;
+	uint32_t		b;
+	uint16_t		index;
 	t_board_node	*location;
 
 	a = 0;

@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 14:57:43 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 01:31:09 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 void		st_(t_corewar *core, t_process *process)
 {
 	uint16_t		index;
-	uint32_t		idx_result;
 	t_board_node	*location;
 
 	location = NULL;
@@ -29,27 +28,12 @@ void		st_(t_corewar *core, t_process *process)
 	if (!parse_encoding_byte(process) ||
 		EB0 != REGISTER || EB1 == 0 || EB1 == DIRECT)
 	{
-		move_pc_by_encoding_byte(process, 0, 2);
-		return ;
+		return (move_pc_by_encoding_byte(process, 0, 2));
 	}
 	if (!parse_arguments(process, 0))
 		return ;
 	if (EB1 == REGISTER)
-	{
-		idx_result = smash_bytes(REG[ARG10]);
-		// write_reg_to_reg(REG[ARG10], REG[ARG00]);
-		if (idx_result & 0x8000)
-		{
-			idx_result = ~idx_result + 1;
-			idx_result %= IDX_MOD;
-			index = (MEM_SIZE - index - 1);
-			location = core->node_addresses_rev[
-				(index + idx_result) % MEM_SIZE];
-		}
-		else
-			location = core->node_addresses[
-				(index + (idx_result % IDX_MOD)) % MEM_SIZE];
-	}
+		write_reg_to_reg(REG[ARG10], REG[ARG00]);
 	else if (EB1 == INDIRECT)
 	{
 		index = get_index(index, ARG10, ARG11);

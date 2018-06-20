@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/05/29 13:23:27 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 02:07:23 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ void					add_flag(t_queue *q, char *flag, void *flag_func);
 unsigned int			flag_handler(t_corewar *c, char ***av);
 void					*search_flag_queue(t_node *n, char *flag);
 void					clean_flag_queue(t_queue *q);
-
+void					dump_board(t_board_node *node_addresses);
 /*
 **	Initializing data
 */

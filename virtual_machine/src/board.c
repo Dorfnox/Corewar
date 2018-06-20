@@ -6,13 +6,13 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 13:44:36 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/02 22:44:57 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/20 02:40:14 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void    create_board(t_board_node **brd, t_board_node **add, t_board_node **rev)
+void	create_board(t_board_node **brd, t_board_node **add, t_board_node **rev)
 {
 	int				i;
 	t_board_node	*tmp;
@@ -52,21 +52,35 @@ void	init_board(t_corewar *core)
 	p = -1;
 	k = 0;
 	while (++p < 4)
-	{
 		if (core->player[p].player_num)
 		{
 			j = ((++k - 1) * (MEM_SIZE / core->env.num_players));
-			push(&core->process_stack[0],
-				new_process(core,
+			push(&core->process_stack[0], new_process(core,
 					&core->player[p], core->node_addresses[j], NULL));
 			i = 0;
 			while (i < core->player[p].instruction_size)
 			{
 				instruction = &core->player[p].header.instructions[i++];
-				ft_memcpy(&core->node_addresses[j]->value, instruction, 1); // change this to core->node_addresses[j++]->value = (uint8_t)core->player[p].header.instructions[i++];
+				ft_memcpy(&core->node_addresses[j]->value, instruction, 1);
 				VIZ(draw_to_bored(core, core->player[p].player_num, j, 1));
 				++j;
 			}
 		}
+}
+
+void	dump_board(t_board_node *node_addresses)
+{
+	uint16_t		i;
+	FILE			*dumpfile;
+
+	i = -1;
+	dumpfile = fopen("corewar.dump", "w");
+	while (++i < MEM_SIZE)
+	{
+		ft_printf("%.2x", node_addresses[i].value);
+		if (i % 63 == 0 && i > 62)
+			ft_printf("\n");
+		else
+			ft_printf(" ");
 	}
 }

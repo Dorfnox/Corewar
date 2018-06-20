@@ -12,7 +12,12 @@
 
 NAME = dsm
 
-FILES = main \
+FILES = main instruction write_bytes \
+		op_add_sub_and_or_xor \
+		op_live_zjmp_fork_lfork \
+		op_st_sti \
+		op_ld_ldi_lld_lldi \
+		op_aff
 
 C_FLAGS = -Wall -Wextra -Werror
 
