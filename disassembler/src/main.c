@@ -91,8 +91,8 @@ void	write_name_and_comment_to_file(int fd, uint8_t *c)
 	write(fd, &c[4], len);
 	write(fd, "\"\n.comment \"", 12);
 	len = ft_strlen((char *)&c[140]);
-	len = len > 2048 ? 2048 : 0;
-	write(fd, &c[140], len);
+	len = len > 2048 ? 2048 : len;
+	write(fd, (char *)&c[140], len);
 	write(fd, "\"\n\n", 3);
 }
 

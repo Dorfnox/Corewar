@@ -46,21 +46,6 @@
 # define EB2 eb[2]
 # define BAD_EB eb[3]
 
-// # define ARG00 arg[0][0]
-// # define ARG01 arg[0][1]
-// # define ARG02 arg[0][2]
-// # define ARG03 arg[0][3]
-
-// # define ARG10 arg[1][0]
-// # define ARG11 arg[1][1]
-// # define ARG12 arg[1][2]
-// # define ARG13 arg[1][3]
-
-// # define ARG20 arg[2][0]
-// # define ARG21 arg[2][1]
-// # define ARG22 arg[2][2]
-// # define ARG23 arg[2][3]
-
 char			*g_filename;
 
 enum
@@ -90,10 +75,12 @@ void        	init_instruction_names(t_operation *op);
 
 uint8_t			*parse_encoding_byte(uint8_t content);
 void			write_instruction(int fd, t_operation *op);
-void			write_reg(int fd, uint8_t reg, int comma);
-void			write_dir(int fd, uint8_t *val, int len, int comma);
+void			write_reg(int fd, t_operation *op, uint8_t reg, int comma);
+uint16_t		write_dir(int fd, uint8_t *val, int len, int comma);
+uint16_t		write_indir(int fd, uint8_t *val, int comma);
 
 uint16_t		math_(int fd, t_operation *op, uint8_t *content);
+uint16_t		bitmath_(int fd, t_operation *op, uint8_t *content);
 
 uint16_t		live_(int fd, t_operation *op, uint8_t *content);
 uint16_t		zjmp_(int fd, t_operation *op, uint8_t *content);
@@ -101,5 +88,11 @@ uint16_t		fork_(int fd, t_operation *op, uint8_t *content);
 uint16_t		lfork_(int fd, t_operation *op, uint8_t *content);
 
 uint16_t		st_(int fd, t_operation *op, uint8_t *content);
+uint16_t		sti_(int fd, t_operation *op, uint8_t *content);
+
+uint16_t		ld_(int fd, t_operation *op, uint8_t *content);
+uint16_t		ldi_(int fd, t_operation *op, uint8_t *content);
+
+uint16_t		aff_(int fd, t_operation *op, uint8_t *content);
 
 #endif
