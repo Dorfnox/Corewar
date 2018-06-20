@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 17:20:09 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 01:19:10 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 05:27:41 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	sti_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
 		INVALID_PARAM(2);
 	ecb = create_ecb(tokens, len_tokens);
 	bytes = OP_SIZE + ECB_SIZE + REG_SIZE;
-	bytes += (tokens[1].subtype == REG_CODE) ? REG_SIZE : (tokens[1].subtype == DIR_CODE) ? DIR_SIZE_0 : IND_SIZE;
+	bytes += (tokens[1].subtype == REG_CODE) ? REG_SIZE : (tokens[1].subtype == DIR_CODE) ? DIR_SIZE_1 : IND_SIZE;
 	bytes += (tokens[2].subtype == DIR_CODE) ? DIR_SIZE_1 : REG_SIZE;
 	enqueue_op(ops, create_ast(op_code, ecb, bytes, tokens, len_tokens));
 }

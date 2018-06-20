@@ -43,7 +43,7 @@ void	ld_lld_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
 	if (tokens[1].subtype != REG_CODE)
 		INVALID_PARAM(1);
 	ecb = create_ecb(tokens, len_tokens);
-	bytes += OP_SIZE + ECB_SIZE + DIR_SIZE_0;
+	bytes += OP_SIZE + ECB_SIZE + REG_SIZE;
 	bytes += (tokens[0].subtype == DIR_CODE) ? DIR_SIZE_0 : REG_SIZE;
 	enqueue_op(ops, create_ast(op_code, ecb, bytes, tokens, len_tokens));
 }

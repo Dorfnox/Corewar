@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/20 02:25:11 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 05:37:59 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ void					remove_comment(char **s);
 void					create_bytecode(t_asm *assembler);
 void					write_header(int fd, t_header *header);
 void					write_ops(int fd, t_ops *ops, t_labels *labels);
-void					write_params(int fd, t_ast *operation, t_labels *labels);
+void					write_params(int fd, t_ast *operation, t_labels *labels, uint32_t bytes_so_far);
 void					write_bytes(int fd, uintmax_t num, uint8_t bytes);
 
 /*

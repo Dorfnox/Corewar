@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/19 14:01:29 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 06:25:34 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void	write_bytes(int fd, uintmax_t num, uint8_t bytes)
 		ft_putchar_fd((num & 0xFF), fd);
 }
 
-void	write_params(int fd, t_ast *operation, t_labels *labels)
+void	write_params(int fd, t_ast *operation, t_labels *labels, uint32_t bytes_so_far)
 {
 	int8_t		j;
-	int32_t		tmp;
+	uint32_t		tmp;
 	uint8_t		bytes;
 	
 	j = -1;
@@ -54,7 +54,11 @@ void	write_params(int fd, t_ast *operation, t_labels *labels)
 		else if (operation->params[j].subtype == DIR_CODE)
 		{
 			if (operation->params[j].value[1] == LABEL_CHAR)
+			{
 				tmp = labelsSearch(labels, &operation->params[j].value[2]);
+				if (tmp <= bytes_so_far)
+					tmp = (0xFFFF - (bytes_so_far - tmp - 1));
+			}
 			else
 				tmp = ft_atoi(&operation->params[j].value[1]);
 			if ((operation->op >= LIVE && operation->op <= XOR) ||
@@ -73,7 +77,9 @@ void	write_params(int fd, t_ast *operation, t_labels *labels)
 void	write_ops(int fd, t_ops *ops, t_labels *labels)
 {
 	t_ast		*operation;
+	uint16_t	bytes_so_far;
 	
+	bytes_so_far = 0;
 	while (!op_queue_is_empty(ops))
 	{
 		operation = dequeue_op(ops);
@@ -81,7 +87,8 @@ void	write_ops(int fd, t_ops *ops, t_labels *labels)
 		if (operation->ecb)
 			write_bytes(fd, operation->ecb, 1);
 		printf("Op_code: %d, ecb: %d, params %d\n", operation->op, operation->ecb, operation->len_params);
-		write_params(fd, operation, labels);
+		write_params(fd, operation, labels, bytes_so_far);
+		bytes_so_far += operation->bytes;
 		// free(operation);
 	}
 }
@@ -103,7 +110,7 @@ void	write_header(int fd, t_header *header)
 void	create_bytecode(t_asm *assembler)
 {
 	close(assembler->fd);
-	if (!(assembler->fd = open("test.cor", O_WRONLY | O_CREAT, 0666)))
+	if (!(assembler->fd = open(assembler->output_file_name, O_WRONLY | O_TRUNC | O_CREAT, 0666)))
 		asm_error(1, "Couldn't create output file");
 	write_header(assembler->fd, assembler->header);
 	write_ops(assembler->fd, assembler->ops, assembler->ops->labels);

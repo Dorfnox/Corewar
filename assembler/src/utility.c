@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 01:27:58 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 06:25:09 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,18 @@ int		is_space(char c)
 	return ((c == ' ' || c == '\t') ? (1) : (0));
 }
 
+char	*create_output_file_name(char *s)
+{
+	size_t	len;
+	char	*new_s;
+
+	len = ft_strlen(s);
+	new_s = ft_strjoin(s, "or");
+	new_s[--len] = 'c';
+	new_s[--len] = '.';
+	return new_s;
+}
+
 void	verify_input(int ac, char **av, t_asm *assembler)
 {
 	size_t	len;
@@ -43,6 +55,7 @@ void	verify_input(int ac, char **av, t_asm *assembler)
 	if ((assembler->fd = open(av[1], O_RDONLY | O_CREAT)) == -1)
 		asm_error(1, "Couldn't open file");
 	assembler->input_file_name = av[1];
+	assembler->output_file_name = create_output_file_name(av[1]);
 }
 
 void	asm_error(int error_code, char *error_message)
