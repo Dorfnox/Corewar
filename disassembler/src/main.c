@@ -19,6 +19,7 @@ int		main(int ac, char **av)
 
 	if (ac != 2)
 		D_EXIT(DIS_USAGE);
+	g_filename = NULL;
 	filename_validation(av[1]);
 	content_validation(av[1], &contents, &content_size);
 	disassemble_contents(av[1], contents, content_size);
@@ -28,6 +29,7 @@ int		main(int ac, char **av)
 void	disassembler_exit(char *message)
 {
 	message ? ft_putendl(message) : 0;
+	g_filename ? remove(g_filename) : 0;
 	exit(1);
 }
 
@@ -50,7 +52,7 @@ void	filename_validation(char *f)
 
 void	content_validation(char *f, uint8_t **c, size_t *content_size)
 {
-	*content_size = getfilecontents(f, (char **)c);
+	*content_size = getfilecontents(f, c);
 	*content_size == 0 ? FILE_ERR("is devoid of contents") : 0;
 	*content_size > (2861) ? FILE_ERR("is too big to be a valid file") : 0;
 	*content_size < (2181) ? FILE_ERR("is too small to be a valid file") : 0;
@@ -61,22 +63,22 @@ void	content_validation(char *f, uint8_t **c, size_t *content_size)
 void	disassemble_contents(char *filename, uint8_t *c, size_t content_size)
 {
 	int		fd;
-	char	fname_buff[ft_strlen(filename) - 1];
+	char	fname_buff[ft_strlen(filename)];
 	size_t	fname_len;
 
 	fname_len = ft_strlen(filename) - 1;
-	ft_strncpy(fname_buff, filename, fname_len - 1);
-	fname_buff[fname_len - 2] = 's';
-	fname_buff[fname_len - 1] = 0;
-	DB(fname_buff);
+	ft_strncpy(fname_buff + 1, filename, fname_len - 1);
+	fname_buff[0] = '.';
+	fname_buff[fname_len - 1] = 's';
+	fname_buff[fname_len] = 0;
 	fd = open(fname_buff, O_TRUNC | O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (fd == -1)
 		DIS_ERR("Failed to open file to write to");
+	g_filename = fname_buff;
 	write_name_and_comment_to_file(fd, c);
 	write_instructions_to_file(fd, &c[2192], content_size - 2192);
 	close(fd);
-	(void)c;
-	(void)content_size;
+	rename(fname_buff, fname_buff + 1);
 }
 
 void	write_name_and_comment_to_file(int fd, uint8_t *c)
@@ -94,18 +96,18 @@ void	write_name_and_comment_to_file(int fd, uint8_t *c)
 	write(fd, "\"\n\n", 3);
 }
 
-void	write_instructions_to_file(int fd, uint8_t *c, size_t content_size)
+void	write_instructions_to_file(int fd, uint8_t *c, size_t size)
 {
-	t_instruction	in[17];
+	t_operation		op[17];
 	uint16_t		i;
 
-	// init_instructions(&in);
-	(void)in;
+    ft_bzero(op, sizeof(t_operation) * 17);
+	init_operations(op);
 	i = 0;
-	write(fd, c, content_size); // Not correct
+	while (i < size)
+	{
+		if (c[i] == 0 || c[i] > 16)
+			INSTR_ERR("A wild, invalid instruction has appeared");
+		i += op[c[i]].instruct(fd, &op[c[i]], &c[i + 1]) + 1;
+	}
 }
-
-// void	init_instructions(t_instruction *in)
-// {
-// 	in[0x0b].instr = NULL;
-// }
