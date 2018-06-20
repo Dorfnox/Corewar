@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/19 16:56:59 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 02:25:11 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@
 # define USAGE					"usage: <>"
 # define BYTE_TO_FILE(x)		ft_putchar_fd(x,assembler->fd)
 # define CAPACITY				30
+
+# define MALLOC_ERROR()			asm_error(1, "Issue encounted while performing malloc.\n")
+# define ERROR_MSG(x)			syntax_error_wihout_token(assembler, line, x);
+# define ERROR_MSG_TOKEN(x)		syntax_error_with_token(assembler, line, x, current_token->value);
+# define INVALID_PARAM(x)		syntax_error_with_token(assembler, line, PARAM_ERROR_INCORRECT, tokens[x].value);
 
 
 /*
@@ -80,6 +85,8 @@
 # define HEADER_NAME_REPEATED		"Token \".name\" repeated"
 # define HEADER_COMMENT_REPEATED	"Token \".comment\" repeated"
 # define HEADER_COMMENT_FIRST		"Token \".comment\" found before \".name\" repeated"
+
+# define OPERATION_LABEL_DOUBLE		"Expected an operation after a label"
 
 # define PARAM_ERROR_ABSENT			"Expected a parameter"
 # define PARAM_ERROR_INCORRECT		"Incorrect parameter type"
@@ -145,7 +152,7 @@ typedef struct			s_asm
 	char				*output_file_name;
 	t_header			*header;	
 	t_ops				*ops;
-	void				(*op_handler[17])(t_input *line, t_ops *ops, uint8_t opcode);
+	void				(*op_handler[17])(struct s_asm *assembler, t_input *line, t_ops *ops, uint8_t opcode);
 }						t_asm;
 
 /*
@@ -158,7 +165,7 @@ void					verify_input(int ac, char **av, t_asm *assembler);
 
 
 void					parse_input(t_asm *assembler);
-void					parse_operations(t_asm *assembler, t_input *line, t_token *current_token, char *label_carry);
+void					parse_operations(t_asm *assembler, t_input *line, t_token *current_token, char **label_carry);
 void					parse_header(t_asm *assembler, t_input *line, t_token *current_token, int *name_set, int *comment_set);
 
 /*
@@ -177,18 +184,18 @@ void					remove_label_char(char **s);
 
 void					init_op_handler(t_asm *assembler);
 uint8_t					compare_to_ops(char *s);
-void					unknown_(t_input *line, t_ops *ops, uint8_t op_code);
-void					live_(t_input *line, t_ops *ops, uint8_t op_code);
-void					ld_lld_(t_input *line, t_ops *ops, uint8_t op_code);
-void					st_(t_input *line, t_ops *ops, uint8_t op_code);
-void					add_sub_(t_input *line, t_ops *ops, uint8_t op_code);
-void					and_or_xor_(t_input *line, t_ops *ops, uint8_t op_code);
-void					zjump_fork_lfork_(t_input *line, t_ops *ops, uint8_t op_code);
-void					ldi_lldi_(t_input *line, t_ops *ops, uint8_t op_code);
-void					sti_(t_input *line, t_ops *ops, uint8_t op_code);
-void					aff_(t_input *line, t_ops *ops, uint8_t op_code);
+void					unknown_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+void					live_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+void					ld_lld_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+void					st_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+void					add_sub_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+void					and_or_xor_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+void					zjump_fork_lfork_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+void					ldi_lldi_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+void					sti_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+void					aff_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
 
-t_token					*get_params(t_input *line, uint8_t len_tokens);
+t_token					*get_params(t_asm *assembler, t_input *line, uint8_t len_tokens);
 uint8_t					compare_to_params(char *s);
 uint8_t					verify_if_register(char *s);
 uint8_t					verify_if_direct(char *s);
@@ -230,7 +237,7 @@ uint8_t					op_queue_is_empty(t_ops *queue);
 
 size_t					hash(char *label);
 t_labels				*labelsInit(size_t capacity);
-int8_t					labelsInsert(t_labels *dict, char *key, uint32_t byte_start);
+void					labelsInsert(t_labels *dict, char *key, uint32_t byte_start);
 uint32_t				labelsSearch(t_labels *dict, char *key);
 
 #endif

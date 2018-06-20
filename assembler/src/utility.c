@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/19 17:04:43 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 01:27:58 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	syntax_error_with_token(t_asm *assembler, t_input *line, char *error_message, char *token_value)
 {
-	printf(BIWHITE "%s - %zu:%zu: " BIRED "error: " BIWHITE "%s\n" COLOR_OFF, assembler->input_file_name, line->line_n, line->index + 1, error_message);
+	printf(BIWHITE "%s:%zu:%zu: " BIRED "error: " BIWHITE "%s\n" COLOR_OFF, assembler->input_file_name, line->line_n, line->index + 1, error_message);
 	printf("\tTokenized value:\t%s\n", token_value);
 	printf(RED "\t\t\t\t^\n" COLOR_OFF);
 	exit(EXIT_FAILURE);
@@ -22,7 +22,7 @@ void	syntax_error_with_token(t_asm *assembler, t_input *line, char *error_messag
 
 void	syntax_error_without_token(t_asm *assembler, t_input *line, char *error_message)
 {
-	printf("%s - %zu:%zu: " RED "error: " COLOR_OFF "%s\n", assembler->input_file_name, line->line_n, line->index + 1, error_message);
+	printf("%s:%zu:%zu: " RED "error: " COLOR_OFF "%s\n", assembler->input_file_name, line->line_n, line->index + 1, error_message);
 	exit(EXIT_FAILURE);
 }
 
@@ -42,6 +42,7 @@ void	verify_input(int ac, char **av, t_asm *assembler)
 		asm_error(1, USAGE);
 	if ((assembler->fd = open(av[1], O_RDONLY | O_CREAT)) == -1)
 		asm_error(1, "Couldn't open file");
+	assembler->input_file_name = av[1];
 }
 
 void	asm_error(int error_code, char *error_message)
@@ -56,8 +57,10 @@ t_asm	*init_asm(void)
 {
 	t_asm *new_asm;
 
-	new_asm = (t_asm *)ft_memalloc(sizeof(t_asm));
-	new_asm->header = (t_header *)ft_memalloc(sizeof(t_header));
+	if (!(new_asm = (t_asm *)ft_memalloc(sizeof(t_asm))))
+		MALLOC_ERROR();
+	if (!(new_asm->header = (t_header *)ft_memalloc(sizeof(t_header))))
+		MALLOC_ERROR();
 	ft_memset(new_asm->header, 0, sizeof(new_asm->header));
 	new_asm->header->magic = COREWAR_EXEC_MAGIC;
 	new_asm->ops = init_op_queue();

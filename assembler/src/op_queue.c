@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:11:57 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/10 05:52:26 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 01:28:24 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_ops		*init_op_queue(void)
 	t_ops	*new_queue;
 
 	if (!(new_queue = (t_ops *)ft_memalloc(sizeof(t_ops))))
-		asm_error(1, "Malloc error");
+		MALLOC_ERROR();
 	new_queue->labels = labelsInit(CAPACITY);
 	new_queue->first = NULL;
 	new_queue->last = NULL;
@@ -58,7 +58,7 @@ t_ast		*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params, uint
 	t_ast	 *node;
 
 	if (!(node = (t_ast *)ft_memalloc(sizeof(t_ast))))
-		asm_error(1, "Malloc error");
+		MALLOC_ERROR();
 	node->op = op;
 	node->ecb = ecb;
 	node->bytes = bytes;

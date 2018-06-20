@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/19 17:05:52 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 02:43:11 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,26 @@ void	parse_header(t_asm *assembler, t_input *line, t_token *current_token, int *
 		syntax_error_with_token(assembler, line, UNEXPECTED_TOKEN, current_token->value);
 }
 
-void	parse_operations(t_asm *assembler, t_input *line, t_token *current_token, char *label_carry)
+void	parse_operations(t_asm *assembler, t_input *line, t_token *current_token, char **label_carry)
 {
 	if (current_token->type == LABEL)
 	{
-		if (label_carry != NULL)
-		syntax_error_with_token(assembler, line, HEADER_VALUE_INCOMPLETE, current_token->value);
-			asm_error(1, "Expected an op, stupid\n");
-		label_carry = current_token->value;
+		if (*label_carry != NULL)
+			syntax_error_with_token(assembler, line, OPERATION_LABEL_DOUBLE, current_token->value);
+		*label_carry = ft_strdup(current_token->value);
 		current_token = get_next_token(line);
 	}
 	if (current_token->type == OPERATION)
 	{
-		if (label_carry != NULL)
-			labelsInsert(assembler->ops->labels, label_carry, assembler->ops->total_bytes + 1);
-		assembler->op_handler[current_token->subtype](line, assembler->ops, current_token->subtype);
+		if (*label_carry != NULL)
+		{
+			labelsInsert(assembler->ops->labels, *label_carry, assembler->ops->total_bytes + 1);
+			ft_strdel(label_carry);
+		}
+		assembler->op_handler[current_token->subtype](assembler, line, assembler->ops, current_token->subtype);
 	}
 	else if (current_token->type != EMPTY)
-		asm_error(1, ft_str128(2, "Invalid syntax in line ", ft_itoa(line->line_n)));
+		syntax_error_with_token(assembler, line, UNEXPECTED_TOKEN, current_token->value);
 }
 
 void	read_file(t_asm *assembler, t_input *line)
@@ -93,17 +95,14 @@ void	read_file(t_asm *assembler, t_input *line)
 		remove_comment(&line->s);
 		ft_bzero(&current_token, sizeof(current_token));
 		line->len = ft_strlen(line->s);
-		printf("len: %zu\n", line->len);
+		// printf("len: %zu\n", line->len);
 		current_token = get_next_token(line);
 		if (!name_set || !comment_set)
 			parse_header(assembler, line, current_token, &name_set, &comment_set);
 		else
-			parse_operations(assembler, line, current_token, label_carry);
+			parse_operations(assembler, line, current_token, &label_carry);
 		line->line_n++;
 		line->index = 0;
-		// ft_bzero((void *)line, sizeof(t_input));
-		// if (line->s)
-		// 	ft_strclr(line->s);
 	}
 }
 
@@ -114,9 +113,7 @@ void		parse_input(t_asm *assembler)
 	line = (t_input *)ft_memalloc(sizeof(t_input));
 	line->line_n = 1;
 	read_file(assembler, line);
-	// parse_header(assembler, line);
-	printf("Name: %s, Header: %s\n", assembler->header->prog_name, assembler->header->comment);
-	// parse_operations(assembler, line);
+	// printf("Name: %s, Header: %s\n", assembler->header->prog_name, assembler->header->comment);
 	assembler->header->prog_size = assembler->ops->total_bytes;
 	free(line);
 }
