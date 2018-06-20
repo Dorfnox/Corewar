@@ -10,32 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar.h"
+#include "disassembler.h"
 
 /*
-**	0x04 - ADD
+**	Math - takes reg reg reg
 **	- - - - - - - - - -
-**	Takes 3 registers. Adds content of first two, and stores it in reg 3
+**	Add, Sub, XOR, OR, AND
 */
 
-void		add_(t_corewar *core, t_process *process)
+uint16_t	math_(int fd, t_operation *op, uint8_t *content)
 {
-	uint32_t	additive_result;
+	uint8_t	*eb;
 
-	(void)core;
-	if (!parse_encoding_byte(process) ||
-		EB0 != REGISTER || EB1 != REGISTER || EB2 != REGISTER)
-	{
-		move_pc_by_encoding_byte(process, 0, 3);
-		return ;
-	}
-	if (!parse_arguments(process, 0))
-		return ;
-	additive_result = smash_bytes(REG[ARG00]);
-	additive_result += smash_bytes(REG[ARG10]);
-	REG[ARG20][0] = (uint8_t)(additive_result >> 24);
-	REG[ARG20][1] = (uint8_t)(additive_result >> 16);
-	REG[ARG20][2] = (uint8_t)(additive_result >> 8);
-	REG[ARG20][3] = (uint8_t)(additive_result >> 0);
-	process->carry = !smash_bytes(REG[ARG20]);
+	eb = parse_encoding_byte(*(content++));
+	if (BAD_EB || EB0 != REGISTER || EB1 != REGISTER || EB2 != REGISTER)
+		INSTR_ERR(ft_str128(2, op->name, " -- invalid encoding byte"));
+	if (content[0] > REG_NUMBER || content[0] < 1)
+		INSTR_ERR(ft_str128(2, op->name, " -- arg 1 is not a valid register"));
+	if (content[1] > REG_NUMBER || content[1] < 1)
+		INSTR_ERR(ft_str128(2, op->name, " -- arg 2 is not a valid register"));
+	if (content[2] > REG_NUMBER || content[2] < 1)
+		INSTR_ERR(ft_str128(2, op->name, " -- arg 3 is not a valid register"));
+	write_instruction(fd, op);
+	write_reg(fd, content[0], 1);
+	write_reg(fd, content[1], 1);
+	write_reg(fd, content[2], 0);
+	return (4);
 }

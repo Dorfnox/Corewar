@@ -278,8 +278,6 @@ void					init_player_processes(t_corewar *core);
 t_process				*new_process(t_corewar *core,
 							t_player *p, t_board_node *b, t_process *cpy);
 void					insert_process(t_corewar *c, t_stack *s, t_process *p);
-void					insert_process_at_bottom(t_corewar *c,
-							t_stack *s, t_process *p);
 
 void					push_process_cursor(t_corewar *core, t_process *process);
 void					pop_process_cursor(t_corewar *core, t_process *process);
@@ -364,7 +362,7 @@ uint32_t				read_from_board(t_board_node *board, uint8_t bytes);
 uint8_t					parse_encoding_byte(t_process *process);
 uint8_t					parse_arguments(t_process *process, uint8_t read_two_bytes);
 void					move_pc_by_encoding_byte(t_process *process,
-							uint8_t read_two_bytes);
+							uint8_t read_two_bytes, uint8_t args);
 uint32_t				smash_bytes(uint8_t *reg);
 uint8_t					*unsmash_bytes(uint32_t nbr);
 

@@ -60,20 +60,6 @@ uint8_t		parse_arguments(t_process *process, uint8_t read_two_bytes)
 **	Returns 1 = success, 0 = FAILURE
 */
 
-// uint8_t		parse_encoding_byte(t_process *process)
-// {
-// 	uint8_t encoding_byte;
-
-// 	encoding_byte = process->curr_pc->next->value;
-// 	process->curr_pc = process->curr_pc->next->next;
-// 	if (encoding_byte > 0xF8 || (encoding_byte & 0b11) > 0)
-// 		return (0);
-// 	process->encoding_byte[0] = (encoding_byte >> 6) & 0b11;
-// 	process->encoding_byte[1] = (encoding_byte >> 4) & 0b11;
-// 	process->encoding_byte[2] = (encoding_byte >> 2) & 0b11;
-// 	return (1);
-// }
-
 uint8_t		parse_encoding_byte(t_process *process)
 {
 	uint8_t encoding_byte;
@@ -82,7 +68,7 @@ uint8_t		parse_encoding_byte(t_process *process)
 	process->curr_pc = process->curr_pc->next->next;
 	process->encoding_byte[0] = (encoding_byte >> 6) & 0b11;
 	process->encoding_byte[1] = (encoding_byte >> 4) & 0b11;
-	process->encoding_byte[2] = (encoding_byte >> 2) & 0b11;
+	process->encoding_byte[2] = (encoding_byte >> 2) & 0b11; //error
 	return (!(encoding_byte > 0xF8 || (encoding_byte & 0b11) > 0));
 }
 
@@ -90,12 +76,12 @@ uint8_t		parse_encoding_byte(t_process *process)
 **	Processes an encoding byte and moves the pc
 */
 
-void		move_pc_by_encoding_byte(t_process *process, uint8_t read_two_bytes)
+void		move_pc_by_encoding_byte(t_process *process, uint8_t read_two_bytes, uint8_t args)
 {
 	uint8_t		i;
 
 	i = -1;
-	while (++i < 3)
+	while (++i < args)
 	{
 		if (process->encoding_byte[i] == REGISTER)
 			process->curr_pc = process->curr_pc->next;

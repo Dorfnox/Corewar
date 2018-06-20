@@ -33,7 +33,7 @@ void		sti_(t_corewar *core, t_process *process)
 	if (!parse_encoding_byte(process) ||
 		EB0 != REGISTER || EB1 == 0 || EB2 == 0 || EB2 == INDIRECT)
 	{
-		move_pc_by_encoding_byte(process, 1);
+		move_pc_by_encoding_byte(process, 1, 3);
 		return ;
 	}
 	if (!parse_arguments(process, 1))

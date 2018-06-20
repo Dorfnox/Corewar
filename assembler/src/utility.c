@@ -6,11 +6,25 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/17 17:53:31 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/19 17:04:43 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "assembler.h"
+
+void	syntax_error_with_token(t_asm *assembler, t_input *line, char *error_message, char *token_value)
+{
+	printf(BIWHITE "%s - %zu:%zu: " BIRED "error: " BIWHITE "%s\n" COLOR_OFF, assembler->input_file_name, line->line_n, line->index + 1, error_message);
+	printf("\tTokenized value:\t%s\n", token_value);
+	printf(RED "\t\t\t\t^\n" COLOR_OFF);
+	exit(EXIT_FAILURE);
+}
+
+void	syntax_error_without_token(t_asm *assembler, t_input *line, char *error_message)
+{
+	printf("%s - %zu:%zu: " RED "error: " COLOR_OFF "%s\n", assembler->input_file_name, line->line_n, line->index + 1, error_message);
+	exit(EXIT_FAILURE);
+}
 
 int		is_space(char c)
 {

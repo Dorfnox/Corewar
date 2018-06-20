@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/17 16:16:03 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/17 16:42:52 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/19 12:35:32 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ uint8_t	compare_to_ops(char *s)
 		return (OR);
 	else if (!ft_strcmp(s, "xor"))
 		return (XOR);
-	else if (!ft_strcmp(s, "zjump"))
+	else if (!ft_strcmp(s, "zjmp"))
 		return (ZJUMP);
 	else if (!ft_strcmp(s, "ldi"))
 		return (LDI);
