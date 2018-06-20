@@ -39,7 +39,7 @@ void		lldi_(t_corewar *core, t_process *process)
 	if (!parse_encoding_byte(process) ||
 		EB0 == 0 || EB1 == 0 || EB1 == INDIRECT || EB2 != REGISTER)
 	{
-		move_pc_by_encoding_byte(process, 1);
+		move_pc_by_encoding_byte(process, 1, 3);
 		return ;
 	}
 	if (!parse_arguments(process, 1))

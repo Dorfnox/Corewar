@@ -48,10 +48,6 @@ void		terminate_players(t_corewar *core)
 			}
 		}
 	}
-	mvwprintw(core->ncur.playa[0], 2, 1, "Process cnt: %4u", core->player[0].num_of_processes); // delete
-	mvwprintw(core->ncur.playa[1], 2, 1, "Process cnt: %4u", core->player[1].num_of_processes); // delete
-	wrefresh(core->ncur.playa[0]); // delete
-	wrefresh(core->ncur.playa[1]); // delete
 }
 
 /*
