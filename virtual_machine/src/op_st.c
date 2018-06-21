@@ -41,7 +41,7 @@ void		st_(t_corewar *core, t_process *process)
 			location = core->node_addresses_rev[index];
 		else
 			location = core->node_addresses[index];
+		write_number_to_board(location, REG[ARG00]);
+		VIZ(draw_to_bored(core, process->player->player_num, location->index, 4));
 	}
-	write_number_to_board(location, REG[ARG00]);
-	VIZ(draw_to_bored(core, process->player->player_num, location->index, 4));
 }

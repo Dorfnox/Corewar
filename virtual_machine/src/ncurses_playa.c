@@ -42,7 +42,6 @@ void		print_process_info(t_ncurses *n, t_process *p)
 	mvwprintw(win, 2, 1, "Process cnt: %4u", p->player->num_of_processes);
 	mvwprintw(win, 3, 1, "Process id:  %4u", p->id);
 	mvwaddstr(win, 4, 1, "--------------");
-	mvwprintw(win, 5, 1, "current pc: %4u, board value: %.2x",
-		p->curr_pc->index, p->curr_pc->value);
+	mvwprintw(win, 5, 1, "Last Live:   %8u", p->player->last_live);
 	wrefresh(win);
 }

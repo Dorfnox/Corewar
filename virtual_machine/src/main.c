@@ -26,5 +26,7 @@ int		main(int argc, char **argv)
 	init_board(&core);
 	core.flag.viz ? loop_viz(&core) : loop(&core);
 	terminate_ncurses(&core);
+	while (1)
+		;
 	return (0);
 }

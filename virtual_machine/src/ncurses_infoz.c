@@ -40,29 +40,23 @@ void		init_ncurses_infoz(t_corewar *core)
 
 void		print_game_info(t_corewar *core)
 {
-	t_node		*node;
-	t_process	*p;
-	uint8_t		i;
+	// t_node		*node;
+	// t_process	*p;
+	// uint8_t		i;
 
-	mvwprintw(core->ncur.infoz, 2, 1, "Cycle: %u", core->env.cycle);
-	if (core->env.cycle > 7410)
-	{
-		node = core->process_stack[(core->env.cycle + 1) %
-							PROCESS_STACK_LEN].top;
-		i = 3;
-		while (node)
-		{
-			p = node->content;
-			mvwprintw(core->ncur.infoz, i++, 1,
-					"pl: %u, id: %3u, inst: %2u, x:%3u, y:%2u",
-				p->player->player_num,
-				p->id,
-				p->curr_pc->value,
-				p->curr_pc->x,
-				p->curr_pc->y);
-			node = node->next;
-		}
-		mvwprintw(core->ncur.infoz, i++, 1, "-------------------------------");
-	}
+	mvwprintw(core->ncur.infoz, 2, 1, "Current Cycle:\n\t%6u\n", core->env.cycle);
+	wprintw(core->ncur.infoz, "Cycle to die:\n\t%4u\nCountdown:\n\t%4u", core->env.cycle_to_die, core->env.cycle_counter);
+	wprintw(core->ncur.infoz, "Total Processes:", core->env.cycle_to_die, core->env.cycle_counter);
+	// node = core->process_stack[(core->env.cycle + 1) % PROCESS_STACK_LEN].top;
+	// 	i = 3;
+	// 	while (node)
+	// 	{
+	// 		p = node->content;
+	// 		mvwprintw(core->ncur.infoz, i++, 1,
+	// 				"pl: %u, id: %3u, inst: %2u, x:%3u, y:%2u",
+	// 		node = node->next;
+	// 	}
+	// 	mvwprintw(core->ncur.infoz, i++, 1, "-------------------------------");
+	// }
 	wrefresh(core->ncur.infoz);
 }

@@ -27,6 +27,7 @@ void		live_(t_corewar *core, t_process *process)
 	i = -1;
 	player_num = 0;
 	process->curr_pc = process->curr_pc->next;
+	process->last_live = core->env.cycle;
 	while (++i < 4)
 	{
 		player_num <<= 8;
@@ -38,8 +39,8 @@ void		live_(t_corewar *core, t_process *process)
 	player_num = ~player_num;
 	core->player[player_num].num_live++;
 	core->player[player_num].last_live = core->env.cycle;
-	core->env.last_cycle_when_live_was_called = core->env.cycle;
 	core->env.last_player_to_call_live = player_num + 1;
+	core->env.last_cycle_when_live_was_called = core->env.cycle;
 	core->env.nbr_live -= (core->env.nbr_live == 0) ? 0 : 1;
 	core->env.total_lives++;
 }

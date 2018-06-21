@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/30 16:28:29 by bpierce          ###   ########.fr        #
+#    Updated: 2018/06/20 15:23:18 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,8 +37,7 @@ FILES = main \
 		op_lld \
 		op_lldi \
 		op_lfork \
-		op_aff \
-		bonus
+		op_aff
 
 C_FLAGS = -Wall -Wextra -Werror
 NCURSES = -L/usr/lib -lncurses
@@ -75,7 +74,7 @@ all: $(NAME)
 
 $(NAME): $(LIB_SRC) $(O_SRC)
 	@echo "$(YELLOW_BOLD)Compiling executable... $@$(END_COLOUR)"
-	@gcc $(C_FLAGS) $(NCURSES) $^ -o $@
+	@gcc -fsanitize=address $(C_FLAGS) $(NCURSES) $^ -o $@
 	@echo
 
 $(O_LOC)%.o: $(C_LOC)%.c $(HEADERS)

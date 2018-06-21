@@ -23,8 +23,8 @@ void			init_flag_queue(t_queue *q)
 	add_flag(q, "-dump", flag_dump);
 	add_flag(q, "-v", flag_viz);
 	add_flag(q, "-viz", flag_viz);
-	add_flag(q, "-e", epilepsy_mode);
-	add_flag(q, "-epilepsy", epilepsy_mode);
+	add_flag(q, "-s", flag_speed);
+	add_flag(q, "-speed", flag_speed);
 }
 
 /*
@@ -40,7 +40,7 @@ void			add_flag(t_queue *q, char *flag, void *flag_func)
 	q_item = malloc(sizeof(t_flag_queue));
 	if (!q_item)
 		corewar_error("Failed to malloc in add_flag\n", 1);
-	q_item->flag = flag;
+	q_item->flag = ft_strdup(flag);
 	q_item->flag_func = flag_func;
 	enqueue(q, q_item);
 }
@@ -89,6 +89,12 @@ void			*search_flag_queue(t_node *n, char *flag)
 
 void			clean_flag_queue(t_queue *q)
 {
+	t_flag_queue *q_item;
+
 	while (!isemptyq(q))
-		free(dequeue(q));
+	{
+		q_item = dequeue(q);
+		free(q_item->flag);
+		free(q_item);
+	}
 }

@@ -46,7 +46,8 @@ void	init_ncurses_colors(void)
 	init_pair(P3B, COLOR_BLACK, COLOR_RED);
 	init_pair(P4B, COLOR_BLACK, COLOR_MAGENTA);
 	init_pair(DF, COLOR_WHITE, COLOR_BLACK);
-	init_pair(INFOZ, COLOR_BLACK, COLOR_GREEN);
+	init_color(COLOR_WHITE, 1000, 1000, 1000);
+	init_pair(INFOZ, COLOR_BLACK, COLOR_WHITE);
 }
 
 void	init_ncurses_character_array(t_corewar *c)

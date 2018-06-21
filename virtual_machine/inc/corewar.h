@@ -27,6 +27,12 @@
 # define MALL_ERR_MSG(a) ft_str256(2, "Failure to malloc: ", (a))
 # define MALL_ERR(a, b) !(a) ? corewar_error(MALL_ERR_MSG(b), 1) : 1
 
+# define PLAYA core->player[p_num - 1]
+
+# define PLAYA_MUST_DIE core->player[i].last_live < last
+# define PLAYA_NEEDS_TO_DIE	(!core->player[i].last_live || (PLAYA_MUST_DIE))
+# define PLAYA_NEEDS_A_KILLING (!core->player[i].dead && (PLAYA_NEEDS_TO_DIE))
+
 # define PROCESS_STACK_LEN 1024
 # define PROCESS_STACK core->process_stack
 # define PROCESS_STACK_P1 core->process_stack[3]
@@ -78,7 +84,7 @@ enum
 	P3B,
 	P4B,
 	DF,
-	INFOZ
+	INFOZ,
 };
 
 enum
@@ -103,7 +109,7 @@ typedef struct			s_flag
 {
 	uint8_t				dump:1;
 	uint8_t				viz:1;
-	uint8_t				epilepsy:1;
+	uint8_t				speed:1;
 }						t_flag;
 
 /*
@@ -179,7 +185,8 @@ typedef struct			s_process
 {
 	t_player			*player;
 	t_board_node		*curr_pc;
-	uint64_t			id;
+	uint32_t			id;
+	uint32_t			last_live;
 	uint8_t				encoding_byte[3];
 	uint8_t				args[3][4];
 	uint8_t				carry;
@@ -207,6 +214,7 @@ typedef struct			s_corewar
 */
 
 void					corewar_error(char *message, int return_value);
+void					debug(char *message);
 
 /*
 **	Flag handling
@@ -228,6 +236,7 @@ void					retrieve_data(t_corewar *core, char **argv);
 unsigned int			flag_dump(t_corewar *core, char ***argv);
 unsigned int			flag_n(t_corewar *core, char ***argv);
 unsigned int			flag_viz(t_corewar *core, char ***argv);
+unsigned int			flag_speed(t_corewar *core, char ***argv);
 unsigned int			add_player_file(t_corewar *core, char *filename);
 uint64_t				get_max_cycles(uint64_t init);
 
@@ -371,10 +380,12 @@ uint8_t					*unsmash_bytes(uint32_t nbr);
 */
 
 uint8_t					cycle_handle(t_corewar *core);
-void					terminate_players(t_corewar *core);
-void					terminate_player_processes(t_stack *stk,
-							uint8_t pnum, uint16_t i);
-void					game_over(t_corewar *core);
+uint8_t					terminate_players(t_corewar *core);
+void					terminate_processes(t_corewar *core,
+							t_stack *stk, uint32_t last);
+void					terminate_process(t_corewar *core, t_stack *stk);
+// void					terminate_cursors(t_board_node *node, uint32_t last);
+uint8_t					game_over(t_corewar *core);
 
 /*
 **	Bonus

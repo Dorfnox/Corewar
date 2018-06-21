@@ -22,6 +22,8 @@
 
 void		aff_(t_corewar *core, t_process *process)
 {
+	char	c;
+
 	(void)core;
 	if (!parse_encoding_byte(process) ||
 		EB0 != REGISTER || EB1 || EB2)
@@ -31,5 +33,9 @@ void		aff_(t_corewar *core, t_process *process)
 	}
 	if (!parse_arguments(process, 0))
 		return ;
-	ft_putchar((int)smash_bytes(process->args[0]) % 256);
+	c = (int)smash_bytes(process->args[0]) % 256;
+	if (core->flag.viz)
+		mvwprintw(core->ncur.bored, 0, 0, "%c <<< AFF", c);
+	else
+		ft_putchar(c);
 }

@@ -89,3 +89,22 @@ unsigned int	flag_viz(t_corewar *core, char ***argv)
 		corewar_error("You can't have two visualizers, silly!", 1);
 	return ((core->flag.viz = 1));
 }
+
+unsigned int	flag_speed(t_corewar *core, char ***argv)
+{
+	char		**args;
+	uint32_t	speed;
+
+	(void)argv;
+	args = ++(*argv);
+	if (core->flag.speed)
+		corewar_error("You can't have two speeds, silly!", 1);
+	if (!*args)
+		corewar_error("Flag 's' or 'speed' needs an argument", 1);
+	speed = ft_atoi(*args);
+	core->env.game_speed = !speed ? 1 : speed;
+	speed = core->env.game_speed;
+	core->env.game_speed = speed > 100 ? 100 : speed;
+	core->flag.speed = 1;
+	return (1);
+}
