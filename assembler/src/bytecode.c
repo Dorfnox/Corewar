@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 06:25:34 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 17:22:49 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	write_params(int fd, t_ast *operation, t_labels *labels, uint32_t bytes_so_
 				tmp = labelsSearch(labels, &operation->params[j].value[2]);
 				if (tmp <= bytes_so_far)
 					tmp = (0xFFFF - (bytes_so_far - tmp - 1));
+				else
+					tmp -= bytes_so_far;
 			}
 			else
 				tmp = ft_atoi(&operation->params[j].value[1]);
