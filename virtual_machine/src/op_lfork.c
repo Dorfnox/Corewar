@@ -41,5 +41,6 @@ void		lfork_(t_corewar *core, t_process *process)
 		&core->process_stack[(core->env.cycle + new_p->op->wait_time)
 						% PROCESS_STACK_LEN], new_p);
 	process->player->num_of_processes++;
+	core->env.total_processes++;
 	process->curr_pc = process->curr_pc->next->next->next;
 }

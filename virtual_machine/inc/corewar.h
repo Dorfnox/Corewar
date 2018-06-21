@@ -83,8 +83,11 @@ enum
 	P2B,
 	P3B,
 	P4B,
-	DF,
 	INFOZ,
+	DF,
+	DF_BAR,
+	ORANGE_STUFF,
+	ORANGE_BAR,
 };
 
 enum
@@ -125,6 +128,7 @@ typedef struct			s_env
 	uint32_t			cycle_delta;
 	uint32_t			nbr_live;
 	uint32_t			total_lives;
+	uint32_t			total_processes;
 	uint32_t			max_checks;
 	uint32_t			dump;
 	uint32_t			last_cycle_when_live_was_called;
@@ -267,7 +271,7 @@ void					terminate_ncurses(t_corewar *core);
 void    				draw_to_bored(t_corewar *core,
 							uint8_t player_num, uint16_t idx, uint8_t len);
 
-void					print_process_info(t_ncurses *n, t_process *p);
+void					print_player_info(t_ncurses *n, t_process *p);
 void					print_game_info(t_corewar *core);
 
 /*

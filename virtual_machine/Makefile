@@ -6,7 +6,7 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/06/20 15:23:18 by bpierce          ###   ########.fr        #
+#    Updated: 2018/06/20 21:29:32 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,7 @@ all: $(NAME)
 
 $(NAME): $(LIB_SRC) $(O_SRC)
 	@echo "$(YELLOW_BOLD)Compiling executable... $@$(END_COLOUR)"
-	@gcc -fsanitize=address $(C_FLAGS) $(NCURSES) $^ -o $@
+	@gcc $(C_FLAGS) $(NCURSES) $^ -o $@
 	@echo
 
 $(O_LOC)%.o: $(C_LOC)%.c $(HEADERS)

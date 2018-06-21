@@ -46,7 +46,7 @@ void	loop_viz(t_corewar *core)
 		{
 			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
 			pop_process_cursor(core, process);
-			print_process_info(&core->ncur, process);
+			print_player_info(&core->ncur, process);
 			process->op->instruct(core, process);
 			board_value = ZERO_AT_BAD_INSTR(process->curr_pc->value);
 			process->op = &core->op[board_value];

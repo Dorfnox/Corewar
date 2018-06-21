@@ -15,8 +15,13 @@
 void	init_ncurses_bored(t_corewar *core)
 {
 	uint16_t	i;
+    WINDOW      *border;
 
-	core->ncur.bored = newwin(64, (64 * 2) + 63, 2, 2);
+    border = newwin(66, (64 * 2) + 67, 0, 0);
+    wattron(border, COLOR_PAIR(ORANGE_STUFF));
+    box(border, 0, 0);
+    wrefresh(border);
+	core->ncur.bored = newwin(64, (64 * 2) + 63, 1, 2);
 	MALL_ERR(core->ncur.bored, "Failed to create ncurses board");
 	wattron(core->ncur.bored, COLOR_PAIR(DF));
 	i = -1;

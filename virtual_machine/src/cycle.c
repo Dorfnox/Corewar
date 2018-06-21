@@ -106,43 +106,44 @@ void		terminate_process(t_corewar *core, t_stack *stk)
 
 	tmp = pop(stk);
 	tmp->player->num_of_processes--;
+	core->env.total_processes--;
 	VIZ(pop_process_cursor(core, tmp));
 	free(tmp);
 }
 
 uint8_t		game_over(t_corewar *core)
 {
-	WINDOW		*winn;
+	WINDOW		*win;
 
 	if (core->flag.viz)
 	{
 		print_game_info(core);
-		MALL_ERR((winn = newwin(10, 141, 28, 26)), "Failed to make new win");
-		wattron(winn, COLOR_PAIR(P4B));
-		box(winn, 0, 0);
+		MALL_ERR((win = newwin(10, 141, 28, 26)), "Failed to make new win");
+		wattron(win, COLOR_PAIR(P4));
+		box(win, 0, 0);
 		if (core->env.last_player_to_call_live)
 		{
-			wattron(winn, COLOR_PAIR(P1));
-			mvwprintw(winn, 3, 50, "Player # %u - %s is the WINNER!", core->env.last_player_to_call_live, 
+			wattron(win, COLOR_PAIR(P1));
+			mvwprintw(win, 3, 50, "Player # %u - %s is the winER!", core->env.last_player_to_call_live, 
 					core->player[core->env.last_player_to_call_live - 1].header.prog_name);
 			ft_str128(1, core->player[core->env.last_player_to_call_live - 1].header.comment);
-			mvwprintw(winn, 5, 65 - (ft_strlen(ft_str128(0)) / 2), "-- \"%s\"", ft_str128(0));
+			mvwprintw(win, 5, 65 - (ft_strlen(ft_str128(0)) / 2), "-- \"%s\"", ft_str128(0));
 		}
 		else
 		{
-			wattron(winn, COLOR_PAIR(P3));
-			mvwprintw(winn, 3, 50, "Losers");
-			mvwprintw(winn, 4, 50, "No one called live");
+			wattron(win, COLOR_PAIR(P3));
+			mvwprintw(win, 3, 50, "Losers");
+			mvwprintw(win, 4, 50, "No one called live");
 		}
-		mvwprintw(winn, 7, 1, "Thanks for playing Corewarz with us.");
-		mvwprintw(winn, 8, 1, "bpierce, dmontoya, kmckee, rzarate");
-		wrefresh(winn);
+		mvwprintw(win, 7, 1, "Thanks for playing Corewarz with us.");
+		mvwprintw(win, 8, 1, "bpierce, dmontoya, kmckee, rzarate");
+		wrefresh(win);
 		key_hit(core);
 	}
 	else
 	{
 		if (core->env.last_player_to_call_live)
-			ft_pflite("Player # %u - %s is the WINNER!\n--- \"%s\"\n", core->env.last_player_to_call_live, 
+			ft_pflite("Player # %u - %s is the winER!\n--- \"%s\"\n", core->env.last_player_to_call_live, 
 					core->player[core->env.last_player_to_call_live - 1].header.prog_name,
 					core->player[core->env.last_player_to_call_live - 1].header.comment);
 		else

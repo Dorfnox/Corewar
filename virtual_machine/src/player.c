@@ -27,7 +27,6 @@ void			add_new_player(t_corewar *core, char *filename, uint8_t p_num)
 			p_num, PLAYA.filename, filename);
 		corewar_error(NULL, 1);
 	}
-
 	content_size = import_player_file(filename, &contents);
 	ft_memcpy(PLAYA.header.prog_name, &contents[4], PROG_NAME_LENGTH);
 	ft_memcpy(PLAYA.header.comment, &contents[140], COMMENT_LENGTH);
@@ -37,7 +36,9 @@ void			add_new_player(t_corewar *core, char *filename, uint8_t p_num)
 	PLAYA.instruction_size = content_size - (INSTR + 16);
 	PLAYA.player_num = p_num;
 	PLAYA.num_of_processes = 1;
+	core->env.total_processes++;
 	PLAYA.filename = filename;
+	free(contents);
 }
 
 /*

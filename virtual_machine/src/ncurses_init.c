@@ -34,9 +34,24 @@ void	init_ncurses(t_corewar *core)
 	curs_set(0);
 }
 
+/*
+**  ONLY 8 colors can appear at once, but many different color_pairs
+**
+**  COLOR_BLACK
+**  COLOR_RED
+**  COLOR_GREEN
+**  COLOR_YELLOW
+**  COLOR_BLUE
+**  COLOR_MAGENTA
+**  COLOR_CYAN
+**  COLOR_WHITE
+*/
+
 void	init_ncurses_colors(void)
 {
-	init_color(COLOR_BLUE, 215, 1000, 1000);
+	init_color(COLOR_BLUE, 215, 800, 1000);
+    init_color(COLOR_WHITE, 850, 850, 850);
+    init_color(COLOR_YELLOW, 855, 530, 36);
 	init_pair(P1, COLOR_GREEN, COLOR_BLACK);
 	init_pair(P2, COLOR_BLUE, COLOR_BLACK);
 	init_pair(P3, COLOR_RED, COLOR_BLACK);
@@ -46,8 +61,10 @@ void	init_ncurses_colors(void)
 	init_pair(P3B, COLOR_BLACK, COLOR_RED);
 	init_pair(P4B, COLOR_BLACK, COLOR_MAGENTA);
 	init_pair(DF, COLOR_WHITE, COLOR_BLACK);
-	init_color(COLOR_WHITE, 1000, 1000, 1000);
-	init_pair(INFOZ, COLOR_BLACK, COLOR_WHITE);
+    init_pair(DF_BAR, COLOR_WHITE, COLOR_WHITE);
+    init_pair(INFOZ, COLOR_BLACK, COLOR_YELLOW);
+    init_pair(ORANGE_STUFF, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(ORANGE_BAR, COLOR_YELLOW, COLOR_YELLOW);
 }
 
 void	init_ncurses_character_array(t_corewar *c)
