@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   op_handler_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 17:20:09 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 05:27:41 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 18:52:07 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "assembler.h"
 
-void	zjump_fork_lfork_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
+void	zjump_fork_lfork_(t_asm *assembler, t_input *line,
+							t_ops *ops, uint8_t op_code)
 {
 	t_token		*tokens;
 	uint8_t		ecb;
 	uint8_t		bytes;
 	uint8_t		len_tokens;
-	
+
 	len_tokens = 1;
 	tokens = get_params(assembler, line, len_tokens);
 	if (tokens[0].subtype != DIR_CODE)
@@ -34,7 +35,7 @@ void	ldi_lldi_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
 	uint8_t		ecb;
 	uint8_t		bytes;
 	uint8_t		len_tokens;
-	
+
 	len_tokens = 3;
 	tokens = get_params(assembler, line, len_tokens);
 	if (tokens[1].subtype == REG_CODE)
@@ -43,7 +44,12 @@ void	ldi_lldi_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
 		INVALID_PARAM(2);
 	ecb = create_ecb(tokens, len_tokens);
 	bytes = OP_SIZE + ECB_SIZE + REG_SIZE;
-	bytes += (tokens[0].subtype == REG_CODE) ? REG_SIZE : (tokens[0].subtype == DIR_CODE) ? DIR_SIZE_1 : IND_SIZE;
+	if (tokens[0].subtype == REG_CODE)
+		bytes += REG_SIZE;
+	else if (tokens[0].subtype == DIR_CODE)
+		bytes += DIR_SIZE_1;
+	else
+		bytes += IND_SIZE;
 	bytes += (tokens[1].subtype == DIR_CODE) ? DIR_SIZE_1 : REG_SIZE;
 	enqueue_op(ops, create_ast(op_code, ecb, bytes, tokens, len_tokens));
 }
@@ -54,7 +60,7 @@ void	sti_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
 	uint8_t		ecb;
 	uint8_t		bytes;
 	uint8_t		len_tokens;
-	
+
 	len_tokens = 3;
 	tokens = get_params(assembler, line, len_tokens);
 	if (tokens[0].subtype != REG_CODE)
@@ -63,7 +69,12 @@ void	sti_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
 		INVALID_PARAM(2);
 	ecb = create_ecb(tokens, len_tokens);
 	bytes = OP_SIZE + ECB_SIZE + REG_SIZE;
-	bytes += (tokens[1].subtype == REG_CODE) ? REG_SIZE : (tokens[1].subtype == DIR_CODE) ? DIR_SIZE_1 : IND_SIZE;
+	if (tokens[1].subtype == REG_CODE)
+		bytes += REG_SIZE;
+	else if (tokens[1].subtype == DIR_CODE)
+		bytes += DIR_SIZE_1;
+	else
+		bytes += IND_SIZE;
 	bytes += (tokens[2].subtype == DIR_CODE) ? DIR_SIZE_1 : REG_SIZE;
 	enqueue_op(ops, create_ast(op_code, ecb, bytes, tokens, len_tokens));
 }
@@ -74,7 +85,7 @@ void	aff_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
 	uint8_t		ecb;
 	uint8_t		bytes;
 	uint8_t		len_tokens;
-	
+
 	len_tokens = 1;
 	tokens = get_params(assembler, line, len_tokens);
 	if (tokens[0].subtype != REG_CODE)

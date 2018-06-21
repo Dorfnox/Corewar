@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+         #
+#    By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/06/17 17:07:12 by rzarate          ###   ########.fr        #
+#    Updated: 2018/06/20 18:18:22 by kmckee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ FILES = main \
 		bytecode \
 		op_queue \
 		label_hashtable \
-		utility \
+		utility_1 \
+		utility_2 \
 
 C_FLAGS = -Wall -Wextra -Werror
 

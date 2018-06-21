@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assembler.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/20 05:37:59 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 19:03:44 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@
 # define HEADER_VALUE_ABSENT		"Expected a header value"
 # define HEADER_VALUE_INCOMPLETE	"Expected a closing \""
 # define HEADER_VALUE_LONG			"Header value too long"
-# define HEADER_NAME_REPEATED		"Token \".name\" repeated"
-# define HEADER_COMMENT_REPEATED	"Token \".comment\" repeated"
+# define HEADER_NAME_REPEAT			"Token \".name\" repeated"
+# define HEADER_COMMENT_REPEAT		"Token \".comment\" repeated"
 # define HEADER_COMMENT_FIRST		"Token \".comment\" found before \".name\" repeated"
 
 # define OPERATION_LABEL_DOUBLE		"Expected an operation after a label"
@@ -166,7 +166,7 @@ void					verify_input(int ac, char **av, t_asm *assembler);
 
 void					parse_input(t_asm *assembler);
 void					parse_operations(t_asm *assembler, t_input *line, t_token *current_token, char **label_carry);
-void					parse_header(t_asm *assembler, t_input *line, t_token *current_token, int *name_set, int *comment_set);
+void					parse_header(t_asm *assembler, t_input *line, t_token *current_token, uint8_t *name_comment_set);
 
 /*
 **	Tokenizer functions
@@ -236,8 +236,8 @@ t_ops					*init_op_queue(void);
 uint8_t					op_queue_is_empty(t_ops *queue);
 
 size_t					hash(char *label);
-t_labels				*labelsInit(size_t capacity);
-void					labelsInsert(t_labels *dict, char *key, uint32_t byte_start);
-uint32_t				labelsSearch(t_labels *dict, char *key);
+t_labels				*labels_init(size_t capacity);
+void					labels_insert(t_labels *dict, char *key, uint32_t byte_start);
+uint32_t				labels_search(t_labels *dict, char *key);
 
 #endif

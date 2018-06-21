@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   op_handler_helpers.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 17:26:46 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 00:24:02 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 18:53:36 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "assembler.h"
 
-t_token		*get_params(t_asm *assembler, t_input *line, uint8_t len_tokens)
+t_token	*get_params(t_asm *assembler, t_input *line, uint8_t len_tokens)
 {
 	t_token *tokens;
 	t_token	*tmp;
@@ -25,7 +25,8 @@ t_token		*get_params(t_asm *assembler, t_input *line, uint8_t len_tokens)
 		tmp = get_next_token(line);
 		tokens[i] = *tmp;
 		if (tokens[i].type != PARAMETER)
-			syntax_error_with_token(assembler, line, PARAM_ERROR_ABSENT, tokens[i].value);
+			syntax_error_with_token(assembler, line,
+									PARAM_ERROR_ABSENT, tokens[i].value);
 		free(tmp);
 	}
 	return (tokens);
@@ -33,8 +34,8 @@ t_token		*get_params(t_asm *assembler, t_input *line, uint8_t len_tokens)
 
 uint8_t	create_ecb(t_token *tokens, uint8_t len_tokens)
 {
-	uint8_t ecb;
-	int8_t i;
+	uint8_t	ecb;
+	int8_t	i;
 
 	i = -1;
 	ecb = 0;
@@ -45,4 +46,3 @@ uint8_t	create_ecb(t_token *tokens, uint8_t len_tokens)
 	}
 	return (ecb);
 }
-

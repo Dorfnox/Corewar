@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type_verifiers.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/17 16:16:03 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/19 12:35:32 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 19:01:04 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ uint8_t	check_if_header(char *s)
 	if (len == 5 || len == 8)
 	{
 		if (!ft_strcmp(s, NAME_CMD_STRING))
-			return HEADER_NAME;
+			return (HEADER_NAME);
 		else if (!ft_strcmp(s, COMMENT_CMD_STRING))
-			return HEADER_COMMENT;
+			return (HEADER_COMMENT);
 	}
 	return (0);
 }
@@ -38,7 +38,7 @@ int8_t	token_is_label(char *s)
 	{
 		while (++i < len - 1)
 		{
-			if (!(s[i] >='a' && s[i] <= 'z') && 
+			if (!(s[i] >= 'a' && s[i] <= 'z') &&
 				!(s[i] >= '0' && s[i] <= '9') &&
 				s[i] != '_')
 				return (0);
@@ -97,4 +97,3 @@ uint8_t	compare_to_params(char *s)
 	else
 		return (0);
 }
-

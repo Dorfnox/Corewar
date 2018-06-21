@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bytecode.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 17:22:49 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 19:10:23 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,13 @@ void	write_bytes(int fd, uintmax_t num, uint8_t bytes)
 		ft_putchar_fd((num & 0xFF), fd);
 }
 
-void	write_params(int fd, t_ast *operation, t_labels *labels, uint32_t bytes_so_far)
+void	write_params(int fd, t_ast *operation,
+					t_labels *labels, uint32_t bytes_so_far)
 {
 	int8_t		j;
-	uint32_t		tmp;
+	uint32_t	tmp;
 	uint8_t		bytes;
-	
+
 	j = -1;
 	while (++j < operation->len_params)
 	{
@@ -55,7 +56,7 @@ void	write_params(int fd, t_ast *operation, t_labels *labels, uint32_t bytes_so_
 		{
 			if (operation->params[j].value[1] == LABEL_CHAR)
 			{
-				tmp = labelsSearch(labels, &operation->params[j].value[2]);
+				tmp = labels_search(labels, &operation->params[j].value[2]);
 				if (tmp <= bytes_so_far)
 					tmp = (0xFFFF - (bytes_so_far - tmp - 1));
 				else
@@ -66,13 +67,11 @@ void	write_params(int fd, t_ast *operation, t_labels *labels, uint32_t bytes_so_
 			if ((operation->op >= LIVE && operation->op <= XOR) ||
 			operation->op == LLD || operation->op == AFF)
 				bytes = DIR_SIZE_0;
-			else 
+			else
 				bytes = DIR_SIZE_1;
-
 			free(operation->params[j].value);
 		}
 		write_bytes(fd, tmp, bytes);
-		// free(operation->params);
 	}
 }
 
@@ -80,7 +79,7 @@ void	write_ops(int fd, t_ops *ops, t_labels *labels)
 {
 	t_ast		*operation;
 	uint16_t	bytes_so_far;
-	
+
 	bytes_so_far = 0;
 	while (!op_queue_is_empty(ops))
 	{
@@ -88,10 +87,10 @@ void	write_ops(int fd, t_ops *ops, t_labels *labels)
 		write_bytes(fd, operation->op, 1);
 		if (operation->ecb)
 			write_bytes(fd, operation->ecb, 1);
-		printf("Op_code: %d, ecb: %d, params %d\n", operation->op, operation->ecb, operation->len_params);
+		printf("Op_code: %d, ecb: %d, params %d\n",
+				operation->op, operation->ecb, operation->len_params);
 		write_params(fd, operation, labels, bytes_so_far);
 		bytes_so_far += operation->bytes;
-		// free(operation);
 	}
 }
 
@@ -106,13 +105,13 @@ void	write_header(int fd, t_header *header)
 	write(fd, header->prog_name, PROG_NAME_LENGTH + 4);
 	write_bytes(fd, header->prog_size, 4);
 	write(fd, header->comment, COMMENT_LENGTH + 4);
-	
 }
 
 void	create_bytecode(t_asm *assembler)
 {
 	close(assembler->fd);
-	if (!(assembler->fd = open(assembler->output_file_name, O_WRONLY | O_TRUNC | O_CREAT, 0666)))
+	if (!(assembler->fd = open(assembler->output_file_name,
+							O_WRONLY | O_TRUNC | O_CREAT, 0666)))
 		asm_error(1, "Couldn't create output file");
 	write_header(assembler->fd, assembler->header);
 	write_ops(assembler->fd, assembler->ops, assembler->ops->labels);

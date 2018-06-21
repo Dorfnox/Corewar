@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/17 16:14:13 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/19 13:45:55 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/20 18:59:50 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ void	advance(t_input *line)
 void	skip_separators(t_input *line)
 {
 	while (char_is_separator(line->current_char))
-	{
 		advance(line);
-	}
 }
 
 void	remove_label_char(char **s)
