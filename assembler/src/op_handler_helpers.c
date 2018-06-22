@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 17:26:46 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 18:53:36 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 20:35:03 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ t_token	*get_params(t_asm *assembler, t_input *line, uint8_t len_tokens)
 		if (tokens[i].type != PARAMETER)
 			syntax_error_with_token(assembler, line,
 									PARAM_ERROR_ABSENT, tokens[i].value);
-		// free(tmp->value);
-        free(tmp);
+		free(tmp);
 	}
 	return (tokens);
 }

@@ -1,7 +1,7 @@
 .name		"test"
 .comment	"Jour J"
 
-		ld   %0,r3		
+		ld   %1,r3 		
 label:		zjmp %:avantdebut
 		zjmp %0				# pour eviter ecrasement
 						# de l'instruction suivante

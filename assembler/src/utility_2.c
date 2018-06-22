@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 18:17:42 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 20:37:46 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,15 @@ void	verify_input(int ac, char **av, t_asm *assembler)
 		asm_error(1, "Couldn't open file");
 	assembler->input_file_name = av[1];
 	assembler->output_file_name = create_output_file_name(av[1]);
+}
+
+void	check_extra_tokens(t_asm *assembler, t_input *line)
+{
+	t_token		*token;
+
+	token = get_next_token(line);
+	if (token->type != EMPTY)
+		syntax_error_with_token(assembler, line, EXTRA_TOKEN, token->value);
+	free(token->value);
+	free(token);
 }

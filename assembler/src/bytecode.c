@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/21 19:17:11 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/21 20:32:27 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ void	write_params(int fd, t_ast *operation,
 			else
 				bytes = DIR_SIZE_1;
 		}
-        free(operation->params[j].value);
+		free(operation->params[j].value);
 		write_bytes(fd, tmp, bytes);
 	}
-    free(operation->params);
+	free(operation->params);
 }
 
 void	write_ops(int fd, t_ops *ops, t_labels *labels)
@@ -90,7 +90,7 @@ void	write_ops(int fd, t_ops *ops, t_labels *labels)
 			write_bytes(fd, operation->ecb, 1);
 		write_params(fd, operation, labels, bytes_so_far);
 		bytes_so_far += operation->bytes;
-        free(operation);
+		free(operation);
 	}
 }
 

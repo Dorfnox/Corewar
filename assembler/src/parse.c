@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/21 19:45:20 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/21 20:37:18 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	parse_operations(t_asm *assembler, t_input *line,
 			syntax_error_with_token(assembler, line, OPERATION_LABEL_DOUBLE,
 									current_token->value);
 		*label_carry = ft_strdup(current_token->value);
-        free(current_token->value);
-        free(current_token);
+		free(current_token->value);
+		free(current_token);
 		current_token = get_next_token(line);
 	}
 	if (current_token->type == OPERATION)
@@ -84,7 +84,6 @@ void	parse_operations(t_asm *assembler, t_input *line,
 						assembler->ops->total_bytes);
 		assembler->op_handler[current_token->subtype](
 			assembler, line, assembler->ops, current_token->subtype);
-
 	}
 	else if (current_token->type != EMPTY)
 		syntax_error_with_token(assembler, line, UNEXPECTED_TOKEN,
@@ -97,7 +96,7 @@ void	check_extra_tokens(t_asm *assembler, t_input *line)
 
 	token = get_next_token(line);
 	if (token->type != EMPTY)
-			syntax_error_with_token(assembler, line, EXTRA_TOKEN, token->value);
+		syntax_error_with_token(assembler, line, EXTRA_TOKEN, token->value);
 	free(token->value);
 	free(token);
 }
@@ -120,15 +119,15 @@ void	read_file(t_asm *assembler, t_input *line)
 			parse_header(assembler, line, current_token, &name_comment_set);
 		else
 			parse_operations(assembler, line, current_token, &label_carry);
-        free(current_token->value);
-        free(current_token);
+		free(current_token->value);
+		free(current_token);
 		check_extra_tokens(assembler, line);
 		free(line->s);
 		line->line_n++;
 		line->index = 0;
 	}
-    if (label_carry)
-        asm_error(EXIT_FAILURE, "Label at the end pointing to nuthin");
+	if (label_carry)
+		asm_error(EXIT_FAILURE, "Label at the end pointing to nuthin");
 }
 
 void	parse_input(t_asm *assembler)

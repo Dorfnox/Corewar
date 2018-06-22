@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:51 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/21 19:58:11 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/21 20:34:14 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ uint32_t	labels_search(t_labels *dict, char *key)
 	while (tmp_item && ft_strcmp(tmp_item->key, key) != 0)
 		tmp_item = tmp_item->next;
 	if (!tmp_item)
-		asm_error(1, ft_str128(3, "Invalid label \"", key, "\" was dereferenced"));
+		asm_error(1, ft_str128(3, "Invalid label \"", key, "\" dereferenced"));
 	return (tmp_item->byte_start);
 }
 
-void         labels_delete(t_labels *labels)
+void		labels_delete(t_labels *labels)
 {
-    int16_t			i;
-    t_label_item	*tmp;
+	int16_t			i;
+	t_label_item	*tmp;
 
 	i = -1;
 	while (++i < CAPACITY)
