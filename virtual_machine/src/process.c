@@ -32,7 +32,7 @@ t_process	*new_process(t_corewar *core,
 	new->op = &core->op[17];
 	new->carry = cpy ? cpy->carry : 0;
 	new->id = id++;
-	new->last_live = cpy? cpy->last_live : 0;
+	new->last_live = cpy ? cpy->last_live : 0;
 	reg_ctr = -1;
 	while (++reg_ctr < REG_NUMBER + 1)
 		if ((byte = -1))
@@ -91,28 +91,24 @@ void		pop_process_cursor(t_corewar *core, t_process *process)
 	t_node				*head;
 	t_node				*prev;
 
-	b = process->curr_pc;
-	if (isemptys(&b->cursor_stack))
+	if (isemptys(&process->curr_pc->cursor_stack) || !(b = process->curr_pc))
 		return ;
 	if ((p = peeks(&b->cursor_stack)) == process)
 	{
 		pop(&b->cursor_stack);
-		draw_cursor(core, b);
+		return (draw_cursor(core, b));
 	}
-	else
+	head = b->cursor_stack.top;
+	while ((p = peeks(&b->cursor_stack)) != process)
 	{
-		head = b->cursor_stack.top;
-		while ((p = peeks(&b->cursor_stack)) != process)
-		{
-			prev = b->cursor_stack.top;
-			b->cursor_stack.top = b->cursor_stack.top->next;
-			if (b->cursor_stack.top == NULL && (b->cursor_stack.top = head))
-				return ;
-		}
-		pop(&b->cursor_stack);
-		prev->next = b->cursor_stack.top;
-		b->cursor_stack.top = head;
+		prev = b->cursor_stack.top;
+		b->cursor_stack.top = b->cursor_stack.top->next;
+		if (b->cursor_stack.top == NULL && (b->cursor_stack.top = head))
+			return ;
 	}
+	pop(&b->cursor_stack);
+	prev->next = b->cursor_stack.top;
+	b->cursor_stack.top = head;
 }
 
 void		draw_cursor(t_corewar *core, t_board_node *b)

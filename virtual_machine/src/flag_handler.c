@@ -25,6 +25,10 @@ void			init_flag_queue(t_queue *q)
 	add_flag(q, "-viz", flag_viz);
 	add_flag(q, "-s", flag_speed);
 	add_flag(q, "-speed", flag_speed);
+	add_flag(q, "-r", flag_rainbow);
+	add_flag(q, "-rainbow", flag_rainbow);
+	add_flag(q, "-a", flag_activity);
+	add_flag(q, "-activity", flag_activity);
 }
 
 /*
