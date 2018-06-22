@@ -27,7 +27,8 @@ t_token	*get_params(t_asm *assembler, t_input *line, uint8_t len_tokens)
 		if (tokens[i].type != PARAMETER)
 			syntax_error_with_token(assembler, line,
 									PARAM_ERROR_ABSENT, tokens[i].value);
-		free(tmp);
+		// free(tmp->value);
+        free(tmp);
 	}
 	return (tokens);
 }

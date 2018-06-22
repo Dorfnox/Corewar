@@ -148,7 +148,6 @@ typedef struct			s_asm
 {
     int					fd;
     char				*input_file_name;
-    char				*input_content;
 	char				*output_file_name;
 	t_header			*header;	
 	t_ops				*ops;
@@ -205,7 +204,7 @@ uint8_t					create_ecb(t_token *tokens, uint8_t len_tokens);
 void					advance(t_input *line);
 void					skip_separators(t_input *line);
 int8_t					char_is_separator(char c);
-void					remove_comment(char **s);
+char					*remove_comment(char *s);
 
 /*
 **	Hexdump function
@@ -237,7 +236,8 @@ uint8_t					op_queue_is_empty(t_ops *queue);
 
 size_t					hash(char *label);
 t_labels				*labels_init(size_t capacity);
-void					labels_insert(t_labels *dict, char *key, uint32_t byte_start);
+void					labels_delete(t_labels *labels);
+void					labels_insert(t_labels *dict, char **key, uint32_t byte_start);
 uint32_t				labels_search(t_labels *dict, char *key);
 
 #endif

@@ -12,17 +12,17 @@
 
 #include "assembler.h"
 
-void	remove_comment(char **s)
+char	*remove_comment(char *s)
 {
 	int		pound_index;
 	char	*tmp;
 
-	pound_index = char_at(*s, '#', 0);
+	pound_index = char_at(s, '#', 0);
 	if (pound_index != -1)
-	{
-		tmp = ft_strsub(*s, 0, pound_index);
-		*s = tmp;
-	}
+		tmp = ft_strsub(s, 0, pound_index);
+	else
+		tmp = ft_strdup(s);
+	return (tmp);
 }
 
 void	advance(t_input *line)

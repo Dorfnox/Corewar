@@ -14,9 +14,15 @@
 
 void	delete_asm(t_asm *assembler)
 {
-	free(assembler->header);
-	// free(assembler->ops);
-	// free(assembler);
+	// (void)assembler;
+    free(assembler->output_file_name);
+  
+	
+    free(assembler->header);
+
+	labels_delete(assembler->ops->labels);
+	free(assembler->ops);
+	free(assembler);
 }
 
 int		main(int ac, char **av)
@@ -29,6 +35,6 @@ int		main(int ac, char **av)
 	printf("total bytes: %i\n", assembler->ops->total_bytes);
 	create_bytecode(assembler);
 	delete_asm(assembler);
-	// while(1) ;
+	while(1) ;
 	return (0);
 }

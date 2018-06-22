@@ -36,19 +36,20 @@ t_labels	*labels_init(size_t capacity)
 	return (table);
 }
 
-void		labels_insert(t_labels *dict, char *key, uint32_t byte_start)
+void		labels_insert(t_labels *dict, char **key, uint32_t byte_start)
 {
 	size_t			tmp_hash;
 	t_label_item	*new_item;
 
-	tmp_hash = hash(key);
+	tmp_hash = hash(*key);
 	if (!(new_item = (t_label_item *)ft_memalloc(sizeof(t_label_item))))
 		MALLOC_ERROR();
-	new_item->key = ft_strdup(key);
+	new_item->key = ft_strdup(*key);
+	free(*key);
+	*key = NULL;
 	new_item->byte_start = byte_start;
 	new_item->next = dict->items[tmp_hash];
 	dict->items[tmp_hash] = new_item;
-	DBI(dict->items[tmp_hash]->byte_start);
 }
 
 uint32_t	labels_search(t_labels *dict, char *key)
@@ -61,4 +62,24 @@ uint32_t	labels_search(t_labels *dict, char *key)
 	if (!tmp_item)
 		asm_error(1, "Invalid label dir param was dereferenced");
 	return (tmp_item->byte_start);
+}
+
+void         labels_delete(t_labels *labels)
+{
+    int16_t			i;
+    t_label_item	*tmp;
+
+	i = -1;
+	while (++i < CAPACITY)
+	{
+		while (labels->items[i])
+		{
+			tmp = labels->items[i];
+			free(tmp->key);
+			labels->items[i] = labels->items[i]->next;
+			free(tmp);
+		}
+	}
+	free(labels->items);
+	free(labels);
 }

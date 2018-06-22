@@ -69,10 +69,11 @@ void	write_params(int fd, t_ast *operation,
 				bytes = DIR_SIZE_0;
 			else
 				bytes = DIR_SIZE_1;
-			free(operation->params[j].value);
 		}
+        free(operation->params[j].value);
 		write_bytes(fd, tmp, bytes);
 	}
+    free(operation->params);
 }
 
 void	write_ops(int fd, t_ops *ops, t_labels *labels)
@@ -91,6 +92,7 @@ void	write_ops(int fd, t_ops *ops, t_labels *labels)
 				operation->op, operation->ecb, operation->len_params);
 		write_params(fd, operation, labels, bytes_so_far);
 		bytes_so_far += operation->bytes;
+        free(operation);
 	}
 }
 

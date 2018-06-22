@@ -72,18 +72,18 @@ void	parse_operations(t_asm *assembler, t_input *line,
 			syntax_error_with_token(assembler, line, OPERATION_LABEL_DOUBLE,
 									current_token->value);
 		*label_carry = ft_strdup(current_token->value);
+        free(current_token->value);
+        free(current_token);
 		current_token = get_next_token(line);
 	}
 	if (current_token->type == OPERATION)
 	{
 		if (*label_carry != NULL)
-		{
-			labels_insert(assembler->ops->labels, *label_carry,
+			labels_insert(assembler->ops->labels, label_carry,
 						assembler->ops->total_bytes);
-			ft_strdel(label_carry);
-		}
 		assembler->op_handler[current_token->subtype](
 			assembler, line, assembler->ops, current_token->subtype);
+
 	}
 	else if (current_token->type != EMPTY)
 		syntax_error_with_token(assembler, line, UNEXPECTED_TOKEN,
@@ -95,13 +95,13 @@ void	read_file(t_asm *assembler, t_input *line)
 	t_token		*current_token;
 	char		*label_carry;
 	uint8_t		name_comment_set;
+	char		*s;
 
 	label_carry = NULL;
 	name_comment_set = 0;
-	while (ft_gnl(assembler->fd, &(line->s)) > 0)
+	while (ft_gnl(assembler->fd, &s) > 0)
 	{
-		remove_comment(&line->s);
-		ft_bzero(&current_token, sizeof(current_token));
+		line->s = remove_comment(s);
 		line->len = ft_strlen(line->s);
 		current_token = get_next_token(line);
 		if (name_comment_set != 3)
@@ -110,7 +110,12 @@ void	read_file(t_asm *assembler, t_input *line)
 			parse_operations(assembler, line, current_token, &label_carry);
 		line->line_n++;
 		line->index = 0;
+		free(line->s);
+        free(current_token->value);
+        free(current_token);
 	}
+    if (label_carry)
+        asm_error(EXIT_FAILURE, "Label at the end pointing to nuthin");
 }
 
 void	parse_input(t_asm *assembler)
