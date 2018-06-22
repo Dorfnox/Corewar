@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/21 20:41:02 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 21:47:43 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 **  MACROS
 */
 
-# define USAGE					"usage: <>"
+# define USAGE					"usage: ./asm <your .s champion>"
 # define BYTE_TO_FILE(x)		ft_putchar_fd(x,assembler->fd)
 # define CAPACITY				30
 

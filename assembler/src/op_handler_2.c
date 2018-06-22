@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 17:20:09 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 18:52:07 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 20:58:36 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ldi_lldi_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
 
 	len_tokens = 3;
 	tokens = get_params(assembler, line, len_tokens);
-	if (tokens[1].subtype == REG_CODE)
+	if (tokens[1].subtype == IND_CODE)
 		INVALID_PARAM(1);
 	if (tokens[2].subtype != REG_CODE)
 		INVALID_PARAM(2);

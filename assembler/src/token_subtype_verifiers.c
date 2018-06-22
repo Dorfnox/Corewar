@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 00:02:13 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 19:01:55 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 21:44:47 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ uint8_t	verify_if_register(char *s)
 	int		reg_num;
 
 	len = ft_strlen(s);
-	if ((len == 2 || len == 3) && s[0] == REGISTER_CHAR)
+	if ((len > 1) && s[0] == REGISTER_CHAR)
 	{
 		reg_num = ft_atoi(&s[1]);
 		if (reg_num >= 1 && reg_num <= 16)
 			return (1);
+		else
+			asm_error(1, "Register params should be between 1 and 16");
 	}
 	return (0);
 }
