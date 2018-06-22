@@ -278,6 +278,7 @@ void					init_ncurses_colors(void);
 void					init_ncurses_character_array(t_corewar *core);
 void					init_ncurses_bored(t_corewar *core);
 void					init_ncurses_playa(t_corewar *core);
+void					create_playa_window(WINDOW *win, t_player *p);
 void					init_ncurses_infoz(t_corewar *core);
 
 int						key_hit(t_corewar *core);

@@ -52,7 +52,7 @@ uint8_t		terminate_players(t_corewar *core)
 			if (!core->player[i].dead && core->player[i].num_of_processes == 0)
 			{
 				VIZ(wattron(core->ncur.playa[i], COLOR_PAIR(P3)));
-				VIZ(mvwaddstr(core->ncur.playa[i], 1, 20, "DEAD"));
+				VIZ(mvwaddstr(core->ncur.playa[i], 0, 18, "DEAD"));
 				VIZ(wattron(core->ncur.playa[i], COLOR_PAIR(i + 1)));
 				VIZ(wrefresh(core->ncur.playa[i]));
 				core->player[i].dead = 1;
