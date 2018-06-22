@@ -16,11 +16,7 @@ uint8_t		cycle_handle(t_corewar *core)
 {
 	++core->env.cycle;
 	if (core->flag.dump && core->env.dump == core->env.cycle)
-	{
-		if (!core->flag.viz)
-			dump_board((t_board_node *)core->node_addresses);
 		return (game_over(core));
-	}
 	if (--core->env.cycle_counter == 0)
 	{
 		if (terminate_players(core))

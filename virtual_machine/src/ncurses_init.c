@@ -25,7 +25,6 @@ void	init_ncurses(t_corewar *core)
 	cbreak();
 	start_color();
 	init_ncurses_colors();
-	init_ncurses_character_array(core);
 	init_ncurses_bored(core);
 	init_ncurses_playa(core);
 	init_ncurses_infoz(core);
@@ -65,20 +64,6 @@ void	init_ncurses_colors(void)
 	init_pair(INFOZ, COLOR_BLACK, COLOR_YELLOW);
 	init_pair(ORANGE_STUFF, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(ORANGE_BAR, COLOR_YELLOW, COLOR_YELLOW);
-}
-
-void	init_ncurses_character_array(t_corewar *c)
-{
-	uint16_t	i;
-	char		*t;
-
-	t = "0123456789abcdef";
-	i = -1;
-	while (++i < 256)
-	{
-		c->ncur.c_array[i][0] = t[i / 16];
-		c->ncur.c_array[i][1] = t[i % 16];
-	}
 }
 
 int		key_hit(t_corewar *core)

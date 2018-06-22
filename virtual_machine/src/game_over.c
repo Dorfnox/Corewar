@@ -26,7 +26,7 @@ uint8_t		game_over(t_corewar *core)
 	else
 	{
 		if (core->env.last_player_to_call_live)
-			ft_pflite("Player # %u - %s is the winER!\n--- \"%s\"\n",
+			ft_pflite("Player # %u - %s is the WINNER!\n--- \"%s\"\n",
 					core->env.last_player_to_call_live,
 					core->player[LAST_PLAYA].header.prog_name,
 					core->player[LAST_PLAYA].header.comment);

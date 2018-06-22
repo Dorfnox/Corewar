@@ -68,19 +68,17 @@ void	init_board(t_corewar *core)
 		}
 }
 
-void	dump_board(t_board_node *node_addresses)
+void	dump_board(t_corewar *core)
 {
 	uint16_t		i;
-	FILE			*dumpfile;
 
 	i = -1;
-	dumpfile = fopen("corewar.dump", "w");
 	while (++i < MEM_SIZE)
 	{
-		ft_printf("%.2x", node_addresses[i].value);
-		if (i % 63 == 0 && i > 62)
-			ft_printf("\n");
+		ft_putstr(core->env.c_array[core->node_addresses[i]->value]);
+		if ((i + 1) % 32 == 0)
+			ft_putstr("\n");
 		else
-			ft_printf(" ");
+			ft_putstr(" ");
 	}
 }

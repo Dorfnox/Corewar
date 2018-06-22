@@ -119,6 +119,6 @@ void		draw_cursor(t_corewar *core, t_board_node *b)
 		wattron(core->ncur.bored, COLOR_PAIR(p->player->player_num + 4));
 	else
 		wattron(core->ncur.bored, COLOR_PAIR(b->bored_color));
-	mvwaddstr(core->ncur.bored, b->y, b->x, core->ncur.c_array[b->value]);
+	mvwaddstr(core->ncur.bored, b->y, b->x, core->env.c_array[b->value]);
 	wrefresh(core->ncur.bored);
 }

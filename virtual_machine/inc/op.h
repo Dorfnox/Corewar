@@ -6,11 +6,11 @@
 /*   By: zaz <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2018/05/30 15:54:14 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/21 20:17:52 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	OP_H
+#ifndef OP_H
 # define OP_H
 
 # define IND_SIZE				2
@@ -44,33 +44,25 @@
 # define NBR_LIVE				21
 # define MAX_CHECKS				10
 
-/*
-**
-*/
-
 typedef char	t_arg_type;
 
 # define T_REG					1
-# define T_DIR					2 //this is supposed to be 4 bytes??
-# define T_IND					4 //this is supposed to be 2 bytes??
+# define T_DIR					2
+# define T_IND					4
 # define T_LAB					8
-
-/*
-**
-*/
 
 # define PROG_NAME_LENGTH		(128)
 # define COMMENT_LENGTH			(2048)
 # define INSTR					(PROG_NAME_LENGTH + COMMENT_LENGTH)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
-typedef struct					header_s
+typedef struct					s_header
 {
 	unsigned int				magic;
 	char						prog_name[PROG_NAME_LENGTH + 1];
 	unsigned int				prog_size;
 	char						comment[COMMENT_LENGTH + 1];
 	char						instructions[CHAMP_MAX_SIZE + 1];
-}								header_t;
+}								t_header;
 
 #endif

@@ -28,6 +28,7 @@ int		main(int argc, char **argv)
 	init_ncurses(&core);
 	init_board(&core);
 	core.flag.viz ? loop_viz(&core) : loop(&core);
+	core.flag.dump ? dump_board(&core) : 0;
 	terminate_ncurses(&core);
 	return (0);
 }

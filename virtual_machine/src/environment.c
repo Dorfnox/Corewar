@@ -21,6 +21,21 @@ void		init_environment(t_corewar *core)
 	core->env.cycle_delta = CYCLE_DELTA;
 	core->env.nbr_live = NBR_LIVE;
 	core->env.max_checks = MAX_CHECKS;
+	init_character_array(core);
+}
+
+void		init_character_array(t_corewar *c)
+{
+	uint16_t	i;
+	char		*t;
+
+	t = "0123456789abcdef";
+	i = -1;
+	while (++i < 256)
+	{
+		c->env.c_array[i][0] = t[i / 16];
+		c->env.c_array[i][1] = t[i % 16];
+	}
 }
 
 void		init_parse_args(t_corewar *core)

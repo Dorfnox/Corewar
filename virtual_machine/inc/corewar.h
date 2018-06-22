@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/20 02:07:23 by dmontoya         ###   ########.fr       */
+/*   Updated: 2018/06/21 20:15:30 by dmontoya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@
 # define RAINBOW_UP(a) ((a) < 3000 ? ((a) - 2000) : RAINBOW_TOP(a))
 # define RAINBOW_CYCLE(a) ((a) < 2000 ? 0 : RAINBOW_UP(a))
 
-struct					s_corewar;
-struct					s_process;
+struct s_corewar;
+struct s_process;
 
 enum
 {
@@ -147,6 +147,7 @@ typedef struct			s_env
 	uint64_t			rainbow_green;
 	uint64_t			rainbow_blue;
 	uint64_t			rainbow_speed;
+	char				c_array[256][3];
 }						t_env;
 
 /*
@@ -160,7 +161,6 @@ typedef struct			s_ncurses
 	WINDOW				*playa[4];
 	WINDOW				*infoz;
 	WINDOW				*winwin;
-	char				c_array[256][3];
 }						t_ncurses;
 
 /*
@@ -177,7 +177,7 @@ typedef struct			s_player
 	uint32_t			num_live;
 	uint16_t			instruction_size;
 	uint8_t				dead;
-	header_t			header;
+	t_header			header;
 }						t_player;
 
 typedef struct			s_board_node
@@ -245,13 +245,14 @@ void					add_flag(t_queue *q, char *flag, void *flag_func);
 unsigned int			flag_handler(t_corewar *c, char ***av);
 void					*search_flag_queue(t_node *n, char *flag);
 void					clean_flag_queue(t_queue *q);
-void					dump_board(t_board_node *node_addresses);
+void					dump_board(t_corewar *core);
 /*
 **	Initializing data
 */
 
 void					init_environment(t_corewar *core);
 void					init_parse_args(t_corewar *core);
+void					init_character_array(t_corewar *core);
 
 void					retrieve_data(t_corewar *core, char **argv);
 unsigned int			flag_dump(t_corewar *core, char ***argv);
@@ -260,32 +261,29 @@ unsigned int			flag_viz(t_corewar *core, char ***argv);
 unsigned int			flag_speed(t_corewar *core, char ***argv);
 unsigned int			add_player_file(t_corewar *core, char *filename);
 uint64_t				get_max_cycles(uint64_t init);
-
 void					init_board(t_corewar *core);
 void					create_board(t_board_node **brd,
 							t_board_node **add, t_board_node **rev);
 
-
 void					init_operations(t_operation *op);
 void					init_wait_times(t_operation *op);
-void        			init_instruction_names(t_operation *op);
-
+void					init_instruction_names(t_operation *op);
 
 /*
 **	NCurses Functionality
 */
 
 void					init_ncurses(t_corewar *core);
-void    				init_ncurses_colors(void);
+void					init_ncurses_colors(void);
 void					init_ncurses_character_array(t_corewar *core);
-void    				init_ncurses_bored(t_corewar *core);
-void    				init_ncurses_playa(t_corewar *core);
+void					init_ncurses_bored(t_corewar *core);
+void					init_ncurses_playa(t_corewar *core);
 void					init_ncurses_infoz(t_corewar *core);
 
-int     				key_hit(t_corewar *core);
+int						key_hit(t_corewar *core);
 void					terminate_ncurses(t_corewar *core);
 
-void    				draw_to_bored(t_corewar *core,
+void					draw_to_bored(t_corewar *core,
 							uint8_t player_num, uint16_t idx, uint8_t len);
 
 void					print_player_info(t_ncurses *n, t_process *p);
@@ -309,7 +307,7 @@ t_process				*new_process(t_corewar *core,
 							t_player *p, t_board_node *b, t_process *cpy);
 void					insert_process(t_corewar *c, t_stack *s, t_process *p);
 
-void					push_process_cursor(t_corewar *core, t_process *process);
+void					push_process_cursor(t_corewar *c, t_process *process);
 void					pop_process_cursor(t_corewar *core, t_process *process);
 void					draw_cursor(t_corewar *core, t_board_node *board);
 
@@ -377,29 +375,29 @@ void					aff_(t_corewar *core, t_process *process);
 
 void					loop(t_corewar *core);
 void					loop_viz(t_corewar *core);
-void    				game_speed(uint8_t speed);
+void					game_speed(uint8_t speed);
 
 /*
 **	Index
 */
 
-uint16_t 				get_index_unchained(uint16_t pc, uint8_t idx_byte1,
+uint16_t				get_index_unchained(uint16_t pc, uint8_t idx_byte1,
 							uint8_t idx_byte2);
-uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1,
+uint16_t				get_index(uint16_t pc, uint8_t idx_byte1,
 							uint8_t idx_byte2);
 
 /*
 ** Write, Read, Parse Bytes
 */
 
-void					write_number_to_board(t_board_node *board,uint8_t *num);
+void					write_number_to_board(t_board_node *brd, uint8_t *num);
 void					write_board_to_register(uint8_t *reg, t_board_node *b);
 void					write_number_to_register(uint8_t *reg, uint32_t nbr);
 void					write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg);
 
 uint32_t				read_from_board(t_board_node *board, uint8_t bytes);
 
-uint8_t					parse_encoding_byte(t_corewar *core, t_process *process);
+uint8_t					parse_encoding_byte(t_corewar *c, t_process *process);
 
 uint8_t					parse_arguments(t_corewar *core, t_process *process,
 							uint8_t two_bytes);
