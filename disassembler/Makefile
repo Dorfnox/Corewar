@@ -6,13 +6,13 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/06/06 13:00:58 by bpierce          ###   ########.fr        #
+#    Updated: 2018/06/21 21:52:51 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = dsm
 
-FILES = main instruction write_bytes \
+FILES = main instruction write_bytes disassemble \
 		op_add_sub_and_or_xor \
 		op_live_zjmp_fork_lfork \
 		op_st_sti \

@@ -6,18 +6,21 @@
 #    By: bpierce <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/25 10:27:14 by bpierce           #+#    #+#              #
-#    Updated: 2018/05/29 13:35:12 by bpierce          ###   ########.fr        #
+#    Updated: 2018/06/21 21:47:46 by bpierce          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 COREWAR = corewar
 ASSEMBLER = asm
+DISASSEMBLER = dsm
 
 COREWAR_DIRECTORY = virtual_machine/
 ASSEMBLER_DIRECTORY = assembler/
+DISASSEMBLER_DIRECTORY = disassembler/
 
 COREWAR_HEADERS = $(COREWAR_DIRECTORY)/inc/$(COREWAR).h
-ASSEMBLER_HEADERS = $(ASSEMBLER_DIRECTORY)/inc/$(asm).h
+ASSEMBLER_HEADERS = $(ASSEMBLER_DIRECTORY)/inc/$(ASSEMBLER).h
+DISASSEMBLER_HEADERS = $(DISASSEMBLER_DIRECTORY)/inc/$(ASSEMBLER).h
 
 FILES = main
 
@@ -27,8 +30,8 @@ LIB_LOC = libft/
 LIB_NAM = libft.a
 LIB_SRC = $(addprefix $(LIB_LOC), $(LIB_NAM))
 
-HEADER_LOCATIONS = -I libft/inc -I $(COREWAR_DIRECTORY)/inc -I $(ASSEMBLER_DIRECTORY)/inc
-HEADERS = $(COREWAR_HEADERS) $(ASSEMBLER_HEADERS)
+HEADER_LOCATIONS = -I libft/inc -I $(COREWAR_DIRECTORY)/inc -I $(ASSEMBLER_DIRECTORY)/inc -I $(DISASSEMBLER_DIRECTORY)/inc
+HEADERS = $(COREWAR_HEADERS) $(ASSEMBLER_HEADERS) $(DISASSEMBLER_HEADERS)
 
 RED = [31m
 GREEN = [32m
@@ -43,7 +46,7 @@ MAGENTA_LIGHT = [95m
 BLINK = [5m
 END_COLOUR = [0m
 
-all: $(COREWAR) $(ASSEMBLER)
+all: $(COREWAR) $(ASSEMBLER) $(DISASSEMBLER)
 
 $(COREWAR): $(LIB_SRC)
 	@echo "$(YELLOW)----------- Checking $@ -----------$(END_COLOUR)"
@@ -59,6 +62,13 @@ $(ASSEMBLER): $(LIB_SRC)
 	@cp $(ASSEMBLER_DIRECTORY)/$(ASSEMBLER) .
 	@echo "$(YELLOW)----------- $@ Check Complete -----------$(END_COLOUR)"
 
+$(DISASSEMBLER): $(LIB_SRC)
+	@echo "$(YELLOW)----------- Checking $@ -----------$(END_COLOUR)"
+	@echo "Running make in $@ directory"
+	@make -C $(DISASSEMBLER_DIRECTORY)
+	@cp $(DISASSEMBLER_DIRECTORY)/$(DISASSEMBLER) .
+	@echo "$(YELLOW)----------- $@ Check Complete -----------$(END_COLOUR)"
+
 $(LIB_SRC): force
 	@echo "$(YELLOW)----------- Checking $@ -----------$(END_COLOUR)"
 	@printf "$(YELLOW_LIGHT)$@ re-compile status: $(END_COLOUR)"
@@ -71,14 +81,17 @@ force:
 clean:
 	@make clean -C $(COREWAR_DIRECTORY)
 	@make clean -C $(ASSEMBLER_DIRECTORY)
+	@make clean -C $(DISASSEMBLER_DIRECTORY)
 	@make clean -C $(LIB_LOC)
 	@echo "$(GREEN)clean complete!$(END_COLOUR)"
 
 fclean: clean
 	@make fclean -C $(COREWAR_DIRECTORY)
 	@make fclean -C $(ASSEMBLER_DIRECTORY)
+	@make fclean -C $(DISASSEMBLER_DIRECTORY)
 	@make fclean -C $(LIB_LOC)
 	@rm -rf $(ASSEMBLER)
+	@rm -rf $(DISASSEMBLER)
 	@rm -rf $(COREWAR)
 	@echo "$(GREEN)fclean complete!$(END_COLOUR)"
 

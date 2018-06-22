@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/06 13:01:17 by bpierce          ###   ########.fr       */
+/*   Updated: 2018/06/21 21:50:02 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ char			*g_filename;
 
 enum
 {
-				REGISTER = 1,
-				DIRECT,
-				INDIRECT
+	REGISTER = 1,
+	DIRECT,
+	INDIRECT
 };
 
 typedef struct	s_operation
@@ -69,9 +69,9 @@ void			disassemble_contents(char *file, uint8_t *c, size_t c_size);
 void			write_name_and_comment_to_file(int fd, uint8_t *c);
 void			write_instructions_to_file(int fd, uint8_t *c, size_t c_size);
 
-void       		init_operations(t_operation *op);
+void			init_operations(t_operation *op);
 void			init_wait_times(t_operation *op);
-void        	init_instruction_names(t_operation *op);
+void			init_instruction_names(t_operation *op);
 
 uint8_t			*parse_encoding_byte(uint8_t content);
 void			write_instruction(int fd, t_operation *op);
