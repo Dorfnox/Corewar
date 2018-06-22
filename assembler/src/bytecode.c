@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 19:10:23 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 19:17:11 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ void	write_ops(int fd, t_ops *ops, t_labels *labels)
 		write_bytes(fd, operation->op, 1);
 		if (operation->ecb)
 			write_bytes(fd, operation->ecb, 1);
-		printf("Op_code: %d, ecb: %d, params %d\n",
-				operation->op, operation->ecb, operation->len_params);
 		write_params(fd, operation, labels, bytes_so_far);
 		bytes_so_far += operation->bytes;
         free(operation);

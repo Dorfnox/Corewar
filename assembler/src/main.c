@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/20 18:55:56 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 20:18:43 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int		main(int ac, char **av)
 	assembler = init_asm();
 	verify_input(ac, av, assembler);
 	parse_input(assembler);
-	printf("total bytes: %i\n", assembler->ops->total_bytes);
+	ft_pflite(BIGREEN "Creating champ:" BIWHITE " %s...\n" COLOR_OFF,
+				assembler->output_file_name);
 	create_bytecode(assembler);
 	delete_asm(assembler);
 	while(1) ;

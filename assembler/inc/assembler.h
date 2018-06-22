@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/20 19:03:44 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 19:15:02 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@
 # define PARAM_ERROR_ABSENT			"Expected a parameter"
 # define PARAM_ERROR_INCORRECT		"Incorrect parameter type"
 
+# define EXTRA_TOKEN				"Extra token found at the end of line"
 
 /*
 **  STRUCTURES

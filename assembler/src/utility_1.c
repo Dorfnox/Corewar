@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:45:50 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 18:17:46 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 19:49:55 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ int		is_space(char c)
 void	asm_error(int error_code, char *error_message)
 {
 	if (error_message)
-		write(2, error_message, ft_strlen(error_message));
-	write(1, "\n", 1);
+		printf(BIRED "error: " BIWHITE "%s\n" COLOR_OFF, error_message);
 	exit(error_code);
 }
 
