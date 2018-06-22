@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:33:54 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/21 20:37:18 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/21 20:40:23 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,6 @@ void	parse_operations(t_asm *assembler, t_input *line,
 	else if (current_token->type != EMPTY)
 		syntax_error_with_token(assembler, line, UNEXPECTED_TOKEN,
 								current_token->value);
-}
-
-void	check_extra_tokens(t_asm *assembler, t_input *line)
-{
-	t_token		*token;
-
-	token = get_next_token(line);
-	if (token->type != EMPTY)
-		syntax_error_with_token(assembler, line, EXTRA_TOKEN, token->value);
-	free(token->value);
-	free(token);
 }
 
 void	read_file(t_asm *assembler, t_input *line)

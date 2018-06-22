@@ -6,7 +6,7 @@
 /*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/21 19:15:02 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/21 20:41:02 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,7 @@ void					advance(t_input *line);
 void					skip_separators(t_input *line);
 int8_t					char_is_separator(char c);
 char					*remove_comment(char *s);
+void					check_extra_tokens(t_asm *assembler, t_input *line);
 
 /*
 **	Hexdump function
