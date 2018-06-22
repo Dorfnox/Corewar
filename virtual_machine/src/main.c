@@ -21,7 +21,10 @@ int		main(int argc, char **argv)
 	ft_bzero(&core, sizeof(t_corewar));
 	init_environment(&core);
 	init_operations(core.op);
+	init_parse_args(&core);
 	retrieve_data(&core, ++argv);
+	if (!core.env.total_processes)
+		corewar_error("Please provide a valid player", 1);
 	init_ncurses(&core);
 	init_board(&core);
 	core.flag.viz ? loop_viz(&core) : loop(&core);

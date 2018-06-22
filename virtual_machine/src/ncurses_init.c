@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/17 12:18:43 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/20 00:42:16 by dmontoya         ###   ########.fr       */
+/*   Updated: 2018/06/21 16:35:24 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ void	init_ncurses(t_corewar *core)
 void	init_ncurses_colors(void)
 {
 	init_color(COLOR_BLUE, 215, 800, 1000);
-    init_color(COLOR_WHITE, 850, 850, 850);
-    init_color(COLOR_YELLOW, 855, 530, 36);
+	init_color(COLOR_WHITE, 200, 200, 200);
+	init_color(COLOR_YELLOW, 855, 530, 36);
 	init_pair(P1, COLOR_GREEN, COLOR_BLACK);
 	init_pair(P2, COLOR_BLUE, COLOR_BLACK);
 	init_pair(P3, COLOR_RED, COLOR_BLACK);
@@ -61,10 +61,10 @@ void	init_ncurses_colors(void)
 	init_pair(P3B, COLOR_BLACK, COLOR_RED);
 	init_pair(P4B, COLOR_BLACK, COLOR_MAGENTA);
 	init_pair(DF, COLOR_WHITE, COLOR_BLACK);
-    init_pair(DF_BAR, COLOR_WHITE, COLOR_WHITE);
-    init_pair(INFOZ, COLOR_BLACK, COLOR_YELLOW);
-    init_pair(ORANGE_STUFF, COLOR_YELLOW, COLOR_BLACK);
-    init_pair(ORANGE_BAR, COLOR_YELLOW, COLOR_YELLOW);
+	init_pair(DF_BAR, COLOR_WHITE, COLOR_WHITE);
+	init_pair(INFOZ, COLOR_BLACK, COLOR_YELLOW);
+	init_pair(ORANGE_STUFF, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(ORANGE_BAR, COLOR_YELLOW, COLOR_YELLOW);
 }
 
 void	init_ncurses_character_array(t_corewar *c)
@@ -72,7 +72,7 @@ void	init_ncurses_character_array(t_corewar *c)
 	uint16_t	i;
 	char		*t;
 
-	t = "0123456789ABCDEF";
+	t = "0123456789abcdef";
 	i = -1;
 	while (++i < 256)
 	{

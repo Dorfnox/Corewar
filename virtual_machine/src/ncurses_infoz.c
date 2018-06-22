@@ -35,28 +35,13 @@ void		init_ncurses_infoz(t_corewar *core)
 
 void		print_game_info(t_corewar *core)
 {
-	t_node		*node;
-	t_process	*p;
-	uint8_t		i;
-
 	wattron(core->ncur.infoz, COLOR_PAIR(ORANGE_STUFF));
 	mvwprintw(core->ncur.infoz, 3, 17, "| %-8u", core->env.cycle);
 	mvwprintw(core->ncur.infoz, 5, 17, "| %-8u", core->env.cycle_counter);
 	mvwprintw(core->ncur.infoz, 6, 17, "| %-8u", core->env.cycle_to_die);
 	mvwprintw(core->ncur.infoz, 7, 17, "| %-8u", core->env.cycle_delta);
 	mvwprintw(core->ncur.infoz, 9, 17, "| %-8u", core->env.total_processes);
-	wattron(core->ncur.infoz, COLOR_PAIR(ORANGE_BAR));
-	node = core->process_stack[(core->env.cycle + 1) % PROCESS_STACK_LEN].top;
-	wmove(core->ncur.infoz, 12, 1);
-	i = 0;
-	while (node && ++i < 38)
-	{
-		waddch(core->ncur.infoz, ' ');
-		p = node->content;
-		node = node->next;
-	}
-	wattron(core->ncur.infoz, COLOR_PAIR(DF_BAR));
-	while (i++ < 38)
-		waddch(core->ncur.infoz, ' ');
+	core->flag.activity ? activity(core) : 0;
+	core->flag.rainbow ? rainbow(core) : 0;
 	wrefresh(core->ncur.infoz);
 }

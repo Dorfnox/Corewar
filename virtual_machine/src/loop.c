@@ -30,6 +30,7 @@ void	loop(t_corewar *core)
 			insert_process(core, &core->process_stack[(core->env.cycle +
 				process->op->wait_time) % PROCESS_STACK_LEN], process);
 		}
+		core->flag.speed ? game_speed(core->env.game_speed) : 0;
 	}
 }
 
@@ -55,9 +56,7 @@ void	loop_viz(t_corewar *core)
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
 		}
 		print_game_info(core);
-		// if (core->env.cycle > 3068)
-		// 	key_hit(core);
-		game_speed(core->env.game_speed);
+		core->flag.speed ? game_speed(core->env.game_speed) : 0;
 	}
 }
 
@@ -69,7 +68,8 @@ void	game_speed(uint8_t speed)
 	d = -1;
 	j = 0;
 	while (j++ < ((speed * PROCESS_STACK_LEN * 10) << 3))
+	{
 		while (++d < speed)
-		{
-		}
+			;
+	}
 }

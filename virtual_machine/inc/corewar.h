@@ -22,12 +22,13 @@
 
 # define CSEM "Corewar Conflict:\n"
 
-# define GAME_SPEED 1
+# define GAME_SPEED 0
 
 # define MALL_ERR_MSG(a) ft_str256(2, "Failure to malloc: ", (a))
 # define MALL_ERR(a, b) !(a) ? corewar_error(MALL_ERR_MSG(b), 1) : 1
 
 # define PLAYA core->player[p_num - 1]
+# define LAST_PLAYA core->env.last_player_to_call_live - 1
 
 # define PLAYA_MUST_DIE core->player[i].last_live < last
 # define PLAYA_NEEDS_TO_DIE	(!core->player[i].last_live || (PLAYA_MUST_DIE))
@@ -46,29 +47,34 @@
 
 # define REG process->reg
 
-# define EB0 process->encoding_byte[0]
-# define EB1 process->encoding_byte[1]
-# define EB2 process->encoding_byte[2]
+# define EB0 core->encoding_byte[0]
+# define EB1 core->encoding_byte[1]
+# define EB2 core->encoding_byte[2]
 
-# define ARG0 process->args[0]
-# define ARG00 process->args[0][0]
-# define ARG01 process->args[0][1]
-# define ARG02 process->args[0][2]
-# define ARG03 process->args[0][3]
+# define ARG0 core->args[0]
+# define ARG00 core->args[0][0]
+# define ARG01 core->args[0][1]
+# define ARG02 core->args[0][2]
+# define ARG03 core->args[0][3]
 
-# define ARG1 process->args[1]
-# define ARG10 process->args[1][0]
-# define ARG11 process->args[1][1]
-# define ARG12 process->args[1][2]
-# define ARG13 process->args[1][3]
+# define ARG1 core->args[1]
+# define ARG10 core->args[1][0]
+# define ARG11 core->args[1][1]
+# define ARG12 core->args[1][2]
+# define ARG13 core->args[1][3]
 
-# define ARG2 process->args[2]
-# define ARG20 process->args[2][0]
-# define ARG21 process->args[2][1]
-# define ARG22 process->args[2][2]
-# define ARG23 process->args[2][3]
+# define ARG2 core->args[2]
+# define ARG20 core->args[2][0]
+# define ARG21 core->args[2][1]
+# define ARG22 core->args[2][2]
+# define ARG23 core->args[2][3]
 
 # define VIZ(a) core->flag.viz ? (a) : 0
+
+# define RAINBOW_VALUE 6000
+# define RAINBOW_TOP(a) (((a) < 5000) ? 1000 : (6000 - (a)))
+# define RAINBOW_UP(a) ((a) < 3000 ? ((a) - 2000) : RAINBOW_TOP(a))
+# define RAINBOW_CYCLE(a) ((a) < 2000 ? 0 : RAINBOW_UP(a))
 
 struct					s_corewar;
 struct					s_process;
@@ -113,6 +119,8 @@ typedef struct			s_flag
 	uint8_t				dump:1;
 	uint8_t				viz:1;
 	uint8_t				speed:1;
+	uint8_t				rainbow:1;
+	uint8_t				activity:1;
 }						t_flag;
 
 /*
@@ -135,6 +143,10 @@ typedef struct			s_env
 	uint8_t				last_player_to_call_live;
 	uint8_t				num_players;
 	uint8_t				game_speed;
+	uint64_t			rainbow_red;
+	uint64_t			rainbow_green;
+	uint64_t			rainbow_blue;
+	uint64_t			rainbow_speed;
 }						t_env;
 
 /*
@@ -144,8 +156,10 @@ typedef struct			s_env
 typedef struct			s_ncurses
 {
 	WINDOW				*bored;
+	WINDOW				*bored_boreder;
 	WINDOW				*playa[4];
 	WINDOW				*infoz;
+	WINDOW				*winwin;
 	char				c_array[256][3];
 }						t_ncurses;
 
@@ -191,8 +205,6 @@ typedef struct			s_process
 	t_board_node		*curr_pc;
 	uint32_t			id;
 	uint32_t			last_live;
-	uint8_t				encoding_byte[3];
-	uint8_t				args[3][4];
 	uint8_t				carry;
 	uint8_t				reg[REG_NUMBER + 1][REG_SIZE];
 	t_operation			*op;
@@ -209,6 +221,10 @@ typedef struct			s_corewar
 	t_stack				process_stack[PROCESS_STACK_LEN];
 	t_player			player[MAX_PLAYERS];
 	char				*playerfiles[MAX_PLAYERS + 1];
+	uint8_t				encoding_byte[3];
+	uint8_t				args[3][4];
+	uint8_t				(*parse_arg[4])(struct s_corewar *, t_process *,
+							uint8_t, uint8_t);
 	t_operation			op[18];
 	t_ncurses			ncur;
 }						t_corewar;
@@ -235,6 +251,7 @@ void					dump_board(t_board_node *node_addresses);
 */
 
 void					init_environment(t_corewar *core);
+void					init_parse_args(t_corewar *core);
 
 void					retrieve_data(t_corewar *core, char **argv);
 unsigned int			flag_dump(t_corewar *core, char ***argv);
@@ -328,17 +345,27 @@ uint32_t				get_xor_args(t_corewar *c, t_process *process,
 void					zjmp_(t_corewar *core, t_process *process);
 
 void					ldi_(t_corewar *core, t_process *process);
+uint32_t				ldi_a_index(t_corewar *core, t_process *process,
+							uint16_t index);
+uint32_t				ldi_b_index(t_corewar *core, t_process *process);
+void					do_ldi(t_corewar *core, t_process *process,
+							uint32_t idx_res, uint16_t idx);
 
 void					sti_(t_corewar *core, t_process *process);
 uint32_t				sti_a_index(t_corewar *core, t_process *process,
 							uint16_t index);
-uint32_t				sti_b_index(t_process *process);
+uint32_t				sti_b_index(t_corewar *core, t_process *process);
 
 void					fork_(t_corewar *core, t_process *process);
 
 void					lld_(t_corewar *core, t_process *process);
 
 void					lldi_(t_corewar *core, t_process *process);
+uint32_t				lldi_a_index(t_corewar *core, t_process *process,
+							uint16_t index);
+uint32_t				lldi_b_index(t_corewar *core, t_process *process);
+void					do_lldi(t_corewar *core, t_process *process,
+							uint32_t idx_res, uint16_t idx);
 
 void					lfork_(t_corewar *core, t_process *process);
 
@@ -365,17 +392,28 @@ uint16_t 				get_index(uint16_t pc, uint8_t idx_byte1,
 ** Write, Read, Parse Bytes
 */
 
-void					write_number_to_board(t_board_node *board, uint8_t *number);
-void					write_board_to_register(uint8_t *reg, t_board_node *board);
+void					write_number_to_board(t_board_node *board,uint8_t *num);
+void					write_board_to_register(uint8_t *reg, t_board_node *b);
 void					write_number_to_register(uint8_t *reg, uint32_t nbr);
 void					write_reg_to_reg(uint8_t *dst_reg, uint8_t *src_reg);
 
 uint32_t				read_from_board(t_board_node *board, uint8_t bytes);
 
-uint8_t					parse_encoding_byte(t_process *process);
-uint8_t					parse_arguments(t_process *process, uint8_t read_two_bytes);
-void					move_pc_by_encoding_byte(t_process *process,
-							uint8_t read_two_bytes, uint8_t args);
+uint8_t					parse_encoding_byte(t_corewar *core, t_process *process);
+
+uint8_t					parse_arguments(t_corewar *core, t_process *process,
+							uint8_t two_bytes);
+uint8_t					parse_nothing(t_corewar *core, t_process *process,
+							uint8_t i, uint8_t two_bytes);
+uint8_t					parse_register(t_corewar *core, t_process *process,
+							uint8_t i, uint8_t two_bytes);
+uint8_t					parse_direct(t_corewar *core, t_process *process,
+							uint8_t i, uint8_t two_bytes);
+uint8_t					parse_indirect(t_corewar *core, t_process *process,
+							uint8_t i, uint8_t two_bytes);
+
+void					move_pc_by_encoding_byte(t_corewar *core,
+							t_process *p, uint8_t read_two_bytes, uint8_t args);
 uint32_t				smash_bytes(uint8_t *reg);
 uint8_t					*unsmash_bytes(uint32_t nbr);
 
@@ -388,13 +426,22 @@ uint8_t					terminate_players(t_corewar *core);
 void					terminate_processes(t_corewar *core,
 							t_stack *stk, uint32_t last);
 void					terminate_process(t_corewar *core, t_stack *stk);
-// void					terminate_cursors(t_board_node *node, uint32_t last);
+
+/*
+**	Game Over
+*/
+
 uint8_t					game_over(t_corewar *core);
+void					declare_winner(t_corewar *core);
 
 /*
 **	Bonus
 */
 
-unsigned int			epilepsy_mode(t_corewar *core, char ***av);
+void					rainbow(t_corewar *core);
+unsigned int			flag_rainbow(t_corewar *core, char ***argv);
+
+void					activity(t_corewar *core);
+unsigned int			flag_activity(t_corewar *core, char ***argv);
 
 #endif

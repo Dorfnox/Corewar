@@ -27,12 +27,12 @@ void		lld_(t_corewar *core, t_process *process)
 	uint16_t		idx;
 
 	idx = process->curr_pc->index;
-	if (!parse_encoding_byte(process) || EB0 < 2 || EB1 != 1 || EB2)
+	if (!parse_encoding_byte(core, process) || EB0 < 2 || EB1 != 1 || EB2)
 	{
-		move_pc_by_encoding_byte(process, 0, 2);
+		move_pc_by_encoding_byte(core, process, 0, 2);
 		return ;
 	}
-	if (!parse_arguments(process, 0))
+	if (!parse_arguments(core, process, 0))
 		return ;
 	if (EB0 == DIRECT)
 		ft_memcpy(REG[ARG10], ARG0, 4);

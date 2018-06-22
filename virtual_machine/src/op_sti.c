@@ -30,12 +30,12 @@ void		sti_(t_corewar *core, t_process *process)
 	t_board_node	*location;
 
 	index = process->curr_pc->index;
-	if (!parse_encoding_byte(process) ||
+	if (!parse_encoding_byte(core, process) ||
 		EB0 != REGISTER || EB1 == 0 || EB2 == 0 || EB2 == INDIRECT)
-		return (move_pc_by_encoding_byte(process, 1, 3));
-	if (!parse_arguments(process, 1))
+		return (move_pc_by_encoding_byte(core, process, 1, 3));
+	if (!parse_arguments(core, process, 1))
 		return ;
-	idx_result = sti_a_index(core, process, index) + sti_b_index(process);
+	idx_result = sti_a_index(core, process, index) + sti_b_index(core, process);
 	if (idx_result & 0x8000)
 	{
 		idx_result = ~idx_result + 1;
@@ -73,7 +73,7 @@ uint32_t	sti_a_index(t_corewar *core, t_process *process, uint16_t index)
 	return (a);
 }
 
-uint32_t	sti_b_index(t_process *process)
+uint32_t	sti_b_index(t_corewar *core, t_process *process)
 {
 	uint32_t	b;
 

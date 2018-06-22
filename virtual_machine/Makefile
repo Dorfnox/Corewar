@@ -15,12 +15,15 @@ NAME = corewar
 FILES = main \
 		error \
 		flag_handler \
-		environment data player process board instruction cycle index \
+		environment data player process board instruction index \
 		ncurses_init ncurses_infoz ncurses_board ncurses_playa \
-		loop \
+		rainbow activity \
+		loop cycle game_over \
+		parse_args \
 		parse_byte \
 		write_byte \
 		read_byte \
+		smash_bytes \
 		op_utility \
 		op_live \
 		op_ld \

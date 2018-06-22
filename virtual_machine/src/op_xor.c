@@ -29,13 +29,13 @@ void		xor_(t_corewar *core, t_process *process)
 	uint32_t	xor_result;
 
 	index = process->curr_pc->index;
-	if (!parse_encoding_byte(process) ||
+	if (!parse_encoding_byte(core, process) ||
 		EB0 == 0 || EB1 == 0 || EB2 != REGISTER)
 	{
-		move_pc_by_encoding_byte(process, 0, 3);
+		move_pc_by_encoding_byte(core, process, 0, 3);
 		return ;
 	}
-	if (!parse_arguments(process, 0))
+	if (!parse_arguments(core, process, 0))
 		return ;
 	a = get_or_args(core, process, index, 0);
 	b = get_or_args(core, process, index, 1);
@@ -57,16 +57,16 @@ uint32_t	get_xor_args(
 	uint32_t		ret;
 
 	ret = 0;
-	if (process->encoding_byte[arg_num] == REGISTER)
-		ret = smash_bytes(REG[process->args[arg_num][0]]);
-	else if (process->encoding_byte[arg_num] == DIRECT)
-		ret = smash_bytes(process->args[arg_num]);
-	else if (process->encoding_byte[arg_num] == INDIRECT)
+	if (core->encoding_byte[arg_num] == REGISTER)
+		ret = smash_bytes(REG[core->args[arg_num][0]]);
+	else if (core->encoding_byte[arg_num] == DIRECT)
+		ret = smash_bytes(core->args[arg_num]);
+	else if (core->encoding_byte[arg_num] == INDIRECT)
 	{
 		index = get_index(index,
-			process->args[arg_num][0],
-			process->args[arg_num][1]);
-		if (process->args[arg_num][0] >> 7)
+			core->args[arg_num][0],
+			core->args[arg_num][1]);
+		if (core->args[arg_num][0] >> 7)
 			location = core->node_addresses_rev[index];
 		else
 			location = core->node_addresses[index];

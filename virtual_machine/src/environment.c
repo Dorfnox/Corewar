@@ -22,3 +22,11 @@ void		init_environment(t_corewar *core)
 	core->env.nbr_live = NBR_LIVE;
 	core->env.max_checks = MAX_CHECKS;
 }
+
+void		init_parse_args(t_corewar *core)
+{
+	core->parse_arg[0] = parse_nothing;
+	core->parse_arg[REGISTER] = parse_register;
+	core->parse_arg[DIRECT] = parse_direct;
+	core->parse_arg[INDIRECT] = parse_indirect;
+}

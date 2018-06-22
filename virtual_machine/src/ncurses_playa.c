@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/17 12:42:53 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/20 00:43:36 by dmontoya         ###   ########.fr       */
+/*   Updated: 2018/06/21 17:00:36 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,21 @@
 void		init_ncurses_playa(t_corewar *core)
 {
 	uint8_t		i;
-	WINDOW		*win;
-    uint8_t     win_size;
+	uint8_t		win_size;
 
-    win_size = 7;
+	win_size = 7;
 	i = -1;
 	while (++i < MAX_PLAYERS)
 	{
 		if (core->player[i].player_num)
 		{
-			win = newwin(win_size, 40, (win_size * i) + 30, 200);
-			MALL_ERR(core->ncur.bored, "Failed to create ncurses playa");
-			wattron(win, COLOR_PAIR(core->player[i].player_num));
-			box(win, 0, 0);
-			wrefresh(win);
-			core->ncur.playa[i] = win;
+			core->ncur.playa[i] = newwin(win_size, 40,
+				((win_size + 3) * i) + 17, 200);
+			MALL_ERR(core->ncur.playa[i], "Malloc of playa");
+			wattron(core->ncur.playa[i],
+				COLOR_PAIR(core->player[i].player_num));
+			box(core->ncur.playa[i], 0, 0);
+			wrefresh(core->ncur.playa[i]);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 13:44:22 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/20 01:31:09 by dmontoya         ###   ########.fr       */
+/*   Updated: 2018/06/21 17:11:53 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void		st_(t_corewar *core, t_process *process)
 
 	location = NULL;
 	index = process->curr_pc->index;
-	if (!parse_encoding_byte(process) ||
+	if (!parse_encoding_byte(core, process) ||
 		EB0 != REGISTER || EB1 == 0 || EB1 == DIRECT)
 	{
-		return (move_pc_by_encoding_byte(process, 0, 2));
+		return (move_pc_by_encoding_byte(core, process, 0, 2));
 	}
-	if (!parse_arguments(process, 0))
+	if (!parse_arguments(core, process, 0))
 		return ;
 	if (EB1 == REGISTER)
 		write_reg_to_reg(REG[ARG10], REG[ARG00]);
@@ -42,6 +42,7 @@ void		st_(t_corewar *core, t_process *process)
 		else
 			location = core->node_addresses[index];
 		write_number_to_board(location, REG[ARG00]);
-		VIZ(draw_to_bored(core, process->player->player_num, location->index, 4));
+		VIZ(draw_to_bored(core,
+					process->player->player_num, location->index, 4));
 	}
 }
