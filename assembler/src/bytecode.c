@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bytecode.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/21 20:32:27 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/23 14:11:21 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,13 @@ void	write_params(int fd, t_ast *operation,
 	while (++j < operation->len_params)
 	{
 		if (operation->params[j].subtype == REG_CODE)
-		{
-			tmp = ft_atoi(&operation->params[j].value[1]);
-			bytes = REG_SIZE;
-		}
+			handle_reg_code(&operation->params[j].value[1], &tmp, &bytes);
 		else if (operation->params[j].subtype == IND_CODE)
-		{
-			tmp = ft_atoi(operation->params[j].value);
-			bytes = IND_SIZE;
-		}
+			handle_ind_code(operation->params[j].value, &tmp, &bytes);
 		else if (operation->params[j].subtype == DIR_CODE)
 		{
-			if (operation->params[j].value[1] == LABEL_CHAR)
-			{
-				tmp = labels_search(labels, &operation->params[j].value[2]);
-				if (tmp <= bytes_so_far)
-					tmp = (0xFFFF - (bytes_so_far - tmp - 1));
-				else
-					tmp -= bytes_so_far;
-			}
-			else
-				tmp = ft_atoi(&operation->params[j].value[1]);
+			handle_dir_tmp(operation->params[j].value,
+							&tmp, labels, bytes_so_far);
 			if ((operation->op >= LIVE && operation->op <= XOR) ||
 			operation->op == LLD || operation->op == AFF)
 				bytes = DIR_SIZE_0;

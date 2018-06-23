@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assembler.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/21 21:47:43 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/23 14:32:20 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,18 @@
 **  MACROS
 */
 
-# define USAGE					"usage: ./asm <your .s champion>"
-# define BYTE_TO_FILE(x)		ft_putchar_fd(x,assembler->fd)
-# define CAPACITY				30
+# define USAGE				"usage: ./asm <your .s champion>"
+# define BYTE_TO_FILE(x)	ft_putchar_fd(x,assembler->fd)
+# define CAPACITY			30
 
-# define MALLOC_ERROR()			asm_error(1, "Issue encounted while performing malloc.\n")
-# define ERROR_MSG(x)			syntax_error_wihout_token(assembler, line, x);
-# define ERROR_MSG_TOKEN(x)		syntax_error_with_token(assembler, line, x, current_token->value);
-# define INVALID_PARAM(x)		syntax_error_with_token(assembler, line, PARAM_ERROR_INCORRECT, tokens[x].value);
-
+# define CTV				current_token->value
+# define PEI				PARAM_ERROR_INCORRECT
+# define AS					assembler
+# define LN					line
+# define MALLOC_ERROR()		asm_error(1,MALOC_ERR)
+# define ERROR_MSG(x)		syntax_error_wihout_token(AS,LN,x);
+# define ERROR_MSG_TOKEN(x)	syntax_error_with_token(AS,LN,x,CTV);
+# define INVALID_PARAM(x)	syntax_error_with_token(AS,LN,PEI,tokens[x].value);
 
 /*
 **	Token types
@@ -49,8 +52,8 @@
 **	Token subtypes
 */
 
-#define HEADER_NAME				1
-#define HEADER_COMMENT			2
+# define HEADER_NAME			1
+# define HEADER_COMMENT			2
 
 # define LIVE					1
 # define LD						2
@@ -60,7 +63,7 @@
 # define AND					6
 # define OR						7
 # define XOR					8
-# define ZJUMP					9
+# define ZJMP					9
 # define LDI					10
 # define STI					11
 # define FORK					12
@@ -77,6 +80,8 @@
 **	Error macros
 */
 
+# define MALOC_ERR					"Issue encounted while performing malloc.\n"
+
 # define UNEXPECTED_TOKEN			"Unexpected token encountered"
 
 # define HEADER_VALUE_ABSENT		"Expected a header value"
@@ -84,7 +89,7 @@
 # define HEADER_VALUE_LONG			"Header value too long"
 # define HEADER_NAME_REPEAT			"Token \".name\" repeated"
 # define HEADER_COMMENT_REPEAT		"Token \".comment\" repeated"
-# define HEADER_COMMENT_FIRST		"Token \".comment\" found before \".name\" repeated"
+# define HEADER_COMMENT_FIRST		"Token \".comment\" found before \".name\""
 
 # define OPERATION_LABEL_DOUBLE		"Expected an operation after a label"
 
@@ -147,12 +152,13 @@ typedef struct			s_ops
 
 typedef struct			s_asm
 {
-    int					fd;
-    char				*input_file_name;
+	int					fd;
+	char				*input_file_name;
 	char				*output_file_name;
-	t_header			*header;	
+	t_header			*header;
 	t_ops				*ops;
-	void				(*op_handler[17])(struct s_asm *assembler, t_input *line, t_ops *ops, uint8_t opcode);
+	void				(*op_handler[17])(struct s_asm *assembler,
+							t_input *line, t_ops *ops, uint8_t opcode);
 }						t_asm;
 
 /*
@@ -163,10 +169,11 @@ typedef struct			s_asm
 t_asm					*init_asm(void);
 void					verify_input(int ac, char **av, t_asm *assembler);
 
-
 void					parse_input(t_asm *assembler);
-void					parse_operations(t_asm *assembler, t_input *line, t_token *current_token, char **label_carry);
-void					parse_header(t_asm *assembler, t_input *line, t_token *current_token, uint8_t *name_comment_set);
+void					parse_operations(t_asm *assembler, t_input *line,
+							t_token *current_token, char **label_carry);
+void					parse_header(t_asm *assembler, t_input *line,
+							t_token *current_token, uint8_t *name_comment_set);
 
 /*
 **	Tokenizer functions
@@ -184,18 +191,30 @@ void					remove_label_char(char **s);
 
 void					init_op_handler(t_asm *assembler);
 uint8_t					compare_to_ops(char *s);
-void					unknown_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
-void					live_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
-void					ld_lld_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
-void					st_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
-void					add_sub_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
-void					and_or_xor_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
-void					zjump_fork_lfork_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
-void					ldi_lldi_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
-void					sti_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
-void					aff_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code);
+uint8_t					compare_to_ops_2(char *s);
+void					unknown_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
+void					live_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
+void					ld_lld_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
+void					st_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
+void					add_sub_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
+void					and_or_xor_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
+void					zjump_fork_lfork_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
+void					ldi_lldi_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
+void					sti_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
+void					aff_(t_asm *assembler,
+								t_input *line, t_ops *ops, uint8_t op_code);
 
-t_token					*get_params(t_asm *assembler, t_input *line, uint8_t len_tokens);
+t_token					*get_params(t_asm *assembler,
+								t_input *line, uint8_t len_tokens);
 uint8_t					compare_to_params(char *s);
 uint8_t					verify_if_register(char *s);
 uint8_t					verify_if_direct(char *s);
@@ -207,6 +226,7 @@ void					skip_separators(t_input *line);
 int8_t					char_is_separator(char c);
 char					*remove_comment(char *s);
 void					check_extra_tokens(t_asm *assembler, t_input *line);
+uint8_t					len_tokens(uint8_t op);
 
 /*
 **	Hexdump function
@@ -216,8 +236,14 @@ void					check_extra_tokens(t_asm *assembler, t_input *line);
 void					create_bytecode(t_asm *assembler);
 void					write_header(int fd, t_header *header);
 void					write_ops(int fd, t_ops *ops, t_labels *labels);
-void					write_params(int fd, t_ast *operation, t_labels *labels, uint32_t bytes_so_far);
+void					write_params(int fd, t_ast *operation,
+									t_labels *labels, uint32_t bytes_so_far);
 void					write_bytes(int fd, uintmax_t num, uint8_t bytes);
+
+void					handle_reg_code(char *s, uint32_t *tmp, uint8_t *bytes);
+void					handle_ind_code(char *s, uint32_t *tmp, uint8_t *bytes);
+void					handle_dir_tmp(char *s, uint32_t *tmp,
+									t_labels *labels, uint32_t bytes_so_far);
 
 /*
 **	Utility functions
@@ -225,21 +251,25 @@ void					write_bytes(int fd, uintmax_t num, uint8_t bytes);
 */
 
 void					asm_error(int error_code, char *error_message);
-void					syntax_error_with_token(t_asm *assembler, t_input *line, char *error_message, char *token_value);
-void					syntax_error_without_token(t_asm *assembler, t_input *line, char *error_message);
+void					syntax_error_with_token(t_asm *assembler,
+						t_input *line, char *error_message, char *token_value);
+void					syntax_error_without_token(t_asm *assembler,
+								t_input *line, char *error_message);
 int						is_space(char c);
 int32_t					char_at(char *s, char c, int32_t start);
 
 t_ast					*dequeue_op(t_ops *queue);
 void					enqueue_op(t_ops *queue, t_ast *node);
-t_ast					*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params, uint8_t len_params);
+t_ast					*create_ast(uint8_t op, uint8_t ecb,
+									uint8_t bytes, t_token *params);
 t_ops					*init_op_queue(void);
 uint8_t					op_queue_is_empty(t_ops *queue);
 
 size_t					hash(char *label);
 t_labels				*labels_init(size_t capacity);
 void					labels_delete(t_labels *labels);
-void					labels_insert(t_labels *dict, char **key, uint32_t byte_start);
+void					labels_insert(t_labels *dict, char **key,
+									uint32_t byte_start);
 uint32_t				labels_search(t_labels *dict, char *key);
 
 #endif

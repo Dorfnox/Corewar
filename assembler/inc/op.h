@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2018/06/16 15:56:59 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/23 14:14:52 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 ** On part du principe qu'un int fait 32 bits. Est-ce vrai chez vous ?
 */
 
-#ifndef	OP_H
+#ifndef OP_H
 # define OP_H
 
 # define OP_SIZE				1
@@ -24,7 +24,6 @@
 # define REG_SIZE				1
 # define DIR_SIZE_0				4
 # define DIR_SIZE_1				2
-
 
 # define CHAMP_MAX_SIZE			(MEM_SIZE / 6)
 
@@ -39,7 +38,6 @@
 # define COMMENT_DELIMITER_CHAR	'\"'
 
 # define REG_NUMBER				16
-
 
 # define T_REG					1
 # define T_DIR					2
@@ -56,12 +54,10 @@
 
 typedef struct		s_header
 {
-  unsigned int		magic;
-  char				prog_name[PROG_NAME_LENGTH + 1];
-  unsigned int		prog_size;
-  char				comment[COMMENT_LENGTH + 1];
+	unsigned int		magic;
+	char				prog_name[PROG_NAME_LENGTH + 1];
+	unsigned int		prog_size;
+	char				comment[COMMENT_LENGTH + 1];
 }					t_header;
-
-
 
 #endif

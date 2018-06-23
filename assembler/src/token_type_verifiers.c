@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type_verifiers.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/17 16:16:03 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 19:01:04 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/23 13:57:31 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,14 @@ uint8_t	compare_to_ops(char *s)
 		return (OR);
 	else if (!ft_strcmp(s, "xor"))
 		return (XOR);
-	else if (!ft_strcmp(s, "zjmp"))
-		return (ZJUMP);
+	else
+		return (compare_to_ops_2(s));
+}
+
+uint8_t	compare_to_ops_2(char *s)
+{
+	if (!ft_strcmp(s, "zjmp"))
+		return (ZJMP);
 	else if (!ft_strcmp(s, "ldi"))
 		return (LDI);
 	else if (!ft_strcmp(s, "sti"))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_queue.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:11:57 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/20 19:06:22 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/06/23 13:37:35 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_ast		*dequeue_op(t_ops *queue)
 	}
 }
 
-t_ast		*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params, uint8_t len_params)
+t_ast		*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params)
 {
 	t_ast	*node;
 
@@ -63,7 +63,7 @@ t_ast		*create_ast(uint8_t op, uint8_t ecb, uint8_t bytes, t_token *params, uint
 	node->ecb = ecb;
 	node->bytes = bytes;
 	node->params = params;
-	node->len_params = len_params;
+	node->len_params = len_tokens(op);
 	node->next = NULL;
 	return (node);
 }
