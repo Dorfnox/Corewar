@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 17:19:56 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/23 13:43:11 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/23 14:59:47 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	ld_lld_(t_asm *assembler, t_input *line, t_ops *ops, uint8_t op_code)
 		INVALID_PARAM(1);
 	ecb = create_ecb(tokens, len_toks);
 	bytes += OP_SIZE + ECB_SIZE + REG_SIZE;
-	bytes += (tokens[0].subtype == DIR_CODE) ? DIR_SIZE_0 : REG_SIZE;
+	bytes += (tokens[0].subtype == DIR_CODE) ? DIR_SIZE_0 : IND_SIZE;
 	enqueue_op(ops, create_ast(op_code, ecb, bytes, tokens));
 }
 
