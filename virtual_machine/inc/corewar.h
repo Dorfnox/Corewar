@@ -6,7 +6,7 @@
 /*   By: bpierce <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/21 20:15:30 by dmontoya         ###   ########.fr       */
+/*   Updated: 2018/06/23 12:54:32 by bpierce          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,16 @@
 # include "libft.h"
 # include "op.h"
 
-# define USAGE "usage: ./corewar ><>"
+# define USE1 "usage: ./corewar champa.cor [b.cor c.cor d.cor]\n"
+# define USE2 "Optional arguments:\n"
+# define USE3 "-viz ... enables the visualizer to view the game\n"
+# define USE4 "-dump number ...  ends game after [number] cycles and "
+# define USE5 "dumps memory to the stdout and a file\n"
+# define USE6 "-n number champion ... select player number\n"
+# define USE7 "-s number ... set the speed of the game\n"
+# define USE8 "-a[ctivity] ... enables activity viewer in the visualizer\n"
+# define USE9 "-r[ainbow] [optional speed 1 - 10] ... enable rainbow mode"
+# define USAGE USE1 USE2 USE3 USE4 USE5 USE6 USE7 USE8 USE9
 
 # define CSEM "Corewar Conflict:\n"
 
