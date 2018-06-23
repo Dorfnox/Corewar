@@ -22,7 +22,7 @@
 # define USE2 "Optional arguments:\n"
 # define USE3 "-viz ... enables the visualizer to view the game\n"
 # define USE4 "-dump number ...  ends game after [number] cycles and "
-# define USE5 "dumps memory to the stdout and a file\n"
+# define USE5 "dumps memory to the stdout\n"
 # define USE6 "-n number champion ... select player number\n"
 # define USE7 "-s number ... set the speed of the game\n"
 # define USE8 "-a[ctivity] ... enables activity viewer in the visualizer\n"

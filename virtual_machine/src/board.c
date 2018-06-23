@@ -75,6 +75,8 @@ void	dump_board(t_corewar *core)
 	i = -1;
 	while (++i < MEM_SIZE)
 	{
+		if (i % 32 == 0)
+			ft_printf("0x%.4x: ", i);
 		ft_putstr(core->env.c_array[core->node_addresses[i]->value]);
 		if ((i + 1) % 32 == 0)
 			ft_putstr("\n");
