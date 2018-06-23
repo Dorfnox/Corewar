@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/23 14:10:59 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/23 15:36:55 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/23 15:42:41 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,10 @@ void	handle_dir_tmp(char *s, uint32_t *tmp,
 	if (s[1] == LABEL_CHAR)
 	{
 		*tmp = labels_search(labels, &s[2]);
-		DBI(*tmp);
 		if (*tmp <= bytes_so_far)
 			*tmp = (0xFFFFFFFF - (bytes_so_far - *tmp - 1));
 		else
 			*tmp -= bytes_so_far;
-		DBI(bytes_so_far);
-		DBI(*tmp);
 	}
 	else
 		*tmp = ft_atoi(&s[1]);
