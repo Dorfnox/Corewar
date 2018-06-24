@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/09 05:18:07 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/23 14:11:21 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/23 20:20:12 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,11 @@ void	write_params(int fd, t_ast *operation,
 		if (operation->params[j].subtype == REG_CODE)
 			handle_reg_code(&operation->params[j].value[1], &tmp, &bytes);
 		else if (operation->params[j].subtype == IND_CODE)
-			handle_ind_code(operation->params[j].value, &tmp, &bytes);
+		{
+			handle_ind_tmp(operation->params[j].value,
+							&tmp, labels, bytes_so_far);
+			bytes = IND_SIZE;
+		}
 		else if (operation->params[j].subtype == DIR_CODE)
 		{
 			handle_dir_tmp(operation->params[j].value,

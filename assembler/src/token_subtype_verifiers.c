@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_subtype_verifiers.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmckee <kmckee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 00:02:13 by rzarate           #+#    #+#             */
-/*   Updated: 2018/06/21 21:44:47 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/23 20:23:49 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,7 @@ uint8_t	verify_if_indirect(char *s)
 		if (ft_isstrdigits(&s[i]) || s[i] == '0')
 			return (1);
 	}
+	if (len > 1 && s[0] == LABEL_CHAR)
+		return (1);
 	return (0);
 }

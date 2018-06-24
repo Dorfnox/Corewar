@@ -6,7 +6,7 @@
 /*   By: rzarate <rzarate@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/30 20:57:13 by bpierce           #+#    #+#             */
-/*   Updated: 2018/06/23 14:32:20 by rzarate          ###   ########.fr       */
+/*   Updated: 2018/06/23 20:19:52 by rzarate          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,8 @@ void					write_params(int fd, t_ast *operation,
 void					write_bytes(int fd, uintmax_t num, uint8_t bytes);
 
 void					handle_reg_code(char *s, uint32_t *tmp, uint8_t *bytes);
-void					handle_ind_code(char *s, uint32_t *tmp, uint8_t *bytes);
+void					handle_ind_tmp(char *s, uint32_t *tmp,
+									t_labels *labels, uint32_t bytes_so_far);
 void					handle_dir_tmp(char *s, uint32_t *tmp,
 									t_labels *labels, uint32_t bytes_so_far);
 
