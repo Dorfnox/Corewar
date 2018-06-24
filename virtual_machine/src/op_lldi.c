@@ -82,7 +82,7 @@ void		do_lldi(t_corewar *core, t_process *process,
 {
 	t_board_node	*location;
 
-	if (idx_result >> 15)
+	if ((idx_result >> 15) & 0b1)
 	{
 		idx_result = (~idx_result + 1);
 		index = (MEM_SIZE - index - 1);

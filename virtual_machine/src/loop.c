@@ -31,6 +31,8 @@ void	loop(t_corewar *core)
 				process->op->wait_time) % PROCESS_STACK_LEN], process);
 		}
 		core->flag.speed ? game_speed(core->env.game_speed) : 0;
+		if (!cycle_handle(core))
+			return ;
 	}
 }
 
@@ -41,8 +43,7 @@ void	loop_viz(t_corewar *core)
 
 	while (1)
 	{
-		if (!cycle_handle(core))
-			return ;
+		++core->env.cycle;
 		while (!isemptys(&PROCESS_STACK[CURRENT_CYCLE]))
 		{
 			process = pop(&PROCESS_STACK[CURRENT_CYCLE]);
@@ -56,6 +57,8 @@ void	loop_viz(t_corewar *core)
 			wrefresh(core->ncur.playa[process->player->player_num - 1]);
 		}
 		print_game_info(core);
+		if (!cycle_handle(core))
+			return ;
 		core->flag.speed ? game_speed(core->env.game_speed) : 0;
 	}
 }

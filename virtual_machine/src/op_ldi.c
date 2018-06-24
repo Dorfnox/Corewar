@@ -83,7 +83,7 @@ void		do_ldi(t_corewar *core, t_process *process,
 	t_board_node	*location;
 
 	location = NULL;
-	if (idx_result >> 15)
+	if ((idx_result >> 15) & 0b1)
 	{
 		idx_result = (~idx_result + 1);
 		idx_result %= IDX_MOD;
