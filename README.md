@@ -2,7 +2,7 @@
 
 A 42 School Silicon Valley algorithms project.
 
-![Corewar](https://gfycat.com/gifs/detail/EdibleAdorableCalf)
+![Corewar](<src='https://gfycat.com/ifr/EdibleAdorableCalf'>)
 
 ## Getting Started
 
@@ -63,12 +63,12 @@ To access the visualizer, run:
 There are many options, including:
 
 ```
--dump number				To dump memory after 'number' of cycles.
--s							To set the optional speed of the game (1 is fast, 100 is slow)
--viz						To display the visualizer.
--n playernum champion		To set the player number of the Champion.
--a / -activity				To show an activity monitor, which displays the number of processes being executed in the current cycle.
--r / -rainbow [1 - 10]		To enable rainbow mode, with optional speed of 1 to 10.
+-dump number		To dump memory after 'number' of cycles.
+-s			To set the optional speed of the game (1 is fast, 100 is slow)
+-viz			To display the visualizer.
+-n playernum champion	To set the player number of the Champion.
+-a / -activity		To show an activity monitor, which displays the number of processes being executed in the current cycle.
+-r / -rainbow [1 - 10]	To enable rainbow mode, with optional speed of 1 to 10.
 ```
 
 An example of a complex corewar request.
