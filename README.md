@@ -2,7 +2,7 @@
 
 A 42 School Silicon Valley algorithms project.
 
-![Corewar](https://giant.gfycat.com/SpitefulOptimisticJerboa.gif)
+![Corewar](https://i.imgur.com/9lo0Z0m.gifv)
 
 ## Getting Started
 
