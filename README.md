@@ -15,7 +15,7 @@ git clone https://github.com/Dorfnox/Corewar.git corewar
 
 Running 'make' in the directory will install all dependencies and create three executables.
 - asm (for the assembler, which compiles .s files into .cor files)
-- dsm (for the disassembler, which de-compules .cor files into .s files)
+- dsm (for the disassembler, which de-compiles .cor files into .s files)
 - corewar (for the virtual machine, which runs the main program)
 
 ```
